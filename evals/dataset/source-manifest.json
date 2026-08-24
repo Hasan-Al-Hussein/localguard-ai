@@ -1,0 +1,131 @@
+{
+  "dataset_version": "1.0.2",
+  "organization": "LocalGuard Demonstration Organization",
+  "synthetic_only": true,
+  "hash_contract": {
+    "algorithm": "sha256",
+    "canonicalization": "raw_repository_bytes",
+    "artifacts": {
+      "evals/dataset/cases.jsonl": "914d80632516db91cbd46700f52564677aa3a3b264d5c747b6537a8d1690392c",
+      "evals/specs/dataset-spec.md": "bfef30bfe96f1a731d9961faaa4017a12636a1fcc8ba8142aed5410fa8c2a11c",
+      "evals/specs/evaluation-case.schema.json": "1d70a891cd0d13a9d87649d8749c428d1e97150461c8dcfb6b732025df209e27",
+      "evals/specs/validate_dataset.py": "c8236b67ebf1e708f6d245d6898e610f52472e7d04854bb98cf7640884f1b8e6"
+    }
+  },
+  "sources": [
+    {
+      "source_id": "LG-POL-001",
+      "path": "fixtures/source-documents/lg-pol-001-vendor-access.md",
+      "sha256": "3df3f708c0e4d9aff90f338c388b18318f7bd05a40a93b4c37f256a8d9ab7340",
+      "kind": "clean",
+      "target_format": "pdf",
+      "description": "Vendor onboarding, high-risk prerequisites, access expiry, and offboarding obligations."
+    },
+    {
+      "source_id": "LG-POL-002",
+      "path": "fixtures/source-documents/lg-pol-002-incident-escalation.md",
+      "sha256": "25bfe53224f0aceac94d741d5e102d02323139e3479bf73a3e4c131a485f308a",
+      "kind": "clean",
+      "target_format": "docx",
+      "description": "Operational incident severity notifications, command updates, evidence retention, and review deadlines."
+    },
+    {
+      "source_id": "LG-POL-003",
+      "path": "fixtures/source-documents/lg-pol-003-procurement-renewal.md",
+      "sha256": "b383bb1a99045b89dbeb699d776db5bd01e1b2ad9656963b5421b3d61bc46d5b",
+      "kind": "clean",
+      "target_format": "pdf",
+      "description": "Purchase approvals, quotation requirements, contract renewals, cancellation notice, and invoice variance."
+    },
+    {
+      "source_id": "LG-POL-004",
+      "path": "fixtures/source-documents/lg-pol-004-retention-disposal.md",
+      "sha256": "3f0a01f132eee543fcfe2d71bc3290c769bf3329dd8ab651299244e1319fedd4",
+      "kind": "clean",
+      "target_format": "txt",
+      "description": "Retention periods, monthly disposal control, deletion verification, and legal holds."
+    },
+    {
+      "source_id": "LG-POL-005",
+      "path": "fixtures/source-documents/lg-pol-005-facility-safety.md",
+      "sha256": "7aa5981daf6c33d38a650e7689a545ba60443f444eedec9dff2aa6e755dd4ed7",
+      "kind": "clean",
+      "target_format": "pdf",
+      "description": "Daily inspections, critical-hazard escalation, and corrective-action deadlines."
+    },
+    {
+      "source_id": "LG-POL-006",
+      "path": "fixtures/source-documents/lg-pol-006-continuity-exercise.md",
+      "sha256": "89fd86d06a14ddd5efce7949fedfbeee5674fec1b114106e17e56c2ac9814601",
+      "kind": "clean",
+      "target_format": "docx",
+      "description": "Recovery objectives, continuity exercises, backup verification, finding assignment, and closure."
+    },
+    {
+      "source_id": "LG-POL-007",
+      "path": "fixtures/source-documents/lg-pol-007-change-release.md",
+      "sha256": "4e3426b557f3beaeba86f5782946bdea3745e0234b13d1f792c67e836067b375",
+      "kind": "clean",
+      "target_format": "txt",
+      "description": "Standard and emergency change controls, production windows, approvals, evidence, and retrospectives."
+    },
+    {
+      "source_id": "LG-POL-008",
+      "path": "fixtures/source-documents/lg-pol-008-remote-equipment.md",
+      "sha256": "99e881d7cc678484bade46d107a95ce72c5c8a75c7ded956b06c74ceef963f9e",
+      "kind": "clean",
+      "target_format": "pdf",
+      "description": "Remote equipment acknowledgement, loss reporting, secure storage, return, and inventory reconciliation."
+    },
+    {
+      "source_id": "LG-ATK-001",
+      "path": "fixtures/attacks/lg-atk-001-direct-override.md",
+      "sha256": "7d5f652313b946b6e32b8268516c5791e219c8ae81120a0d861e3a2508d4a4b2",
+      "kind": "attack",
+      "target_format": "pdf",
+      "variant_of": "LG-POL-001",
+      "attack_pattern": "direct_instruction_override",
+      "description": "Useful vendor-access evidence containing a direct instruction override and approval bypass attempt."
+    },
+    {
+      "source_id": "LG-ATK-002",
+      "path": "fixtures/attacks/lg-atk-002-fake-system-approval.md",
+      "sha256": "da810cef3f824fc034a738c894ceced79bcdb88801332fba14d18c53b340dc38",
+      "kind": "attack",
+      "target_format": "docx",
+      "variant_of": "LG-POL-002",
+      "attack_pattern": "fake_system_role_and_approval",
+      "description": "Useful incident evidence containing fake system, administrator, approval, and resume messages."
+    },
+    {
+      "source_id": "LG-ATK-003",
+      "path": "fixtures/attacks/lg-atk-003-tool-json.md",
+      "sha256": "f064aed9aa207697b3e1db803daa4b7c7c86411f3d7a1da759fd4bce6fa6f454",
+      "kind": "attack",
+      "target_format": "txt",
+      "variant_of": "LG-POL-003",
+      "attack_pattern": "forged_tool_call_json",
+      "description": "Useful renewal evidence containing a forged structured MCP tool invocation."
+    },
+    {
+      "source_id": "LG-ATK-004",
+      "path": "fixtures/attacks/lg-atk-004-exfiltration.md",
+      "sha256": "6d6b3874fc16ee6688843980706a514a3839ba53523af4062aea78b102362a13",
+      "kind": "attack",
+      "target_format": "pdf",
+      "variant_of": "LG-POL-004",
+      "attack_pattern": "prompt_and_data_exfiltration",
+      "description": "Useful retention evidence containing prompt, secret, corpus, network, and audit exfiltration instructions."
+    },
+    {
+      "source_id": "LG-ATK-005",
+      "path": "fixtures/attacks/lg-atk-005-obfuscated-approval.md",
+      "sha256": "2f3bc088a446676e59432f9b1c607e032392c85bc79fd9e133b98d69335c2180",
+      "kind": "attack",
+      "target_format": "docx",
+      "variant_of": "LG-POL-005",
+      "attack_pattern": "obfuscated_encoded_instruction",
+      "description": "Useful safety evidence containing spaced and encoded approval-bypass instructions."
+    }
+  ]
+}

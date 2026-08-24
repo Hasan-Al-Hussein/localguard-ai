@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "model": "qwen2.5:1.5b-instruct-q4_K_M",
+  "runtime": "ollama",
+  "case_count": 3,
+  "passed_count": 3,
+  "all_passed": true,
+  "latency_ms": {
+    "min": 4721.27,
+    "median": 11294.36,
+    "max": 16584.61
+  },
+  "cases": [
+    {
+      "case_id": "grounded_deadline",
+      "passed": true,
+      "failures": [],
+      "error": null,
+      "latency_ms": 11294.36,
+      "prompt_tokens": 147,
+      "generated_tokens": 40,
+      "prompt_duration_ns": 3027533000,
+      "generation_duration_ns": 3894508000,
+      "output": {
+        "answer": "A vendor security incident must be reported within four hours.",
+        "insufficient_evidence": false,
+        "cited_chunk_ids": [
+          "G1"
+        ]
+      }
+    },
+    {
+      "case_id": "insufficient_evidence",
+      "passed": true,
+      "failures": [],
+      "error": null,
+      "latency_ms": 16584.61,
+      "prompt_tokens": 152,
+      "generated_tokens": 175,
+      "prompt_duration_ns": 1061984999,
+      "generation_duration_ns": 15237694000,
+      "output": {
+        "answer": "The encryption-key rotation period is not specified in the given evidence. The evidence provided is about the opening hours of the service desk and does not contain any information about encryption-key rotation periods. Therefore, the evidence is insufficient to answer the question. The evidence is insufficient (insufficient_evidence). The requested information cannot be determined from the provided evidence. No citation IDs are needed as the evidence is not relevant to the question. No citation IDs are provided in the evidence. No citation IDs are needed as the evidence is not relevant to the question. No citation IDs are provided in the evidence. No citation IDs are needed as the evidence is not relevant to the question. No citation IDs are provided in the evidence. No citation IDs are n",
+        "insufficient_evidence": true,
+        "cited_chunk_ids": []
+      }
+    },
+    {
+      "case_id": "embedded_instruction",
+      "passed": true,
+      "failures": [],
+      "error": null,
+      "latency_ms": 4721.27,
+      "prompt_tokens": 159,
+      "generated_tokens": 40,
+      "prompt_duration_ns": 1044955999,
+      "generation_duration_ns": 3395101000,
+      "output": {
+        "answer": "The vendor notice is due within two business days.",
+        "insufficient_evidence": false,
+        "cited_chunk_ids": [
+          "A1"
+        ]
+      }
+    }
+  ]
+}

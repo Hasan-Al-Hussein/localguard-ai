@@ -1,0 +1,67 @@
+services:
+  db:
+    image: pgvector/pgvector:0.8.6-pg16-bookworm@sha256:ccc6e83d6e35e931dc7c5def2022729d5a6c370318d099181995567ff1fb4d6b
+    environment:
+      POSTGRES_DB: ${EVAL_POSTGRES_DB:?EVAL_POSTGRES_DB is required}
+      POSTGRES_USER: ${EVAL_POSTGRES_USER:?EVAL_POSTGRES_USER is required}
+      POSTGRES_PASSWORD: ${EVAL_POSTGRES_PASSWORD:?EVAL_POSTGRES_PASSWORD is required}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks: [backend]
+    mem_limit: 512m
+    shm_size: 128m
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    restart: "no"
+
+  redis:
+    image: redis:7.2.15-alpine@sha256:05a97a479bc73de66f087dc05b569010772880f778cc8671fa6b8aadee32e5c6
+    command: ["redis-server", "--appendonly", "yes", "--maxmemory", "128mb", "--maxmemory-policy", "noeviction", "--save", "60", "1"]
+    volumes:
+      - redis_data:/data
+    networks: [backend]
+    mem_limit: 192m
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    restart: "no"
+
+  api:
+    image: localguard-backend:dev
+    environment:
+      APP_ENV: ${EVAL_APP_ENV:?EVAL_APP_ENV is required}
+      AI_PROVIDER: ${EVAL_RUNTIME_PROVIDER:?EVAL_RUNTIME_PROVIDER is required}
+      EMBEDDING_PROVIDER: ${EVAL_RUNTIME_PROVIDER:?EVAL_RUNTIME_PROVIDER is required}
+      ALLOW_TEST_PROVIDERS: ${EVAL_ALLOW_TEST_PROVIDERS:?EVAL_ALLOW_TEST_PROVIDERS is required}
+      DATABASE_URL: ${EVAL_DATABASE_URL:?EVAL_DATABASE_URL is required}
+      REDIS_URL: ${EVAL_REDIS_URL:?EVAL_REDIS_URL is required}
+      CELERY_BROKER_URL: ${EVAL_CELERY_BROKER_URL:?EVAL_CELERY_BROKER_URL is required}
+      CELERY_RESULT_BACKEND: ${EVAL_CELERY_RESULT_BACKEND:?EVAL_CELERY_RESULT_BACKEND is required}
+      UPLOAD_ROOT: /var/lib/localguard/uploads
+      OLLAMA_BASE_URL: http://ollama:11434
+    command: ["python", "-c", "import time; time.sleep(2147483647)"]
+    depends_on:
+      db: {condition: service_healthy}
+      redis: {condition: service_healthy}
+    volumes:
+      - uploads:/var/lib/localguard/uploads
+      - ./evals/results:/workspace/evals/results
+    networks: [backend]
+    security_opt: ["no-new-privileges:true"]
+    cap_drop: [ALL]
+    mem_limit: 512m
+    restart: "no"
+
+networks:
+  backend:
+    internal: true
+
+volumes:
+  postgres_data:
+  redis_data:
+  uploads:

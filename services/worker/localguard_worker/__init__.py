@@ -1,0 +1,1 @@
+"""LocalGuard Celery worker package."""

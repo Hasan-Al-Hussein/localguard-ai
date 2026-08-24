@@ -1,0 +1,34 @@
+FROM python:3.12.12-slim-bookworm@sha256:593bd06efe90efa80dc4eee3948be7c0fde4134606dd40d8dd8dbcade98e669c
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PYTHONPATH=/workspace/apps/api:/workspace/services/mcp:/workspace/services/worker
+
+WORKDIR /workspace
+
+RUN groupadd --system --gid 10001 localguard \
+    && useradd --system --uid 10001 --gid localguard --create-home localguard \
+    && mkdir -p /var/lib/localguard/uploads /workspace/artifacts \
+    && chown -R localguard:localguard /var/lib/localguard /workspace
+
+COPY --chown=localguard:localguard pyproject.toml requirements.lock ./
+
+RUN python -m pip install --upgrade "pip==26.2.1" \
+    && python -m pip install --requirement requirements.lock
+
+COPY --chown=localguard:localguard apps/api ./apps/api
+COPY --chown=localguard:localguard packages ./packages
+COPY --chown=localguard:localguard services ./services
+COPY --chown=localguard:localguard evals ./evals
+COPY --chown=localguard:localguard fixtures ./fixtures
+COPY --chown=localguard:localguard tests ./tests
+COPY --chown=localguard:localguard scripts ./scripts
+COPY --chown=localguard:localguard alembic.ini ./
+
+RUN python -m pip install --no-deps .
+
+USER localguard
+
+CMD ["uvicorn", "localguard_api.main:app", "--host", "0.0.0.0", "--port", "8000"]

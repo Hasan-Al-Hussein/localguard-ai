@@ -1,0 +1,92 @@
+[build-system]
+requires = ["setuptools==84.0.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "localguard-ai"
+version = "0.1.0"
+description = "Auditable local-first document intelligence and workflow copilot"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+  "alembic==1.19.1",
+  "argon2-cffi==25.1.0",
+  "celery[redis]==5.6.3",
+  "fastapi==0.141.1",
+  "fastmcp==3.4.7",
+  "filetype==1.2.0",
+  "httpx==0.28.1",
+  "jsonschema[format-nongpl]==4.26.0",
+  "langgraph==1.2.11",
+  "langgraph-checkpoint-postgres==3.1.2",
+  "orjson==3.12.0",
+  "pgvector==0.5.0",
+  "psutil==7.2.2",
+  "psycopg[binary,pool]==3.3.4",
+  "pydantic==2.13.4",
+  "pydantic-settings==2.15.0",
+  "pypdf==6.16.1",
+  "python-docx==1.2.0",
+  "python-multipart==0.0.32",
+  "redis==6.4.0",
+  "sqlalchemy==2.0.52",
+  "structlog==26.1.0",
+  "typer==0.27.1",
+  "uvicorn[standard]==0.52.4",
+]
+
+[project.optional-dependencies]
+dev = [
+  "freezegun==1.5.5",
+  "mypy==2.3.1",
+  "pytest==9.1.1",
+  "pytest-asyncio==1.4.0",
+  "pytest-cov==7.1.0",
+  "respx==0.23.1",
+  "ruff==0.16.4",
+]
+fixtures = [
+  "reportlab==5.0.1",
+]
+
+[tool.setuptools.packages.find]
+where = ["apps/api", "services/mcp", "services/worker"]
+include = ["localguard_api*", "localguard_mcp*", "localguard_worker*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra --strict-config --strict-markers"
+asyncio_mode = "auto"
+markers = [
+  "unit: isolated deterministic tests",
+  "integration: PostgreSQL, Redis, API, worker, or MCP integration",
+  "security: authorization and adversarial policy regression",
+  "real_model: requires the pinned local Ollama models",
+]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+extend-exclude = ["apps/api/migrations/versions"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "ASYNC", "S", "SIM", "RUF"]
+ignore = ["S101"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = ["S105", "S106", "S311"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+packages = ["localguard_api", "localguard_mcp", "localguard_worker"]
+mypy_path = ["apps/api", "services/mcp", "services/worker"]
+plugins = ["pydantic.mypy"]
+
+[tool.coverage.run]
+branch = true
+source = ["apps/api/localguard_api", "services/mcp/localguard_mcp", "services/worker/localguard_worker"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+fail_under = 75

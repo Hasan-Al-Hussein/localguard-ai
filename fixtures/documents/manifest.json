@@ -1,0 +1,946 @@
+{
+  "dataset_version": "1.0.2",
+  "documents": [
+    {
+      "bytes": 4279,
+      "format": "pdf",
+      "kind": "clean",
+      "locations": {
+        "LG-POL-001:H01": {
+          "anchor_type": "page",
+          "page": 1
+        },
+        "LG-POL-001:H02": {
+          "anchor_type": "page",
+          "page": 1
+        },
+        "LG-POL-001:H03": {
+          "anchor_type": "page",
+          "page": 2
+        },
+        "LG-POL-001:H04": {
+          "anchor_type": "page",
+          "page": 2
+        },
+        "LG-POL-001:L001": {
+          "anchor_type": "page",
+          "page": 1
+        },
+        "LG-POL-001:L002": {
+          "anchor_type": "page",
+          "page": 1
+        },
+        "LG-POL-001:L003": {
+          "anchor_type": "page",
+          "page": 1
+        },
+        "LG-POL-001:L004": {
+          "anchor_type": "page",
+          "page": 1
+        },
+        "LG-POL-001:L005": {
+          "anchor_type": "page",
+          "page": 1
+        },
+        "LG-POL-001:L006": {
+          "anchor_type": "page",
+          "page": 2
+        },
+        "LG-POL-001:L007": {
+          "anchor_type": "page",
+          "page": 2
+        },
+        "LG-POL-001:L008": {
+          "anchor_type": "page",
+          "page": 2
+        },
+        "LG-POL-001:L009": {
+          "anchor_type": "page",
+          "page": 2
+        },
+        "LG-POL-001:L010": {
+          "anchor_type": "page",
+          "page": 2
+        },
+        "LG-POL-001:P001": {
+          "anchor_type": "page",
+          "page": 1
+        },
+        "LG-POL-001:P002": {
+          "anchor_type": "page",
+          "page": 1
+        },
+        "LG-POL-001:P003": {
+          "anchor_type": "page",
+          "page": 2
+        },
+        "LG-POL-001:P004": {
+          "anchor_type": "page",
+          "page": 2
+        },
+        "_document": {
+          "page_count": 2
+        }
+      },
+      "path": "fixtures/documents/clean/lg-pol-001-vendor-access.pdf",
+      "sha256": "ca17d5d74922336dd21f48b7551a7127a0ba6bbaec3ac77a65baaed59b77c357",
+      "source_id": "LG-POL-001",
+      "source_path": "fixtures/source-documents/lg-pol-001-vendor-access.md",
+      "source_sha256": "3df3f708c0e4d9aff90f338c388b18318f7bd05a40a93b4c37f256a8d9ab7340"
+    },
+    {
+      "bytes": 38871,
+      "format": "docx",
+      "kind": "clean",
+      "locations": {
+        "LG-POL-002:H01": {
+          "anchor_type": "paragraph",
+          "paragraph": 4
+        },
+        "LG-POL-002:H02": {
+          "anchor_type": "paragraph",
+          "paragraph": 9
+        },
+        "LG-POL-002:H03": {
+          "anchor_type": "paragraph",
+          "paragraph": 14
+        },
+        "LG-POL-002:L001": {
+          "anchor_type": "paragraph",
+          "paragraph": 6
+        },
+        "LG-POL-002:L002": {
+          "anchor_type": "paragraph",
+          "paragraph": 7
+        },
+        "LG-POL-002:L003": {
+          "anchor_type": "paragraph",
+          "paragraph": 8
+        },
+        "LG-POL-002:L004": {
+          "anchor_type": "paragraph",
+          "paragraph": 11
+        },
+        "LG-POL-002:L005": {
+          "anchor_type": "paragraph",
+          "paragraph": 12
+        },
+        "LG-POL-002:L006": {
+          "anchor_type": "paragraph",
+          "paragraph": 13
+        },
+        "LG-POL-002:L007": {
+          "anchor_type": "paragraph",
+          "paragraph": 16
+        },
+        "LG-POL-002:L008": {
+          "anchor_type": "paragraph",
+          "paragraph": 17
+        },
+        "LG-POL-002:L009": {
+          "anchor_type": "paragraph",
+          "paragraph": 18
+        },
+        "LG-POL-002:P001": {
+          "anchor_type": "paragraph",
+          "paragraph": 5
+        },
+        "LG-POL-002:P002": {
+          "anchor_type": "paragraph",
+          "paragraph": 10
+        },
+        "LG-POL-002:P003": {
+          "anchor_type": "paragraph",
+          "paragraph": 15
+        },
+        "_document": {
+          "paragraph_count": 18
+        }
+      },
+      "path": "fixtures/documents/clean/lg-pol-002-incident-escalation.docx",
+      "sha256": "36f49394b958b4132d6d8b07c0629c7333381c755be46830f41d70b305612f8f",
+      "source_id": "LG-POL-002",
+      "source_path": "fixtures/source-documents/lg-pol-002-incident-escalation.md",
+      "source_sha256": "25bfe53224f0aceac94d741d5e102d02323139e3479bf73a3e4c131a485f308a"
+    },
+    {
+      "bytes": 4059,
+      "format": "pdf",
+      "kind": "clean",
+      "locations": {
+        "LG-POL-003:H01": {
+          "anchor_type": "page",
+          "page": 1
+        },
+        "LG-POL-003:H02": {
+          "anchor_type": "page",
+          "page": 2
+        },
+        "LG-POL-003:H03": {
+          "anchor_type": "page",
+          "page": 2
+        },
+        "LG-POL-003:L001": {
+          "anchor_type": "page",
+          "page": 1
+        },
+        "LG-POL-003:L002": {
+          "anchor_type": "page",
+          "page": 1
+        },
+        "LG-POL-003:L003": {
+          "anchor_type": "page",
+          "page": 1
+        },
+        "LG-POL-003:L004": {
+          "anchor_type": "page",
+          "page": 2
+        },
+        "LG-POL-003:L005": {
+          "anchor_type": "page",
+          "page": 2
+        },
+        "LG-POL-003:L006": {
+          "anchor_type": "page",
+          "page": 2
+        },
+        "LG-POL-003:L007": {
+          "anchor_type": "page",
+          "page": 2
+        },
+        "LG-POL-003:L008": {
+          "anchor_type": "page",
+          "page": 2
+        },
+        "LG-POL-003:P001": {
+          "anchor_type": "page",
+          "page": 1
+        },
+        "LG-POL-003:P002": {
+          "anchor_type": "page",
+          "page": 2
+        },
+        "LG-POL-003:P003": {
+          "anchor_type": "page",
+          "page": 2
+        },
+        "_document": {
+          "page_count": 2
+        }
+      },
+      "path": "fixtures/documents/clean/lg-pol-003-procurement-renewal.pdf",
+      "sha256": "636bb03f6f34185dbaf2ff4c56db5e272c2e1961ea63231883b191f1503cabe4",
+      "source_id": "LG-POL-003",
+      "source_path": "fixtures/source-documents/lg-pol-003-procurement-renewal.md",
+      "source_sha256": "b383bb1a99045b89dbeb699d776db5bd01e1b2ad9656963b5421b3d61bc46d5b"
+    },
+    {
+      "bytes": 1473,
+      "format": "txt",
+      "kind": "clean",
+      "locations": {
+        "LG-POL-004:H01": {
+          "anchor_type": "line",
+          "line_end": 8,
+          "line_start": 8
+        },
+        "LG-POL-004:H02": {
+          "anchor_type": "line",
+          "line_end": 15,
+          "line_start": 15
+        },
+        "LG-POL-004:H03": {
+          "anchor_type": "line",
+          "line_end": 21,
+          "line_start": 21
+        },
+        "LG-POL-004:L001": {
+          "anchor_type": "line",
+          "line_end": 10,
+          "line_start": 10
+        },
+        "LG-POL-004:L002": {
+          "anchor_type": "line",
+          "line_end": 11,
+          "line_start": 11
+        },
+        "LG-POL-004:L003": {
+          "anchor_type": "line",
+          "line_end": 12,
+          "line_start": 12
+        },
+        "LG-POL-004:L004": {
+          "anchor_type": "line",
+          "line_end": 13,
+          "line_start": 13
+        },
+        "LG-POL-004:L005": {
+          "anchor_type": "line",
+          "line_end": 17,
+          "line_start": 17
+        },
+        "LG-POL-004:L006": {
+          "anchor_type": "line",
+          "line_end": 18,
+          "line_start": 18
+        },
+        "LG-POL-004:L007": {
+          "anchor_type": "line",
+          "line_end": 19,
+          "line_start": 19
+        },
+        "LG-POL-004:L008": {
+          "anchor_type": "line",
+          "line_end": 23,
+          "line_start": 23
+        },
+        "LG-POL-004:L009": {
+          "anchor_type": "line",
+          "line_end": 24,
+          "line_start": 24
+        },
+        "LG-POL-004:P001": {
+          "anchor_type": "line",
+          "line_end": 9,
+          "line_start": 9
+        },
+        "LG-POL-004:P002": {
+          "anchor_type": "line",
+          "line_end": 16,
+          "line_start": 16
+        },
+        "LG-POL-004:P003": {
+          "anchor_type": "line",
+          "line_end": 22,
+          "line_start": 22
+        },
+        "_document": {
+          "line_count": 24
+        }
+      },
+      "path": "fixtures/documents/clean/lg-pol-004-retention-disposal.txt",
+      "sha256": "3f0a01f132eee543fcfe2d71bc3290c769bf3329dd8ab651299244e1319fedd4",
+      "source_id": "LG-POL-004",
+      "source_path": "fixtures/source-documents/lg-pol-004-retention-disposal.md",
+      "source_sha256": "3f0a01f132eee543fcfe2d71bc3290c769bf3329dd8ab651299244e1319fedd4"
+    },
+    {
+      "bytes": 3951,
+      "format": "pdf",
+      "kind": "clean",
+      "locations": {
+        "LG-POL-005:H01": {
+          "anchor_type": "page",
+          "page": 1
+        },
+        "LG-POL-005:H02": {
+          "anchor_type": "page",
+          "page": 2
+        },
+        "LG-POL-005:H03": {
+          "anchor_type": "page",
+          "page": 2
+        },
+        "LG-POL-005:L001": {
+          "anchor_type": "page",
+          "page": 1
+        },
+        "LG-POL-005:L002": {
+          "anchor_type": "page",
+          "page": 1
+        },
+        "LG-POL-005:L003": {
+          "anchor_type": "page",
+          "page": 2
+        },
+        "LG-POL-005:L004": {
+          "anchor_type": "page",
+          "page": 2
+        },
+        "LG-POL-005:L005": {
+          "anchor_type": "page",
+          "page": 2
+        },
+        "LG-POL-005:L006": {
+          "anchor_type": "page",
+          "page": 2
+        },
+        "LG-POL-005:L007": {
+          "anchor_type": "page",
+          "page": 2
+        },
+        "LG-POL-005:L008": {
+          "anchor_type": "page",
+          "page": 2
+        },
+        "LG-POL-005:P001": {
+          "anchor_type": "page",
+          "page": 1
+        },
+        "LG-POL-005:P002": {
+          "anchor_type": "page",
+          "page": 2
+        },
+        "LG-POL-005:P003": {
+          "anchor_type": "page",
+          "page": 2
+        },
+        "_document": {
+          "page_count": 2
+        }
+      },
+      "path": "fixtures/documents/clean/lg-pol-005-facility-safety.pdf",
+      "sha256": "bba56bea694f9b75aa01e8aab6593e888d1829b645d80d12d1ce7b69450aaff7",
+      "source_id": "LG-POL-005",
+      "source_path": "fixtures/source-documents/lg-pol-005-facility-safety.md",
+      "source_sha256": "7aa5981daf6c33d38a650e7689a545ba60443f444eedec9dff2aa6e755dd4ed7"
+    },
+    {
+      "bytes": 38830,
+      "format": "docx",
+      "kind": "clean",
+      "locations": {
+        "LG-POL-006:H01": {
+          "anchor_type": "paragraph",
+          "paragraph": 4
+        },
+        "LG-POL-006:H02": {
+          "anchor_type": "paragraph",
+          "paragraph": 9
+        },
+        "LG-POL-006:H03": {
+          "anchor_type": "paragraph",
+          "paragraph": 14
+        },
+        "LG-POL-006:L001": {
+          "anchor_type": "paragraph",
+          "paragraph": 6
+        },
+        "LG-POL-006:L002": {
+          "anchor_type": "paragraph",
+          "paragraph": 7
+        },
+        "LG-POL-006:L003": {
+          "anchor_type": "paragraph",
+          "paragraph": 8
+        },
+        "LG-POL-006:L004": {
+          "anchor_type": "paragraph",
+          "paragraph": 11
+        },
+        "LG-POL-006:L005": {
+          "anchor_type": "paragraph",
+          "paragraph": 12
+        },
+        "LG-POL-006:L006": {
+          "anchor_type": "paragraph",
+          "paragraph": 13
+        },
+        "LG-POL-006:L007": {
+          "anchor_type": "paragraph",
+          "paragraph": 16
+        },
+        "LG-POL-006:L008": {
+          "anchor_type": "paragraph",
+          "paragraph": 17
+        },
+        "LG-POL-006:L009": {
+          "anchor_type": "paragraph",
+          "paragraph": 18
+        },
+        "LG-POL-006:P001": {
+          "anchor_type": "paragraph",
+          "paragraph": 5
+        },
+        "LG-POL-006:P002": {
+          "anchor_type": "paragraph",
+          "paragraph": 10
+        },
+        "LG-POL-006:P003": {
+          "anchor_type": "paragraph",
+          "paragraph": 15
+        },
+        "_document": {
+          "paragraph_count": 18
+        }
+      },
+      "path": "fixtures/documents/clean/lg-pol-006-continuity-exercise.docx",
+      "sha256": "9469fb9ae278c64930356271230246a98326fee320182fbb02c76e7b38ccd1a8",
+      "source_id": "LG-POL-006",
+      "source_path": "fixtures/source-documents/lg-pol-006-continuity-exercise.md",
+      "source_sha256": "89fd86d06a14ddd5efce7949fedfbeee5674fec1b114106e17e56c2ac9814601"
+    },
+    {
+      "bytes": 1392,
+      "format": "txt",
+      "kind": "clean",
+      "locations": {
+        "LG-POL-007:H01": {
+          "anchor_type": "line",
+          "line_end": 8,
+          "line_start": 8
+        },
+        "LG-POL-007:H02": {
+          "anchor_type": "line",
+          "line_end": 14,
+          "line_start": 14
+        },
+        "LG-POL-007:H03": {
+          "anchor_type": "line",
+          "line_end": 19,
+          "line_start": 19
+        },
+        "LG-POL-007:L001": {
+          "anchor_type": "line",
+          "line_end": 10,
+          "line_start": 10
+        },
+        "LG-POL-007:L002": {
+          "anchor_type": "line",
+          "line_end": 11,
+          "line_start": 11
+        },
+        "LG-POL-007:L003": {
+          "anchor_type": "line",
+          "line_end": 12,
+          "line_start": 12
+        },
+        "LG-POL-007:L004": {
+          "anchor_type": "line",
+          "line_end": 16,
+          "line_start": 16
+        },
+        "LG-POL-007:L005": {
+          "anchor_type": "line",
+          "line_end": 17,
+          "line_start": 17
+        },
+        "LG-POL-007:L006": {
+          "anchor_type": "line",
+          "line_end": 21,
+          "line_start": 21
+        },
+        "LG-POL-007:L007": {
+          "anchor_type": "line",
+          "line_end": 22,
+          "line_start": 22
+        },
+        "LG-POL-007:L008": {
+          "anchor_type": "line",
+          "line_end": 23,
+          "line_start": 23
+        },
+        "LG-POL-007:P001": {
+          "anchor_type": "line",
+          "line_end": 9,
+          "line_start": 9
+        },
+        "LG-POL-007:P002": {
+          "anchor_type": "line",
+          "line_end": 15,
+          "line_start": 15
+        },
+        "LG-POL-007:P003": {
+          "anchor_type": "line",
+          "line_end": 20,
+          "line_start": 20
+        },
+        "_document": {
+          "line_count": 23
+        }
+      },
+      "path": "fixtures/documents/clean/lg-pol-007-change-release.txt",
+      "sha256": "4e3426b557f3beaeba86f5782946bdea3745e0234b13d1f792c67e836067b375",
+      "source_id": "LG-POL-007",
+      "source_path": "fixtures/source-documents/lg-pol-007-change-release.md",
+      "source_sha256": "4e3426b557f3beaeba86f5782946bdea3745e0234b13d1f792c67e836067b375"
+    },
+    {
+      "bytes": 4044,
+      "format": "pdf",
+      "kind": "clean",
+      "locations": {
+        "LG-POL-008:H01": {
+          "anchor_type": "page",
+          "page": 1
+        },
+        "LG-POL-008:H02": {
+          "anchor_type": "page",
+          "page": 2
+        },
+        "LG-POL-008:H03": {
+          "anchor_type": "page",
+          "page": 2
+        },
+        "LG-POL-008:L001": {
+          "anchor_type": "page",
+          "page": 1
+        },
+        "LG-POL-008:L002": {
+          "anchor_type": "page",
+          "page": 1
+        },
+        "LG-POL-008:L003": {
+          "anchor_type": "page",
+          "page": 1
+        },
+        "LG-POL-008:L004": {
+          "anchor_type": "page",
+          "page": 2
+        },
+        "LG-POL-008:L005": {
+          "anchor_type": "page",
+          "page": 2
+        },
+        "LG-POL-008:L006": {
+          "anchor_type": "page",
+          "page": 2
+        },
+        "LG-POL-008:L007": {
+          "anchor_type": "page",
+          "page": 2
+        },
+        "LG-POL-008:L008": {
+          "anchor_type": "page",
+          "page": 2
+        },
+        "LG-POL-008:L009": {
+          "anchor_type": "page",
+          "page": 2
+        },
+        "LG-POL-008:P001": {
+          "anchor_type": "page",
+          "page": 1
+        },
+        "LG-POL-008:P002": {
+          "anchor_type": "page",
+          "page": 2
+        },
+        "LG-POL-008:P003": {
+          "anchor_type": "page",
+          "page": 2
+        },
+        "_document": {
+          "page_count": 2
+        }
+      },
+      "path": "fixtures/documents/clean/lg-pol-008-remote-equipment.pdf",
+      "sha256": "ea45d2b43730b48dcf88930451729bfa51e6674626e210c75b904dd09d1b3505",
+      "source_id": "LG-POL-008",
+      "source_path": "fixtures/source-documents/lg-pol-008-remote-equipment.md",
+      "source_sha256": "99e881d7cc678484bade46d107a95ce72c5c8a75c7ded956b06c74ceef963f9e"
+    },
+    {
+      "bytes": 3933,
+      "format": "pdf",
+      "kind": "attack",
+      "locations": {
+        "LG-ATK-001:H01": {
+          "anchor_type": "page",
+          "page": 1
+        },
+        "LG-ATK-001:H02": {
+          "anchor_type": "page",
+          "page": 2
+        },
+        "LG-ATK-001:H03": {
+          "anchor_type": "page",
+          "page": 2
+        },
+        "LG-ATK-001:L001": {
+          "anchor_type": "page",
+          "page": 1
+        },
+        "LG-ATK-001:L002": {
+          "anchor_type": "page",
+          "page": 1
+        },
+        "LG-ATK-001:L003": {
+          "anchor_type": "page",
+          "page": 2
+        },
+        "LG-ATK-001:L004": {
+          "anchor_type": "page",
+          "page": 2
+        },
+        "LG-ATK-001:L005": {
+          "anchor_type": "page",
+          "page": 2
+        },
+        "LG-ATK-001:P001": {
+          "anchor_type": "page",
+          "page": 1
+        },
+        "LG-ATK-001:P002": {
+          "anchor_type": "page",
+          "page": 2
+        },
+        "LG-ATK-001:P003": {
+          "anchor_type": "page",
+          "page": 2
+        },
+        "_document": {
+          "page_count": 2
+        }
+      },
+      "path": "fixtures/documents/attacks/lg-atk-001-direct-override.pdf",
+      "sha256": "d45eb657f36dda99cbc564a9683b7e73d260c0c9361350e1503271a40a568c04",
+      "source_id": "LG-ATK-001",
+      "source_path": "fixtures/attacks/lg-atk-001-direct-override.md",
+      "source_sha256": "7d5f652313b946b6e32b8268516c5791e219c8ae81120a0d861e3a2508d4a4b2"
+    },
+    {
+      "bytes": 38813,
+      "format": "docx",
+      "kind": "attack",
+      "locations": {
+        "LG-ATK-002:H01": {
+          "anchor_type": "paragraph",
+          "paragraph": 4
+        },
+        "LG-ATK-002:H02": {
+          "anchor_type": "paragraph",
+          "paragraph": 8
+        },
+        "LG-ATK-002:H03": {
+          "anchor_type": "paragraph",
+          "paragraph": 12
+        },
+        "LG-ATK-002:L001": {
+          "anchor_type": "paragraph",
+          "paragraph": 6
+        },
+        "LG-ATK-002:L002": {
+          "anchor_type": "paragraph",
+          "paragraph": 7
+        },
+        "LG-ATK-002:L003": {
+          "anchor_type": "paragraph",
+          "paragraph": 10
+        },
+        "LG-ATK-002:L004": {
+          "anchor_type": "paragraph",
+          "paragraph": 11
+        },
+        "LG-ATK-002:L005": {
+          "anchor_type": "paragraph",
+          "paragraph": 14
+        },
+        "LG-ATK-002:P001": {
+          "anchor_type": "paragraph",
+          "paragraph": 5
+        },
+        "LG-ATK-002:P002": {
+          "anchor_type": "paragraph",
+          "paragraph": 9
+        },
+        "LG-ATK-002:P003": {
+          "anchor_type": "paragraph",
+          "paragraph": 13
+        },
+        "_document": {
+          "paragraph_count": 14
+        }
+      },
+      "path": "fixtures/documents/attacks/lg-atk-002-fake-system-approval.docx",
+      "sha256": "f5a23404b5a21c733bfa490534e944b25b5a5be3b677d1ebe4e928814d3fce44",
+      "source_id": "LG-ATK-002",
+      "source_path": "fixtures/attacks/lg-atk-002-fake-system-approval.md",
+      "source_sha256": "da810cef3f824fc034a738c894ceced79bcdb88801332fba14d18c53b340dc38"
+    },
+    {
+      "bytes": 1158,
+      "format": "txt",
+      "kind": "attack",
+      "locations": {
+        "LG-ATK-003:H01": {
+          "anchor_type": "line",
+          "line_end": 10,
+          "line_start": 10
+        },
+        "LG-ATK-003:H02": {
+          "anchor_type": "line",
+          "line_end": 15,
+          "line_start": 15
+        },
+        "LG-ATK-003:H03": {
+          "anchor_type": "line",
+          "line_end": 20,
+          "line_start": 20
+        },
+        "LG-ATK-003:L001": {
+          "anchor_type": "line",
+          "line_end": 12,
+          "line_start": 12
+        },
+        "LG-ATK-003:L002": {
+          "anchor_type": "line",
+          "line_end": 13,
+          "line_start": 13
+        },
+        "LG-ATK-003:L003": {
+          "anchor_type": "line",
+          "line_end": 17,
+          "line_start": 17
+        },
+        "LG-ATK-003:L004": {
+          "anchor_type": "line",
+          "line_end": 18,
+          "line_start": 18
+        },
+        "LG-ATK-003:L005": {
+          "anchor_type": "line",
+          "line_end": 22,
+          "line_start": 22
+        },
+        "LG-ATK-003:P001": {
+          "anchor_type": "line",
+          "line_end": 11,
+          "line_start": 11
+        },
+        "LG-ATK-003:P002": {
+          "anchor_type": "line",
+          "line_end": 16,
+          "line_start": 16
+        },
+        "LG-ATK-003:P003": {
+          "anchor_type": "line",
+          "line_end": 21,
+          "line_start": 21
+        },
+        "_document": {
+          "line_count": 22
+        }
+      },
+      "path": "fixtures/documents/attacks/lg-atk-003-tool-json.txt",
+      "sha256": "f064aed9aa207697b3e1db803daa4b7c7c86411f3d7a1da759fd4bce6fa6f454",
+      "source_id": "LG-ATK-003",
+      "source_path": "fixtures/attacks/lg-atk-003-tool-json.md",
+      "source_sha256": "f064aed9aa207697b3e1db803daa4b7c7c86411f3d7a1da759fd4bce6fa6f454"
+    },
+    {
+      "bytes": 3877,
+      "format": "pdf",
+      "kind": "attack",
+      "locations": {
+        "LG-ATK-004:H01": {
+          "anchor_type": "page",
+          "page": 1
+        },
+        "LG-ATK-004:H02": {
+          "anchor_type": "page",
+          "page": 2
+        },
+        "LG-ATK-004:H03": {
+          "anchor_type": "page",
+          "page": 2
+        },
+        "LG-ATK-004:L001": {
+          "anchor_type": "page",
+          "page": 1
+        },
+        "LG-ATK-004:L002": {
+          "anchor_type": "page",
+          "page": 1
+        },
+        "LG-ATK-004:L003": {
+          "anchor_type": "page",
+          "page": 2
+        },
+        "LG-ATK-004:L004": {
+          "anchor_type": "page",
+          "page": 2
+        },
+        "LG-ATK-004:L005": {
+          "anchor_type": "page",
+          "page": 2
+        },
+        "LG-ATK-004:P001": {
+          "anchor_type": "page",
+          "page": 1
+        },
+        "LG-ATK-004:P002": {
+          "anchor_type": "page",
+          "page": 2
+        },
+        "LG-ATK-004:P003": {
+          "anchor_type": "page",
+          "page": 2
+        },
+        "_document": {
+          "page_count": 2
+        }
+      },
+      "path": "fixtures/documents/attacks/lg-atk-004-exfiltration.pdf",
+      "sha256": "79797a42b19ea72a3d67ae18fb5041a7096c8b738b995bea57dd79ba5a840f74",
+      "source_id": "LG-ATK-004",
+      "source_path": "fixtures/attacks/lg-atk-004-exfiltration.md",
+      "source_sha256": "6d6b3874fc16ee6688843980706a514a3839ba53523af4062aea78b102362a13"
+    },
+    {
+      "bytes": 38797,
+      "format": "docx",
+      "kind": "attack",
+      "locations": {
+        "LG-ATK-005:H01": {
+          "anchor_type": "paragraph",
+          "paragraph": 4
+        },
+        "LG-ATK-005:H02": {
+          "anchor_type": "paragraph",
+          "paragraph": 8
+        },
+        "LG-ATK-005:H03": {
+          "anchor_type": "paragraph",
+          "paragraph": 13
+        },
+        "LG-ATK-005:L001": {
+          "anchor_type": "paragraph",
+          "paragraph": 6
+        },
+        "LG-ATK-005:L002": {
+          "anchor_type": "paragraph",
+          "paragraph": 7
+        },
+        "LG-ATK-005:L003": {
+          "anchor_type": "paragraph",
+          "paragraph": 10
+        },
+        "LG-ATK-005:L004": {
+          "anchor_type": "paragraph",
+          "paragraph": 11
+        },
+        "LG-ATK-005:L005": {
+          "anchor_type": "paragraph",
+          "paragraph": 12
+        },
+        "LG-ATK-005:L006": {
+          "anchor_type": "paragraph",
+          "paragraph": 15
+        },
+        "LG-ATK-005:P001": {
+          "anchor_type": "paragraph",
+          "paragraph": 5
+        },
+        "LG-ATK-005:P002": {
+          "anchor_type": "paragraph",
+          "paragraph": 9
+        },
+        "LG-ATK-005:P003": {
+          "anchor_type": "paragraph",
+          "paragraph": 14
+        },
+        "_document": {
+          "paragraph_count": 15
+        }
+      },
+      "path": "fixtures/documents/attacks/lg-atk-005-obfuscated-approval.docx",
+      "sha256": "e1e8d9909785800a32a977114e9e7e845b9d1606e7d971773e504dd92a206474",
+      "source_id": "LG-ATK-005",
+      "source_path": "fixtures/attacks/lg-atk-005-obfuscated-approval.md",
+      "source_sha256": "2f3bc088a446676e59432f9b1c607e032392c85bc79fd9e133b98d69335c2180"
+    }
+  ],
+  "generator": "scripts/generate-fixtures.py",
+  "synthetic_only": true
+}

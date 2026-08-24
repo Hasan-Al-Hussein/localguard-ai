@@ -1,0 +1,120 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="520" viewBox="0 0 1600 520" role="img" aria-labelledby="title desc">
+  <title id="title">LocalGuard AI evidence before action</title>
+  <desc id="desc">A local document pipeline flows through hybrid retrieval and exact citation proof, then pauses for human approval before one task can be created.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#071827" />
+      <stop offset="0.58" stop-color="#0B2C43" />
+      <stop offset="1" stop-color="#063F43" />
+    </linearGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#123B53" stop-opacity="0.95" />
+      <stop offset="1" stop-color="#0B2438" stop-opacity="0.88" />
+    </linearGradient>
+    <linearGradient id="mint" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#65E7D4" />
+      <stop offset="1" stop-color="#31BFAF" />
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" fill="none" stroke="#8EDFD7" stroke-opacity="0.07" stroke-width="1" />
+    </pattern>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="10" result="blur" />
+      <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+    </filter>
+    <filter id="shadow" x="-20%" y="-30%" width="140%" height="170%">
+      <feDropShadow dx="0" dy="14" stdDeviation="16" flood-color="#020A12" flood-opacity="0.45" />
+    </filter>
+  </defs>
+
+  <rect width="1600" height="520" rx="28" fill="url(#bg)" />
+  <rect width="1600" height="520" rx="28" fill="url(#grid)" />
+  <circle cx="1450" cy="50" r="260" fill="#39D8C5" opacity="0.06" />
+  <circle cx="1160" cy="500" r="300" fill="#4F8CFF" opacity="0.06" />
+
+  <g transform="translate(70 62)">
+    <rect width="212" height="36" rx="18" fill="#123F51" stroke="#65E7D4" stroke-opacity="0.42" />
+    <circle cx="22" cy="18" r="5" fill="#65E7D4" filter="url(#glow)" />
+    <text x="38" y="23" fill="#BFF8EE" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" letter-spacing="1.4">LOCAL-FIRST / CPU-ONLY</text>
+
+    <g transform="translate(0 78)">
+      <path d="M30 0 58 10v22c0 22-11 38-28 47C13 70 2 54 2 32V10Z" fill="#65E7D4" fill-opacity="0.12" stroke="#65E7D4" stroke-width="2" />
+      <path d="m18 37 8 8 17-19" fill="none" stroke="#65E7D4" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+      <text x="84" y="51" fill="#FFFFFF" font-family="Segoe UI, Arial, sans-serif" font-size="64" font-weight="750" letter-spacing="-2">LocalGuard AI</text>
+    </g>
+
+    <text x="0" y="252" fill="#D6E7F2" font-family="Segoe UI, Arial, sans-serif" font-size="27" font-weight="500">Ground every answer. Gate every action.</text>
+    <text x="0" y="294" fill="#93AFC2" font-family="Segoe UI, Arial, sans-serif" font-size="18">Exact source proof / bounded local models / authenticated human review</text>
+
+    <g transform="translate(0 340)" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="650">
+      <rect width="92" height="36" rx="8" fill="#0D2C40" stroke="#2B6073" /><text x="19" y="23" fill="#B8CDDA">FastAPI</text>
+      <rect x="104" width="96" height="36" rx="8" fill="#0D2C40" stroke="#2B6073" /><text x="122" y="23" fill="#B8CDDA">Next.js</text>
+      <rect x="212" width="188" height="36" rx="8" fill="#0D2C40" stroke="#2B6073" /><text x="230" y="23" fill="#B8CDDA">PostgreSQL + pgvector</text>
+      <rect x="412" width="116" height="36" rx="8" fill="#0D2C40" stroke="#2B6073" /><text x="430" y="23" fill="#B8CDDA">LangGraph</text>
+      <rect x="540" width="88" height="36" rx="8" fill="#0D2C40" stroke="#2B6073" /><text x="558" y="23" fill="#B8CDDA">Ollama</text>
+    </g>
+  </g>
+
+  <g transform="translate(830 60)" filter="url(#shadow)" font-family="Segoe UI, Arial, sans-serif">
+    <rect width="700" height="400" rx="24" fill="url(#panel)" stroke="#5FB8C2" stroke-opacity="0.35" />
+    <text x="34" y="42" fill="#8FAFC1" font-size="14" font-weight="700" letter-spacing="1.8">EVIDENCE-BOUND WORKFLOW</text>
+
+    <g transform="translate(34 70)">
+      <rect width="190" height="90" rx="14" fill="#102F45" stroke="#4F8CFF" stroke-opacity="0.55" />
+      <path d="M26 23h26l12 12v31H26Z" fill="none" stroke="#8FB5FF" stroke-width="2" /><path d="M52 23v13h12" fill="none" stroke="#8FB5FF" stroke-width="2" />
+      <text x="78" y="39" fill="#FFFFFF" font-size="18" font-weight="700">LOCAL SOURCE</text>
+      <text x="78" y="64" fill="#94B4C7" font-size="14">PDF / DOCX / TXT</text>
+    </g>
+
+    <g transform="translate(286 70)">
+      <rect width="190" height="90" rx="14" fill="#102F45" stroke="#65E7D4" stroke-opacity="0.55" />
+      <circle cx="42" cy="42" r="19" fill="none" stroke="#65E7D4" stroke-width="2" /><path d="m55 56 15 15" stroke="#65E7D4" stroke-width="3" stroke-linecap="round" />
+      <text x="78" y="39" fill="#FFFFFF" font-size="18" font-weight="700">HYBRID SEARCH</text>
+      <text x="78" y="64" fill="#94B4C7" font-size="14">Vector + full text</text>
+    </g>
+
+    <g transform="translate(34 216)">
+      <rect width="190" height="90" rx="14" fill="#102F45" stroke="#65E7D4" stroke-opacity="0.55" />
+      <path d="M29 30h34v34H29Z" fill="none" stroke="#65E7D4" stroke-width="2" /><path d="m36 47 7 7 14-17" fill="none" stroke="#65E7D4" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+      <text x="78" y="39" fill="#FFFFFF" font-size="18" font-weight="700">EXACT PROOF</text>
+      <text x="78" y="64" fill="#94B4C7" font-size="14">Revision + offsets</text>
+    </g>
+
+    <g transform="translate(286 216)">
+      <rect width="190" height="90" rx="14" fill="#102F45" stroke="#F5B942" stroke-opacity="0.65" />
+      <circle cx="45" cy="38" r="11" fill="none" stroke="#F5B942" stroke-width="2" /><path d="M27 70c3-14 11-21 18-21s15 7 18 21" fill="none" stroke="#F5B942" stroke-width="2" />
+      <text x="78" y="39" fill="#FFFFFF" font-size="18" font-weight="700">HUMAN REVIEW</text>
+      <text x="78" y="64" fill="#C9B884" font-size="14">Bound approval gate</text>
+    </g>
+
+    <g transform="translate(522 143)">
+      <rect width="144" height="90" rx="14" fill="#0C4A46" stroke="#65E7D4" />
+      <circle cx="37" cy="45" r="20" fill="#65E7D4" fill-opacity="0.15" stroke="#65E7D4" stroke-width="2" />
+      <text x="31" y="52" fill="#FFFFFF" font-size="22" font-weight="800">1</text>
+      <text x="68" y="40" fill="#FFFFFF" font-size="18" font-weight="700">TASK</text>
+      <text x="68" y="63" fill="#A9DAD4" font-size="13">exactly once</text>
+    </g>
+
+    <g fill="none" stroke="url(#mint)" stroke-width="3" stroke-linecap="round">
+      <path d="M224 115h62" /><path d="m275 106 11 9-11 9" />
+      <path d="M381 160v38H129v18" /><path d="m120 205 9 11 9-11" />
+      <path d="M224 261h62" /><path d="m275 252 11 9-11 9" />
+      <path d="M476 261h27c31 0 31-73 53-73" /><path d="m546 180 10 8-11 10" />
+    </g>
+
+    <circle r="5" fill="#FFFFFF" filter="url(#glow)" opacity="0">
+      <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.06;0.94;1" dur="4s" repeatCount="indefinite" />
+      <animateMotion dur="4s" repeatCount="indefinite" path="M224 115h62" />
+    </circle>
+    <circle r="5" fill="#65E7D4" filter="url(#glow)" opacity="0">
+      <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.06;0.94;1" dur="5s" repeatCount="indefinite" />
+      <animateMotion dur="5s" repeatCount="indefinite" path="M381 160v38H129v18" />
+    </circle>
+    <circle r="5" fill="#F5B942" filter="url(#glow)" opacity="0">
+      <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.06;0.94;1" dur="4.6s" repeatCount="indefinite" />
+      <animateMotion dur="4.6s" repeatCount="indefinite" path="M476 261h27c31 0 31-73 53-73" />
+    </circle>
+
+    <text x="34" y="363" fill="#7FA4B7" font-size="14">PostgreSQL is authoritative. Redis is replaceable. Model calls remain local.</text>
+  </g>
+</svg>

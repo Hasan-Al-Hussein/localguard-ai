@@ -1,0 +1,26 @@
+{
+  "name": "@localguard/contracts",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "generate": "npm run openapi:check && tsc --noEmit",
+    "openapi:generate": "node ./scripts/generate-openapi.mjs",
+    "openapi:check": "node ./scripts/check-openapi.mjs",
+    "openapi:snapshot": "python ./scripts/export_openapi.py --write ./openapi.json",
+    "openapi:snapshot:check": "python ./scripts/export_openapi.py --check ./openapi.json",
+    "openapi:drift": "npm run openapi:snapshot:check && npm run openapi:check",
+    "openapi:update": "npm run openapi:snapshot && npm run openapi:generate",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "zod": "4.4.3"
+  },
+  "devDependencies": {
+    "openapi-typescript": "7.13.0",
+    "typescript": "5.9.3"
+  }
+}

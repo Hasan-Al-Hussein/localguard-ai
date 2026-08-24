@@ -1,0 +1,452 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PYTHON_VERSION: "3.12.12"
+  NODE_VERSION: "24.13.0"
+
+jobs:
+  backend-unit:
+    name: Backend lint, types, and unit tests
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+          cache-dependency-path: requirements.lock
+      - name: Install locked dependencies
+        run: |
+          python -m pip install --upgrade pip==26.2.1
+          python -m pip install --requirement requirements.lock
+          python -m pip install --no-deps .
+      - name: Validate synthetic evaluation data and integrity probes
+        run: python evals/specs/validate_dataset.py --self-test
+      - name: Verify the checked OpenAPI snapshot against the live FastAPI app
+        run: python packages/contracts/scripts/export_openapi.py --check packages/contracts/openapi.json
+      - name: Check Python formatting
+        run: ruff format --check apps/api services tests scripts evals/specs
+      - name: Lint Python
+        run: ruff check apps/api services tests scripts evals/specs
+      - name: Strict type check
+        run: mypy
+      - name: Run deterministic unit and security tests
+        env:
+          APP_ENV: test
+          ALLOW_TEST_PROVIDERS: "true"
+          AI_PROVIDER: deterministic
+          EMBEDDING_PROVIDER: deterministic
+        run: |
+          pytest -m "not integration and not real_model" \
+            --junitxml=artifacts/pytest-unit.xml
+      - name: Upload backend unit results
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: backend-unit-results
+          path: artifacts/pytest-unit.xml
+          if-no-files-found: warn
+          retention-days: 7
+
+  backend-integration:
+    name: Migrations, integration, and deterministic evaluation
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    services:
+      postgres:
+        image: pgvector/pgvector:0.8.6-pg16-bookworm@sha256:ccc6e83d6e35e931dc7c5def2022729d5a6c370318d099181995567ff1fb4d6b
+        env:
+          POSTGRES_DB: localguard
+          POSTGRES_USER: localguard
+          POSTGRES_PASSWORD: localguard-ci-only
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U localguard -d localguard"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 20
+      redis:
+        image: redis:7.2.15-alpine@sha256:05a97a479bc73de66f087dc05b569010772880f778cc8671fa6b8aadee32e5c6
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 20
+    env:
+      APP_ENV: test
+      ALLOW_TEST_PROVIDERS: "true"
+      AI_PROVIDER: deterministic
+      EMBEDDING_PROVIDER: deterministic
+      DATABASE_URL: postgresql+psycopg://localguard:localguard-ci-only@127.0.0.1:5432/localguard
+      REDIS_URL: redis://127.0.0.1:6379/0
+      CELERY_BROKER_URL: redis://127.0.0.1:6379/1
+      CELERY_RESULT_BACKEND: redis://127.0.0.1:6379/2
+      UPLOAD_ROOT: /tmp/localguard-ci-uploads
+      RUN_DB_INTEGRATION: "1"
+      RUN_INTEGRATION_TESTS: "1"
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+          cache-dependency-path: requirements.lock
+      - name: Install locked dependencies
+        run: |
+          python -m pip install --upgrade pip==26.2.1
+          python -m pip install --requirement requirements.lock
+          python -m pip install --no-deps .
+      - name: Prove migration upgrade, drift check, downgrade, and recovery
+        run: |
+          alembic upgrade 20260823_0001
+          python scripts/verify_migration_data.py seed-legacy-duplicates
+          alembic upgrade 20260823_0003
+          python scripts/verify_migration_data.py seed-legacy-finding
+          alembic upgrade head
+          python scripts/verify_migration_data.py assert-quarantined
+          python scripts/verify_migration_data.py assert-legacy-finding-backfilled
+          alembic check
+          python scripts/verify_migration_data.py seed-derived-finding
+          if alembic downgrade 20260823_0003; then
+            echo "::error::Downgrade unexpectedly discarded structured finding evidence"
+            exit 1
+          fi
+          python scripts/verify_migration_data.py assert-derived-finding-preserved
+          python scripts/verify_migration_data.py cleanup-derived-finding
+          alembic downgrade 20260823_0003
+          alembic upgrade head
+          python scripts/verify_migration_data.py assert-legacy-finding-backfilled
+          python scripts/verify_migration_data.py seed-orphan-citation
+          if alembic downgrade 20260823_0001; then
+            echo "::error::Downgrade unexpectedly discarded an orphan citation snapshot"
+            exit 1
+          fi
+          python scripts/verify_migration_data.py assert-orphan-citation-preserved
+          python -m localguard_api.cli export-orphan-citations --output artifacts/orphan-citations-migration-probe.json
+          python -c "import json; from pathlib import Path; data=json.loads(Path('artifacts/orphan-citations-migration-probe.json').read_text()); assert data['count'] == 1 and len(data['citations']) == 1"
+          python -m localguard_api.cli purge-orphan-citations --confirm "PURGE ORPHAN CITATIONS"
+          python scripts/verify_migration_data.py cleanup-orphan-citation-probe
+          alembic downgrade 20260823_0001
+          python scripts/verify_migration_data.py assert-restored
+          alembic upgrade head
+          python scripts/verify_migration_data.py assert-quarantined
+          alembic downgrade c57f8be7e15c
+          python scripts/verify_migration_data.py simulate-historical-phase2
+          alembic upgrade head
+          python scripts/verify_migration_data.py assert-reconciled
+          alembic downgrade base
+          alembic upgrade head
+          alembic current
+      - name: Run PostgreSQL, Redis, graph, MCP, and worker integration tests
+        run: pytest -m integration --junitxml=artifacts/pytest-integration.xml
+      - name: Run exact deterministic 25-case evaluation
+        run: python -m localguard_api.evaluation.cli run --provider fake
+      - name: Upload integration and evaluation evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: backend-integration-results
+          path: |
+            artifacts/pytest-integration.xml
+            evals/results/
+          if-no-files-found: warn
+          retention-days: 7
+
+  frontend:
+    name: Frontend lint, types, tests, and build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Set up Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          package-manager-cache: false
+      - name: Install locked dependencies
+        run: npm ci
+      - name: Validate contracts
+        run: npm run contracts
+      - name: Lint frontend
+        run: npm run lint
+      - name: Type-check frontend
+        run: npm run typecheck
+      - name: Run frontend tests
+        run: npm run test
+      - name: Build production frontend
+        env:
+          NEXT_TELEMETRY_DISABLED: "1"
+          API_INTERNAL_URL: http://127.0.0.1:8000
+        run: npm run build
+
+  browser-contract:
+    name: Playwright UI/browser contract tests (mock API)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Set up Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          package-manager-cache: false
+      - name: Install locked dependencies
+        run: npm ci
+      - name: Install the locked Playwright Chromium runtime
+        run: npx playwright install --with-deps chromium
+      - name: Run desktop and mobile UI journeys against contract fixtures
+        env:
+          CI: "1"
+          NEXT_TELEMETRY_DISABLED: "1"
+        run: npm run test:e2e:ui-contract --workspace @localguard/web
+      - name: Upload Playwright failure evidence
+        if: failure()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: playwright-ui-contract-failure-evidence
+          path: apps/web/output/
+          if-no-files-found: warn
+          retention-days: 7
+
+  browser-real-stack:
+    name: Playwright unmocked full-stack journey (deterministic)
+    needs: [backend-integration, frontend]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    services:
+      postgres:
+        image: pgvector/pgvector:0.8.6-pg16-bookworm@sha256:ccc6e83d6e35e931dc7c5def2022729d5a6c370318d099181995567ff1fb4d6b
+        env:
+          POSTGRES_DB: localguard
+          POSTGRES_USER: localguard
+          POSTGRES_PASSWORD: localguard-ci-only
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U localguard -d localguard"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 20
+      redis:
+        image: redis:7.2.15-alpine@sha256:05a97a479bc73de66f087dc05b569010772880f778cc8671fa6b8aadee32e5c6
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 20
+    env:
+      APP_ENV: test
+      APP_ORIGIN: http://127.0.0.1:3000
+      API_PUBLIC_ORIGIN: http://127.0.0.1:3000
+      API_INTERNAL_URL: http://127.0.0.1:8000
+      ALLOWED_HOSTS: 127.0.0.1,localhost
+      DATABASE_URL: postgresql+psycopg://localguard:localguard-ci-only@127.0.0.1:5432/localguard
+      REDIS_URL: redis://127.0.0.1:6379/0
+      CELERY_BROKER_URL: redis://127.0.0.1:6379/1
+      CELERY_RESULT_BACKEND: redis://127.0.0.1:6379/2
+      OUTBOX_POLL_SECONDS: "0.25"
+      CLEANUP_POLL_SECONDS: "1"
+      UPLOAD_ROOT: /tmp/localguard-real-stack-uploads
+      SESSION_COOKIE_NAME: localguard_session
+      SESSION_COOKIE_SECURE: "false"
+      MCP_ALLOWED_ORIGINS: http://127.0.0.1:3000
+      ALLOW_TEST_PROVIDERS: "true"
+      AI_PROVIDER: deterministic
+      EMBEDDING_PROVIDER: deterministic
+      RETRIEVAL_MIN_SCORE: "0.0"
+      RETRIEVAL_MIN_VECTOR_SIMILARITY: "-1.0"
+      RETRIEVAL_MIN_TEXT_SCORE: "0.0"
+      LOCALGUARD_REAL_STACK: "1"
+      LOCALGUARD_BASE_URL: http://127.0.0.1:3000
+      LOCALGUARD_E2E_USERNAME: demo-admin
+      CI: "1"
+      NEXT_TELEMETRY_DISABLED: "1"
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+          cache-dependency-path: requirements.lock
+      - name: Set up Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          package-manager-cache: false
+      - name: Install locked backend and frontend dependencies
+        run: |
+          python -m pip install --upgrade pip==26.2.1
+          python -m pip install --requirement requirements.lock
+          python -m pip install --no-deps .
+          npm ci
+      - name: Install the locked Playwright Chromium runtime
+        run: npx playwright install --with-deps chromium
+      - name: Generate ephemeral bootstrap credentials
+        shell: python
+        run: |
+          import os
+          import secrets
+
+          names = (
+              "BOOTSTRAP_ADMIN_PASSWORD",
+              "BOOTSTRAP_REVIEWER_PASSWORD",
+              "BOOTSTRAP_VIEWER_PASSWORD",
+              "MCP_BOOTSTRAP_TOKEN",
+          )
+          with open(os.environ["GITHUB_ENV"], "a", encoding="utf-8") as environment:
+              for name in names:
+                  environment.write(f"{name}={secrets.token_urlsafe(32)}\n")
+      - name: Migrate, initialize checkpoints, and seed CI principals
+        run: |
+          alembic upgrade head
+          python -m localguard_api.cli setup-checkpoints
+          python -m localguard_api.cli seed
+      - name: Build the production frontend
+        run: |
+          npm run contracts
+          npm run build --workspace @localguard/web
+          cp -R apps/web/.next/static apps/web/.next/standalone/apps/web/.next/static
+      - name: Run the unmocked browser journey through the real stack
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/real-stack
+          worker_pid=""
+          api_pid=""
+          web_pid=""
+          cleanup() {
+            result=$?
+            trap - EXIT
+            for process_id in "$web_pid" "$api_pid" "$worker_pid"; do
+              if [[ -n "$process_id" ]]; then
+                kill "$process_id" 2>/dev/null || true
+              fi
+            done
+            for _attempt in {1..20}; do
+              still_running=0
+              for process_id in "$web_pid" "$api_pid" "$worker_pid"; do
+                if [[ -n "$process_id" ]] && kill -0 "$process_id" 2>/dev/null; then
+                  still_running=1
+                fi
+              done
+              if [[ "$still_running" == "0" ]]; then
+                break
+              fi
+              sleep 0.25
+            done
+            for process_id in "$web_pid" "$api_pid" "$worker_pid"; do
+              if [[ -n "$process_id" ]]; then
+                kill -KILL "$process_id" 2>/dev/null || true
+              fi
+            done
+            wait 2>/dev/null || true
+            exit "$result"
+          }
+          trap cleanup EXIT
+
+          celery -A localguard_worker.app:celery_app worker \
+            --loglevel=INFO --concurrency=1 --prefetch-multiplier=1 \
+            --hostname=localguard-real-stack@%h \
+            >artifacts/real-stack/worker.log 2>&1 &
+          worker_pid=$!
+          uvicorn localguard_api.main:app --host 127.0.0.1 --port 8000 --workers 1 \
+            >artifacts/real-stack/api.log 2>&1 &
+          api_pid=$!
+
+          worker_ready=0
+          for _attempt in {1..60}; do
+            if celery -A localguard_worker.app:celery_app inspect ping --timeout 2 \
+              2>/dev/null | grep -q pong; then
+              worker_ready=1
+              break
+            fi
+            kill -0 "$worker_pid"
+            sleep 1
+          done
+          if [[ "$worker_ready" != "1" ]]; then
+            echo "Celery worker did not become ready" >&2
+            exit 1
+          fi
+
+          api_ready=0
+          for _attempt in {1..90}; do
+            if curl --fail --silent --show-error http://127.0.0.1:8000/health/ready \
+              >/dev/null; then
+              api_ready=1
+              break
+            fi
+            kill -0 "$api_pid"
+            sleep 1
+          done
+          if [[ "$api_ready" != "1" ]]; then
+            echo "FastAPI did not become ready" >&2
+            exit 1
+          fi
+
+          HOSTNAME=127.0.0.1 PORT=3000 \
+            node apps/web/.next/standalone/apps/web/server.js \
+            >artifacts/real-stack/web.log 2>&1 &
+          web_pid=$!
+          web_ready=0
+          for _attempt in {1..90}; do
+            if curl --fail --silent --show-error http://127.0.0.1:3000/login \
+              >/dev/null; then
+              web_ready=1
+              break
+            fi
+            kill -0 "$web_pid"
+            sleep 1
+          done
+          if [[ "$web_ready" != "1" ]]; then
+            echo "Production Next server did not become ready" >&2
+            exit 1
+          fi
+
+          npm run test:e2e --workspace @localguard/web -- --project=real-stack
+      - name: Upload real-stack browser failure evidence
+        if: failure()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: playwright-real-stack-failure-evidence
+          path: |
+            apps/web/output/
+            artifacts/real-stack/
+          if-no-files-found: warn
+          retention-days: 7

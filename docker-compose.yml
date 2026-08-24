@@ -1,0 +1,197 @@
+name: localguard
+
+x-logging: &default-logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
+x-backend-environment: &backend-environment
+  APP_ENV: ${APP_ENV:-development}
+  ALLOW_TEST_PROVIDERS: ${ALLOW_TEST_PROVIDERS:-false}
+  AI_PROVIDER: ${AI_PROVIDER:-ollama}
+  EMBEDDING_PROVIDER: ${EMBEDDING_PROVIDER:-ollama}
+  POSTGRES_PASSWORD: ""
+  BOOTSTRAP_ADMIN_PASSWORD: ""
+  BOOTSTRAP_REVIEWER_PASSWORD: ""
+  BOOTSTRAP_VIEWER_PASSWORD: ""
+  MCP_BOOTSTRAP_TOKEN: ""
+
+x-backend-service: &backend-service
+  image: localguard-backend:dev
+  build:
+    context: .
+    dockerfile: Dockerfile.backend
+  env_file: .env
+  environment: *backend-environment
+  networks: [backend]
+  security_opt: ["no-new-privileges:true"]
+  cap_drop: [ALL]
+  logging: *default-logging
+  restart: unless-stopped
+
+services:
+  db:
+    image: pgvector/pgvector:0.8.6-pg16-bookworm@sha256:ccc6e83d6e35e931dc7c5def2022729d5a6c370318d099181995567ff1fb4d6b
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:?POSTGRES_DB is required}
+      POSTGRES_USER: ${POSTGRES_USER:?POSTGRES_USER is required}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks: [backend]
+    mem_limit: 512m
+    shm_size: 128m
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    logging: *default-logging
+    restart: unless-stopped
+
+  redis:
+    image: redis:7.2.15-alpine@sha256:05a97a479bc73de66f087dc05b569010772880f778cc8671fa6b8aadee32e5c6
+    command: ["redis-server", "--appendonly", "yes", "--maxmemory", "128mb", "--maxmemory-policy", "noeviction", "--save", "60", "1"]
+    volumes:
+      - redis_data:/data
+    networks: [backend]
+    mem_limit: 192m
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    logging: *default-logging
+    restart: unless-stopped
+
+  ollama:
+    image: ollama/ollama:0.32.14@sha256:9d30908e41144b1f1da89b9d8e33c07e4aeb43ff41a8660241b1686e2cc330ad
+    profiles: ["app"]
+    environment:
+      OLLAMA_HOST: 0.0.0.0:11434
+      OLLAMA_NUM_PARALLEL: ${OLLAMA_NUM_PARALLEL:-1}
+      OLLAMA_MAX_LOADED_MODELS: ${OLLAMA_MAX_LOADED_MODELS:-1}
+      OLLAMA_CONTEXT_LENGTH: ${MODEL_CONTEXT_TOKENS:-4096}
+      OLLAMA_KEEP_ALIVE: 5m
+    volumes:
+      - ollama_models:/root/.ollama
+    networks: [backend]
+    mem_limit: 4g
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+    logging: *default-logging
+    restart: unless-stopped
+
+  api:
+    <<: *backend-service
+    profiles: ["app"]
+    command: ["uvicorn", "localguard_api.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1"]
+    depends_on:
+      db: {condition: service_healthy}
+      redis: {condition: service_healthy}
+    volumes:
+      - uploads:/var/lib/localguard/uploads
+      - ./artifacts:/workspace/artifacts
+      - ./evals/results:/workspace/evals/results
+    ports:
+      - "127.0.0.1:8000:8000"
+    networks: [edge, backend]
+    mem_limit: 512m
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health/live', timeout=2)"]
+      interval: 10s
+      timeout: 4s
+      retries: 20
+
+  worker:
+    <<: *backend-service
+    profiles: ["app"]
+    command: ["celery", "-A", "localguard_worker.app:celery_app", "worker", "--loglevel=INFO", "--concurrency=1", "--prefetch-multiplier=1"]
+    depends_on:
+      db: {condition: service_healthy}
+      redis: {condition: service_healthy}
+      ollama: {condition: service_healthy}
+    volumes:
+      - uploads:/var/lib/localguard/uploads
+      - ./artifacts:/workspace/artifacts
+    mem_limit: 768m
+    healthcheck:
+      test: ["CMD-SHELL", "celery -A localguard_worker.app inspect ping --destination celery@$$HOSTNAME --timeout 5"]
+      interval: 15s
+      timeout: 8s
+      retries: 20
+      start_period: 15s
+
+  admin-cli:
+    <<: *backend-service
+    profiles: ["tools"]
+    environment:
+      <<: *backend-environment
+      BOOTSTRAP_ADMIN_PASSWORD: ${BOOTSTRAP_ADMIN_PASSWORD:?BOOTSTRAP_ADMIN_PASSWORD is required}
+      BOOTSTRAP_REVIEWER_PASSWORD: ${BOOTSTRAP_REVIEWER_PASSWORD:?BOOTSTRAP_REVIEWER_PASSWORD is required}
+      BOOTSTRAP_VIEWER_PASSWORD: ${BOOTSTRAP_VIEWER_PASSWORD:?BOOTSTRAP_VIEWER_PASSWORD is required}
+      MCP_BOOTSTRAP_TOKEN: ${MCP_BOOTSTRAP_TOKEN:?MCP_BOOTSTRAP_TOKEN is required}
+    depends_on:
+      db: {condition: service_healthy}
+      redis: {condition: service_healthy}
+    volumes:
+      - uploads:/var/lib/localguard/uploads
+      - ./artifacts:/workspace/artifacts
+      - ./evals/results:/workspace/evals/results
+    restart: "no"
+
+  mcp:
+    <<: *backend-service
+    profiles: ["app"]
+    command: ["python", "-m", "localguard_mcp.server"]
+    depends_on:
+      api: {condition: service_healthy}
+    ports:
+      - "127.0.0.1:8001:8001"
+    networks: [edge, backend]
+    mem_limit: 256m
+    healthcheck:
+      test: ["CMD", "python", "-c", "import socket; sock=socket.create_connection(('127.0.0.1',8001),2); sock.close()"]
+      interval: 10s
+      timeout: 4s
+      retries: 20
+
+  web:
+    image: localguard-web:dev
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    profiles: ["app"]
+    environment:
+      API_INTERNAL_URL: http://api:8000
+      NODE_ENV: production
+    security_opt: ["no-new-privileges:true"]
+    cap_drop: [ALL]
+    depends_on:
+      api: {condition: service_healthy}
+    ports:
+      - "127.0.0.1:3000:3000"
+    networks: [edge]
+    mem_limit: 768m
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/login').then(r=>{if(!r.ok)process.exit(1)})"]
+      interval: 10s
+      timeout: 4s
+      retries: 20
+    logging: *default-logging
+    restart: unless-stopped
+
+networks:
+  edge:
+  backend:
+    internal: true
+
+volumes:
+  postgres_data:
+  redis_data:
+  ollama_models:
+  uploads:

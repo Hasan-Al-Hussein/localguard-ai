@@ -1,0 +1,21 @@
+export const queryKeys = {
+  auth: ["auth"] as const,
+  csrf: ["csrf"] as const,
+  health: ["health"] as const,
+  overview: ["overview"] as const,
+  documents: (filters?: string) => ["documents", filters ?? "all"] as const,
+  document: (id: string) => ["document", id] as const,
+  documentPage: (id: string, page: number) => ["document", id, "page", page] as const,
+  revisionSection: (documentId: string, revisionId: string, anchorKey: string, start: number, end: number) =>
+    ["document", documentId, "revision", revisionId, "anchor", anchorKey, start, end] as const,
+  question: (id: string) => ["question", id] as const,
+  workflow: (id: string) => ["workflow", id] as const,
+  approvals: (filters?: string) => ["approvals", filters ?? "all"] as const,
+  approval: (id: string) => ["approval", id] as const,
+  tasks: (filters?: string) => ["tasks", filters ?? "all"] as const,
+  task: (id: string) => ["task", id] as const,
+  evaluations: (filters?: string) => ["evaluations", filters ?? "all"] as const,
+  evaluation: (id: string) => ["evaluation", id] as const,
+  audit: (filters?: string) => ["audit", filters ?? "all"] as const,
+  auditEvent: (id: string) => ["audit", id] as const,
+};

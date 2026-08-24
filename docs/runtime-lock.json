@@ -1,0 +1,60 @@
+{
+  "locked_at_utc": "2026-08-23T03:29:56Z",
+  "containers": {
+    "python": {
+      "tag": "python:3.12.12-slim-bookworm",
+      "digest": "sha256:593bd06efe90efa80dc4eee3948be7c0fde4134606dd40d8dd8dbcade98e669c"
+    },
+    "postgres_pgvector": {
+      "tag": "pgvector/pgvector:0.8.6-pg16-bookworm",
+      "digest": "sha256:ccc6e83d6e35e931dc7c5def2022729d5a6c370318d099181995567ff1fb4d6b"
+    },
+    "redis": {
+      "tag": "redis:7.2.15-alpine",
+      "digest": "sha256:05a97a479bc73de66f087dc05b569010772880f778cc8671fa6b8aadee32e5c6"
+    },
+    "ollama": {
+      "tag": "ollama/ollama:0.32.14",
+      "digest": "sha256:9d30908e41144b1f1da89b9d8e33c07e4aeb43ff41a8660241b1686e2cc330ad",
+      "acceleration": "CPU only"
+    },
+    "node": {
+      "tag": "node:24.13.0-alpine",
+      "digest": "sha256:cd6fb7efa6490f039f3471a189214d5f548c11df1ff9e5b181aa49e22c14383e"
+    }
+  },
+  "models": {
+    "generation_selected": {
+      "tag": "qwen3:1.7b-q4_K_M",
+      "manifest_sha256": "8f68893c685c3ddff2aa3fffce2aa60a30bb2da65ca488b61fff134a4d1730e7",
+      "gate": "3/3 chat cases plus 384-dimensional embedding passed",
+      "warm_median_latency_ms": 4912.23,
+      "embedding_latency_ms": 646.93,
+      "observed_ollama_peak_gib": 2.008,
+      "artifact": "artifacts/model-gate-qwen3-1.7b.json"
+    },
+    "generation_rejected": {
+      "tag": "qwen2.5:1.5b-instruct-q4_K_M",
+      "manifest_sha256": "65ec06548149b04c096a120e4a6da9d4017ea809c91734ea5631e89f96ddc57b",
+      "gate": "3/3 passed",
+      "warm_median_latency_ms": 11294.36,
+      "reason": "slower median and a repetitive 175-token abstention",
+      "removed_after_comparison": true,
+      "artifact": "artifacts/model-gate-qwen2.5-1.5b.json"
+    },
+    "embedding": {
+      "tag": "all-minilm:22m-l6-v2-fp16",
+      "manifest_sha256": "1b226e2802dbb772b5fc32a58f103ca1804ef7501331012de126ab22f67475ef",
+      "observed_runner_context_tokens": 256,
+      "truncate": false,
+      "long_input_policy": "lossless adaptive segments, length-weighted mean, L2 normalization"
+    }
+  },
+  "limits": {
+    "parallel_model_requests": 1,
+    "loaded_models": 1,
+    "context_tokens": 4096,
+    "max_output_tokens": 512,
+    "worker_concurrency": 1
+  }
+}

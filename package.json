@@ -1,0 +1,22 @@
+{
+  "name": "localguard-ai",
+  "private": true,
+  "version": "0.1.0",
+  "packageManager": "npm@11.6.2",
+  "workspaces": [
+    "apps/web",
+    "packages/contracts"
+  ],
+  "scripts": {
+    "build": "npm run build --workspace @localguard/web",
+    "lint": "npm run lint --workspace @localguard/web",
+    "typecheck": "npm run typecheck --workspace @localguard/web",
+    "test": "npm run test --workspace @localguard/web",
+    "test:e2e": "npm run test:e2e --workspace @localguard/web",
+    "contracts": "npm run generate --workspace @localguard/contracts"
+  },
+  "engines": {
+    "node": ">=24.13.0 <25",
+    "npm": ">=11.6.2 <12"
+  }
+}
