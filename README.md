@@ -7,92 +7,67 @@
 **Local-first document intelligence where every answer resolves to source proof and every action waits for human approval.**
 
 [![CI](https://img.shields.io/github/actions/workflow/status/Hasan-Al-Hussein/localguard-ai/ci.yml?branch=main&style=for-the-badge&label=CI)](https://github.com/Hasan-Al-Hussein/localguard-ai/actions/workflows/ci.yml)
-![Local-first](https://img.shields.io/badge/RUNTIME-LOCAL--FIRST-18BFA5?style=for-the-badge)
-![CPU-only](https://img.shields.io/badge/INFERENCE-CPU--ONLY-4F8CFF?style=for-the-badge)
+[![Demo](https://img.shields.io/badge/DEMO-85_SECONDS-18BFA5?style=for-the-badge)](docs/demo/localguard-demo.webm)
+![Local-first](https://img.shields.io/badge/RUNTIME-LOCAL--FIRST-4F8CFF?style=for-the-badge)
+![CPU-only](https://img.shields.io/badge/INFERENCE-CPU--ONLY-68758A?style=for-the-badge)
 [![MIT License](https://img.shields.io/badge/LICENSE-MIT-F5B942?style=for-the-badge)](LICENSE)
 
-[Pipeline](docs/pipeline.md) · [Demo video](docs/demo/localguard-demo.webm) · [Architecture](docs/architecture.md) · [Security](docs/security.md) · [Evaluation](docs/evaluation.md) · [Windows quick start](README-WINDOWS.txt)
+[Product tour](#see-the-complete-workflow) · [Pipeline](docs/pipeline.md) · [Architecture](docs/architecture.md) · [Security](docs/security.md) · [Evaluation](docs/evaluation.md) · [Windows quick start](README-WINDOWS.txt)
 
 </div>
 
-LocalGuard AI ingests PDF, DOCX, and TXT files, preserves immutable source locations, and answers
-questions through hybrid retrieval and evidence-confirmed bindings. An action request becomes an
-inert proposal, pauses in LangGraph, and cannot create a task until an authenticated reviewer
-approves the bound version, payload, evidence snapshot, and expiry.
+LocalGuard AI turns PDF, DOCX, and TXT files into evidence-grounded answers and controlled
+workflows. It preserves immutable source locations, combines vector and full-text retrieval, and
+lets a local model confirm bounded evidence bindings rather than invent cited facts.
 
-The standard runtime stays on one Windows computer. Generation and embeddings use pinned Ollama
-models, PostgreSQL with pgvector is authoritative, and the application needs neither a paid model
-API nor a GPU. This is an engineering demonstration, not legal advice or a production compliance
-system.
+When a request could create work, the system produces an inert proposal and pauses. Only an
+authenticated reviewer can approve the exact version, payload, evidence snapshot, and expiry;
+database uniqueness then permits one task. Generation and embeddings run locally with pinned
+Ollama models, with no paid model API or GPU required.
+
+This is a single-machine engineering demonstration—not legal advice or a production multi-tenant
+compliance system.
+
+## Why LocalGuard exists
+
+Plausible answers are easy to generate. Proving where they came from—and preventing suggestions
+from silently becoming privileged actions—is harder. LocalGuard makes both guarantees application
+responsibilities:
+
+- every citation resolves to an immutable document revision and exact source range;
+- uploaded text is untrusted evidence, never an instruction or approval channel;
+- roles, evidence sufficiency, and tool access are enforced outside the model;
+- action requests stop at a version- and hash-bound human review record;
+- retrieval, model output, tools, approvals, retries, and failures leave a correlated audit trail.
 
 ## Evidence at a glance
 
 | Signal | Verified release evidence |
 |---|---|
 | Local-model evaluation | 25/25 hash-verified cases completed under schema 1.2.0 and dataset 1.0.2 |
-| Grounding | 1.0000 macro and pooled citation precision, zero unsupported claims in the measured corpus |
-| Human approval | 7/7 approval transitions, with zero preapproval tasks or executions |
+| Grounding | 1.0000 macro and pooled citation precision; zero unsupported claims in the measured corpus |
+| Human approval | 7/7 approval transitions; zero preapproval tasks or executions |
 | Adversarial controls | 5/5 insufficiency abstentions, 27/27 injection controls, 97/97 forbidden controls |
-| Deterministic quality gates | 383 Python unit/security tests, 45 integration tests, and 46 frontend tests passed locally |
-| Product evidence | Twelve-step walkthrough plus seven guarded captures from the validated local workflow |
+| Deterministic quality gates | 384 Python unit/security tests, 45 integration tests, and 46 frontend tests passed locally |
+| Public CI | [Five-job GitHub Actions workflow](https://github.com/Hasan-Al-Hussein/localguard-ai/actions/workflows/ci.yml), passing on `main` |
 
-These are bounded results from the documented synthetic corpus and target CPU-only laptop. They are
-not production, legal, or general model-accuracy claims.
+These are bounded results from the documented synthetic corpus and target CPU-only laptop. They
+are not production, legal, or general model-accuracy claims.
 
-## The problem
+## See the complete workflow
 
-Operational documents contain deadlines, responsibilities, exceptions, and required actions.
-Finding a plausible answer is easy; proving where it came from and controlling what happens next
-is harder. LocalGuard treats those concerns as application responsibilities:
+<div align="center">
+  <a href="docs/demo/localguard-demo.webm"><img src="docs/screenshots/pipeline/step-02-overview-system-status.png" width="900" alt="Open the 85-second LocalGuard AI product demo" /></a>
+  <br />
+  <strong><a href="docs/demo/localguard-demo.webm">▶ Watch the 85-second product tour</a></strong>
+</div>
 
-- citations resolve to immutable document revisions and exact source ranges;
-- uploaded text is untrusted evidence, never an instruction or approval channel;
-- roles and tool access are enforced outside the model;
-- action requests stop at a version-bound approval record;
-- retrieval, model output, tools, approvals, retries, and failures leave an audit trail.
+The recording moves through the live local overview, document library, exact source proof, Ask
+workspace, human approval boundary, approved task, causal audit trail, and passing evaluation.
+Authentication happens before recording, so no local password appears in the video.
 
-## What I engineered
-
-- Built the source-preserving PDF, DOCX, and TXT ingestion path with immutable revisions, stable
-  anchors, local embeddings, pgvector search, PostgreSQL full-text search, and reciprocal-rank
-  fusion.
-- Designed evidence-binding contracts where the application scopes and derives facts while the
-  local model confirms a valid binding or abstains.
-- Implemented the LangGraph human-review interrupt, version and hash binding, role revalidation,
-  durable audit trail, and database-enforced exactly-once task creation.
-- Developed the FastAPI, Next.js, Celery, FastMCP, migration, packaging, test, browser, and
-  evaluation surfaces that make the full local workflow reproducible.
-
-## What is implemented
-
-| Area | Current behavior |
-|---|---|
-| Document intake | Validates PDF, DOCX, and TXT by extension, declared type, detected content, size, and format-specific limits |
-| Source preservation | Stores immutable revisions with real PDF pages, DOCX structural anchors, or TXT line ranges |
-| Retrieval | Combines exact pgvector cosine search and PostgreSQL full-text search with reciprocal-rank fusion |
-| Answering | Uses a sufficient-evidence gate, model confirmation of opaque exact-marker bindings, and application-derived answers, claims, and server-resolved citations under `qa-fact-binding-v1` |
-| Extraction | Supports unambiguous modal obligations and deadlines plus the immediate-when-safe required-action shape, with actor/action/deadline fields |
-| Extraction boundary | Under `evidence_derived_binding_confirmation_v2`, the application scopes the complete supported evidence-binding set, the model confirms that set or abstains, and the application derives every finding field. Standalone risk and party extraction are unsupported roadmap capabilities |
-| Agent workflow | Runs an explicit LangGraph classify, retrieve, assess, generate, validate, propose, interrupt, and resume flow. For actions, `evidence_derived_binding_selection_v2` lets the model select one evidence binding while the application derives claim and proposal fields |
-| Human approval | Binds proposal version, payload hash, evidence hash, expiry, actor, and graph thread before one task may be created |
-| MCP | Exposes five schema-validated, RBAC-aware, audited FastMCP tools on loopback |
-| Reliability | Uses a PostgreSQL outbox, idempotent Celery work, stale-claim recovery, cleanup retries, and correlation IDs |
-| Evaluation | Uses evaluator schema `1.2.0` and the final audited, hash-verified dataset v1.0.2 corpus against either a deterministic provider or the pinned Ollama provider |
-| Product UI | Includes overview, documents, viewer, ask, approvals, tasks, evaluations, and audit screens |
-
-## End-to-end pipeline
-
-<img src="docs/visuals/localguard-pipeline.svg" width="100%" alt="LocalGuard AI pipeline from validated document intake through immutable indexing, evidence confirmation, human review, exactly-once task creation, and audit" />
-
-The answer path ends in exact source proof. The action path adds an inert proposal and authenticated
-human decision before task creation. The [complete twelve-step walkthrough](docs/pipeline.md) shows
-every visible stage and explains what the application is doing behind it.
-
-## Guided product tour
-
-These consistently framed milestones come from the validated local workflow. Open any image for
-full resolution, or follow the [complete pipeline](docs/pipeline.md) for sign-in, citation proof,
-pending approval, and evaluation detail as well.
+These six equally framed captures show the core journey. Open any image for full resolution, or
+follow the [complete twelve-step walkthrough](docs/pipeline.md) for every intermediate state.
 
 <table>
   <tr>
@@ -109,34 +84,56 @@ pending approval, and evaluation detail as well.
   </tr>
 </table>
 
-## 85-second demo
+## End-to-end pipeline
 
-<div align="center">
-  <a href="docs/demo/localguard-demo.webm"><img src="docs/screenshots/pipeline/step-02-overview-system-status.png" width="900" alt="Open the LocalGuard AI product demo video" /></a>
-  <br />
-  <strong><a href="docs/demo/localguard-demo.webm">▶ Watch the product tour</a></strong>
-</div>
+<img src="docs/visuals/localguard-pipeline.svg" width="100%" alt="LocalGuard AI pipeline from validated document intake through immutable indexing, evidence confirmation, human review, exactly-once task creation, and audit" />
 
-The chaptered WebM recording moves through the live local overview, document library, exact source
-proof, Ask workspace, human approval boundary, approved task, causal audit trail, and passing
-evaluation. Authentication happens before recording, so no local password appears in the video.
+The answer path ends in exact source proof. The action path adds an inert proposal and authenticated
+human decision before task creation. The [pipeline walkthrough](docs/pipeline.md) connects all 12
+visible stages to the implementation behind them.
+
+## What I engineered
+
+- Built source-preserving PDF, DOCX, and TXT ingestion with immutable revisions, stable anchors,
+  local embeddings, pgvector search, PostgreSQL full-text search, and reciprocal-rank fusion.
+- Designed evidence-binding contracts where the application scopes and derives facts while the
+  local model confirms a valid binding or abstains.
+- Implemented the LangGraph human-review interrupt, version and hash binding, role revalidation,
+  durable audit trail, and database-enforced exactly-once task creation.
+- Developed the FastAPI, Next.js, Celery, FastMCP, migration, packaging, browser-test, and
+  evaluation surfaces needed to reproduce the complete local workflow.
 
 ## Architecture
 
 <img src="docs/visuals/localguard-architecture.svg" width="100%" alt="LocalGuard AI architecture with local clients, loopback entry points, application workflow, and private data and model services" />
 
 PostgreSQL is authoritative. Redis contains replaceable broker state and the cross-process model
-lease. Web, API, and MCP ports bind to `127.0.0.1`; PostgreSQL, Redis, and Ollama are not published
-to the host. Model downloads use a separate temporary Compose overlay, then Ollama returns to the
-internal network.
+lease. Web, API, and MCP ports bind to `127.0.0.1`; PostgreSQL, Redis, and Ollama stay on the private
+Docker network. Model downloads use a temporary Compose overlay, after which Ollama returns to the
+internal network. See the [architecture guide](docs/architecture.md) for state transitions,
+recovery behavior, and design decisions.
 
-The longer design discussion is in [docs/architecture.md](docs/architecture.md).
+## System capabilities
+
+| Surface | Implemented behavior |
+|---|---|
+| Intake and source proof | Validates format and parser limits, stores immutable revisions, and preserves PDF pages, DOCX structure, or TXT line ranges |
+| Retrieval and answering | Fuses pgvector and PostgreSQL full-text search, gates evidence sufficiency, and derives answers and citations from confirmed marker bytes |
+| Structured extraction | Derives bounded actor, action, and deadline fields; unsupported or ambiguous evidence produces an abstention |
+| Human approval | Binds proposal version, payload hash, evidence hash, expiry, actor, and graph thread before one task may exist |
+| Tools and jobs | Exposes five RBAC-aware FastMCP tools and retry-aware Celery work with idempotency and stale-claim recovery |
+| Audit and reliability | Records correlation-bound events and uses PostgreSQL checkpoints, uniqueness constraints, and a durable outbox |
+| Product UI | Includes overview, documents, preserved-source viewer, Ask, approvals, tasks, evaluations, and audit screens |
+| Evaluation | Runs a versioned 25-case corpus against deterministic CI providers or the pinned local Ollama provider |
+
+The exact binding contracts, supported request shapes, and code paths are documented in
+[docs/pipeline.md](docs/pipeline.md) and [docs/evaluation.md](docs/evaluation.md).
 
 ## Technology
 
 | Layer | Main components |
 |---|---|
-| Web | Next.js 16, React 19, TypeScript 5.9, Tailwind CSS 4, TanStack Query and Table, React Hook Form, Zod, Recharts |
+| Web | Next.js 16, React 19, TypeScript 5.9, Tailwind CSS 4, TanStack Query and Table, Zod, Recharts |
 | API | Python 3.12, FastAPI, Pydantic 2, SQLAlchemy 2, Alembic |
 | Agent and tools | LangGraph, PostgreSQL checkpoints, FastMCP 3, strict structured outputs |
 | Local AI | Ollama 0.32, `qwen3:1.7b-q4_K_M`, `all-minilm:22m-l6-v2-fp16` embeddings |
@@ -144,91 +141,55 @@ The longer design discussion is in [docs/architecture.md](docs/architecture.md).
 | Verification | Pytest, Ruff, strict mypy, Vitest, Testing Library, Playwright, actionlint |
 | Runtime | Docker Compose, digest-pinned service images, PowerShell 7 scripts |
 
-Exact package versions are locked in `requirements.lock`, `package-lock.json`, and
-[docs/runtime-lock.json](docs/runtime-lock.json).
-The current application-schema head is Alembic revision `20260823_0004`.
+Exact versions are locked in `requirements.lock`, `package-lock.json`, and
+[docs/runtime-lock.json](docs/runtime-lock.json). The application-schema head is Alembic revision
+`20260823_0004`.
 
-## Run it on Windows
+## Run locally on Windows
 
-### Prerequisites
+The standard target is a 16 GB Windows laptop with an Intel CPU, integrated graphics, PowerShell 7,
+Docker Desktop, Node.js `24.13.x`, and npm `11.6.x`. Host Python, PostgreSQL, Redis, Celery, Ollama,
+a GPU, and paid model credentials are not required.
 
-- PowerShell 7 (`pwsh`)
-- Docker Desktop using the Linux container engine
-- Node.js `24.13.x` and npm `11.6.x`
-- Internet access for the first dependency, image, and model download
-
-The target machine has 16 GB RAM, an Intel CPU with integrated graphics, and no CUDA device. Host
-Python, PostgreSQL, Redis, Celery, and Ollama are not required.
-
-For the packaged Windows release, extract the ZIP and double-click `START-LOCALGUARD.cmd`. The
-launcher checks the package, offers to install missing free prerequisites, generates local-only
-credentials, starts the stack, and opens the app. See `README-WINDOWS.txt` in the package for the
-resumable first-run flow and hardware requirements.
-
-If Docker Desktop or Node.js is missing, the free installation commands are:
-
-```powershell
-winget install --exact --id Docker.DockerDesktop
-winget install --exact --id OpenJS.NodeJS.LTS
-```
-
-### First setup
-
-Open PowerShell 7 in the repository root:
+For the packaged release, extract the ZIP and double-click `START-LOCALGUARD.cmd`. For a source
+checkout, open PowerShell 7 in the repository root:
 
 ```powershell
 pwsh -File .\scripts\bootstrap.ps1
 pwsh -File .\scripts\dev.ps1
 ```
 
-Bootstrap performs locked npm installation, pulls the database and Redis images, builds the
-application images, checks the live OpenAPI snapshot, applies and checks migrations, creates
-LangGraph checkpoint tables, seeds demo users, and verifies the pinned local model manifests. It
-creates an ignored `.env` with random local credentials and does not print their values.
+Bootstrap installs locked dependencies, builds the stack, applies migrations, creates checkpoint
+tables and demo users, and verifies pinned model manifests. It creates an ignored `.env` with
+random local credentials and never prints their values. Open
+[http://localhost:3000](http://localhost:3000) when setup completes.
 
-Open [http://localhost:3000](http://localhost:3000). Demo usernames are `demo-admin`,
-`demo-reviewer`, and `demo-viewer`; read the matching password from the local ignored `.env`.
-Development-only FastAPI docs are available at [http://localhost:8000/docs](http://localhost:8000/docs).
-
-### Normal commands
-
-| Task | PowerShell command |
+| Task | Command |
 |---|---|
-| Start or update the local stack | `pwsh -File .\scripts\dev.ps1` |
-| Stop containers and keep data | `pwsh -File .\scripts\stop.ps1` |
-| Run all configured test suites | `pwsh -File .\scripts\test.ps1 -Suite all` |
-| Run unit checks only | `pwsh -File .\scripts\test.ps1 -Suite unit` |
-| Run PostgreSQL and Redis integration tests | `pwsh -File .\scripts\test.ps1 -Suite integration` |
-| Run both browser suites | `pwsh -File .\scripts\test.ps1 -Suite e2e` |
+| Start or update | `pwsh -File .\scripts\dev.ps1` |
+| Stop and preserve data | `pwsh -File .\scripts\stop.ps1` |
+| Run all configured suites | `pwsh -File .\scripts\test.ps1 -Suite all` |
 | Run deterministic evaluation | `pwsh -File .\scripts\evaluate.ps1 -Provider fake` |
-| Run real local-model evaluation | `pwsh -File .\scripts\evaluate.ps1 -Provider ollama` |
-| Reset and run the real demo proof | `pwsh -File .\scripts\demo.ps1 -Reset` |
-| Measure authenticated indexing of all 13 fixtures | `pwsh -File .\scripts\benchmark-index.ps1` |
-| Rotate the local demo-admin password | `pwsh -File .\scripts\rotate-demo-admin.ps1` |
-| Rotate the local MCP bootstrap bearer | `pwsh -File .\scripts\rotate-mcp-token.ps1` |
+| Run the real local-model proof | `pwsh -File .\scripts\demo.ps1 -Reset` |
 
-The scripts stop on failure and preserve project volumes. They do not prune unrelated Docker data.
-Unit, integration, and browser suites inject deterministic providers. Real Ollama behavior is
-covered separately by the demo and local-model evaluation commands.
-See [docs/troubleshooting.md](docs/troubleshooting.md) for bounded recovery steps.
+The complete first-run flow, role credentials, recovery steps, packaging behavior, and additional
+commands live in [README-WINDOWS.txt](README-WINDOWS.txt) and
+[docs/troubleshooting.md](docs/troubleshooting.md).
 
-## Five-minute demo path
+## Reproduce the approval invariant
 
-1. Sign in as `demo-reviewer` and upload
-   `fixtures/documents/clean/lg-pol-001-vendor-access.pdf`.
-2. Wait for the revision to become ready, then open its preserved page text.
-3. Ask: `How long does the Service Desk have to disable a vendor account after it receives an offboarding notice?`
-4. Open the citation and inspect the exact stored passage containing the one-hour requirement.
-5. Submit the action request from [docs/demo-script.md](docs/demo-script.md), then confirm that the
-   proposal exists while the matching task count is zero.
-6. Approve the bound proposal as a reviewer and confirm that exactly one task appears. A replay must
-   return a conflict and must not create a second task.
-7. Follow the correlation and workflow thread in the audit log.
+1. Sign in as `demo-reviewer` and upload `fixtures/documents/clean/lg-pol-001-vendor-access.pdf`.
+2. Ask how long the Service Desk has to disable a vendor account after an offboarding notice.
+3. Open the citation and inspect the exact stored passage containing the one-hour requirement.
+4. Submit the action request from [docs/demo-script.md](docs/demo-script.md) and confirm the matching
+   task count remains zero while approval is pending.
+5. Approve the bound proposal, confirm exactly one task appears, and follow its workflow thread in
+   the audit log. Replaying the approval must return a conflict without creating a second task.
 
-The automated proof command writes `artifacts/verification/demo.json`. It refuses the deterministic
-provider so the final demo cannot silently fall back to a fake model.
+The automated proof writes `artifacts/verification/demo.json` and refuses the deterministic
+provider, so the portfolio demo cannot silently fall back to a fake model.
 
-## Evaluation evidence
+## Evaluation and verification
 
 The current audited corpus contains 25 synthetic cases across grounded answers, insufficient
 evidence, indirect prompt injection, and action/approval behavior. It scores observed application
@@ -239,121 +200,79 @@ behavior without sending gold answers to the system under test or using a learne
 | Completion and gates | 25/25; safety, quality, and overall gates passed |
 | Citation precision | 1.0000 macro and pooled; 31/31 returned citations supported |
 | Extraction F1 | 0.8889 |
-| Safety controls | 5/5 abstentions, 27/27 injection controls, 97/97 forbidden controls |
 | Human approval boundary | 7/7 transitions; zero preapproval tasks or executions |
-| Total latency on the target CPU laptop | 10.841 s p50; 15.547 s p95 |
+| Target-laptop latency | 10.841 s p50; 15.547 s p95 |
+| Target-laptop resources | 3.98 GB successful warm-query peak; approximately 12.94 GB attributable disk |
 
-These are bounded results for evaluator schema `1.2.0`, dataset `1.0.2`, and the pinned local model
-pair. The [full evaluation record](docs/evaluation.md) preserves the corpus and run hashes, metric
-formulas, thresholds, reproduction steps, structured contract names, and non-comparable historical
-results without forcing those details into the first project overview.
+The [evaluation record](docs/evaluation.md) preserves corpus and run hashes, metric formulas,
+thresholds, reproduction steps, and non-comparable historical results. The
+[resource report](docs/resource-benchmarks.md) defines the measurement protocol and accounting
+scope.
 
-## Verification
-
-The definitive backend and web images were rebuilt from the frozen tree and tested locally. The
-published repository was also exercised by all five jobs in the public GitHub Actions workflow.
-
-| Gate | Observed result |
-|---|---:|
-| Python unit and security suite | 384 passed; 48 integration/real-model cases deselected |
-| Disposable PostgreSQL, pgvector, Redis, graph, MCP, worker, evaluator integration | 45 passed, 1 expected opt-in real-model skip |
-| Frontend Vitest suite | 46 passed across 8 files |
-| Live Ollama portfolio Playwright | 1 passed in 47.5 seconds; 7 screenshots published atomically |
-| Python formatting, lint, and strict types | Ruff 155-file format check and lint pass; strict mypy passes for 44 source files |
-| Frontend contracts, lint, types, and production build | Pass |
-| FastAPI OpenAPI snapshot, Alembic head/drift, and backend image bytes | Pass; `20260823_0004`, no drift, 143/143 copied files match |
-| GitHub Actions publication run | [All five jobs passed](https://github.com/Hasan-Al-Hussein/localguard-ai/actions/runs/32686128422) |
-
-The unmocked Playwright journey used production Next.js, its same-origin BFF, FastAPI,
-PostgreSQL/pgvector, Redis, Celery, and deterministic providers. It proved upload and processing,
-the cited one-hour answer, immutable citation resolution, zero tasks before approval, one task after
-approval, and no duplicate task after replay. Deterministic providers keep this path free and
-repeatable; they do not turn it into a real-model benchmark.
-
-GitHub Actions is defined in [.github/workflows/ci.yml](.github/workflows/ci.yml) with pinned actions,
-digest-pinned data services, masked ephemeral bootstrap credentials, no paid model API key, and no
-model download. Its deterministic full-stack job exercises production Next.js, FastAPI,
-PostgreSQL/pgvector, Redis, Celery, and an unmocked browser journey.
+The frozen release also passed 384 Python unit/security tests, 45 disposable PostgreSQL/Redis
+integration tests with one expected opt-in real-model skip, 46 frontend tests, strict Ruff and mypy,
+frontend lint/type/build, OpenAPI parity, migration checks, image-byte verification, and both
+desktop and mobile browser contracts. The public [five-job GitHub Actions workflow](https://github.com/Hasan-Al-Hussein/localguard-ai/actions/workflows/ci.yml)
+passed without a paid API key or model download. Full commands and proof boundaries are in
+[docs/verification-log.md](docs/verification-log.md).
 
 ## Security and privacy boundaries
 
-- Browser authentication uses opaque HttpOnly sessions, Argon2id passwords, CSRF checks, login
-  throttling, trusted hosts, and server-side RBAC.
-- Bootstrap writes random demo credentials only to ignored `.env`. The rotation script updates the
-  demo-admin credential and database hash without printing the new value, and restores the prior
-  value if rotation fails.
-- Upload storage uses generated private storage keys, atomic writes, path containment, parser limits, and no
-  document execution.
-- The model receives delimited untrusted evidence and can cite only retrieved opaque chunk IDs.
-- Privileged task creation requires a stored reviewer/admin decision bound to proposal and evidence
-  hashes. Database uniqueness enforces one task.
-- MCP tools resolve their principal from a hashed bearer token and share REST authorization and
-  audit policy.
-- Only original synthetic documents are committed. A corpus validator checks hashes and rejects
-  common private-data patterns.
-- Normal runtime ports stay on host loopback. The local HTTP setup has no TLS and must not be
-  exposed to another machine.
+- Authentication uses opaque HttpOnly sessions, Argon2id passwords, CSRF checks, throttling,
+  trusted hosts, and server-side RBAC.
+- Uploads use generated private keys, atomic writes, path containment, parser limits, and no
+  document execution; retrieved text remains untrusted data.
+- Task creation requires a stored reviewer/admin decision bound to proposal and evidence hashes;
+  database uniqueness enforces one task.
+- MCP principals come from hashed bearer tokens and share the REST authorization and audit policy.
+- Only synthetic documents are committed. A corpus validator checks hashes and rejects common
+  private-data patterns.
+- Normal runtime ports stay on loopback. The local HTTP setup has no TLS and must not be exposed to
+  another machine.
 
-The threat boundaries and residual risks are documented in [docs/security.md](docs/security.md).
-
-## Measured resource evidence
-
-The final release benchmark recorded these values on the target CPU-only laptop:
-
-| Measurement | Observed value |
-|---|---:|
-| Selected model | `qwen3:1.7b-q4_K_M` |
-| Full-stack unloaded idle memory | 576.06 MiB across seven containers |
-| Successful warm-query peak | 3,976.33 MiB across seven containers |
-| 25-case retrieval / generation mean | 195.19 ms / 8,921.34 ms |
-| 25-case total latency p95 | 15,546.71 ms |
-| Thirteen-fixture indexing | 6,730.53 ms; 13/13 ready, no duplicate or failure |
-| Single demo PDF ingestion | 727.49 ms |
-| Retained generation and embedding model volume | 1,405,257,156 bytes |
-| Final attributable project disk | approximately 12.94 GB; build cache 0 bytes |
-
-Raw measurements, aggregation rules, the successful query evidence, and disk-accounting scope are
-in [docs/resource-benchmarks.md](docs/resource-benchmarks.md). Both the 3.98 GB query peak and
-12.94 GB retained disk result are below the stated 10 GB and 15 GB targets.
+See [SECURITY.md](SECURITY.md) for private reporting and responsible-use guidance, and
+[docs/security.md](docs/security.md) for trust boundaries, controls, and residual risks.
 
 ## Engineering tradeoffs
 
-| Decision | Benefit | Cost or limit |
+| Decision | Benefit | Limit |
 |---|---|---|
-| Qwen3 1.7B Q4 on CPU | Fits the target laptop and needs no paid API | Slower and less capable than a larger hosted model |
-| Exact vector search for the small corpus | Predictable retrieval without ANN tuning | Must be revisited for a much larger corpus |
-| One model request at a time | Keeps memory bounded across API and worker processes | Reduces throughput |
-| PostgreSQL as the source of truth | Durable approvals, audit, idempotency, and outbox recovery | More local services than an in-memory demo |
-| Opaque local sessions | Revocation and no browser bearer-token storage | Loopback HTTP still lacks TLS |
+| Qwen3 1.7B Q4 on CPU | No paid API and fits the target laptop | Slower and less capable than a larger hosted model |
+| Exact vector search | Predictable retrieval for the bounded corpus | Must be revisited at much larger scale |
+| One model request at a time | Bounds memory across API and worker processes | Reduces throughput |
+| PostgreSQL authority | Durable approvals, audit, idempotency, and recovery | More local services than an in-memory demo |
 | Deterministic CI provider | Fast, free, reproducible safety testing | Does not measure local-model quality |
-| No OCR in the standard path | Smaller and safer CPU workload | Scanned image-only documents are unsupported |
+| No OCR in the standard path | Smaller, safer CPU workload | Scanned image-only documents are unsupported |
 
-## Repository guide
+## Repository map
 
-- [docs/architecture.md](docs/architecture.md): components, state transitions, and recovery model
-- [docs/pipeline.md](docs/pipeline.md): complete twelve-step product walkthrough
-- [docs/security.md](docs/security.md): trust boundaries, controls, and residual risks
-- [docs/evaluation.md](docs/evaluation.md): dataset, metrics, gates, and current evidence
-- [docs/demo-script.md](docs/demo-script.md): five-minute portfolio walkthrough
-- [docs/resource-benchmarks.md](docs/resource-benchmarks.md): benchmark protocol and final measurements
-- [docs/career-pack.md](docs/career-pack.md): CV, LinkedIn, GitHub, and interview wording
-- [docs/troubleshooting.md](docs/troubleshooting.md): Windows and Docker recovery steps
-- [CONTRIBUTING.md](CONTRIBUTING.md): local contribution and verification rules
+| Path | Purpose |
+|---|---|
+| `apps/api/localguard_api` | FastAPI, auth/RBAC, ingestion, retrieval, evidence binding, LangGraph, persistence, audit, migrations |
+| `apps/web` | Next.js product UI, same-origin BFF, Vitest, and Playwright |
+| `services/worker` / `services/mcp` | Celery background work and the authenticated FastMCP server |
+| `packages/contracts` | Checked OpenAPI snapshot, generated TypeScript types, strict Zod contracts |
+| `tests` / `evals` / `fixtures` | Backend and evaluation suites, versioned corpus, synthetic and hostile fixtures |
+| `scripts` | Bootstrap, lifecycle, tests, evaluation, benchmarks, rotation, migration, and packaging commands |
+| `docs` | Architecture, pipeline, security, evaluation, verification, screenshots, and troubleshooting |
+
+Start with [docs/pipeline.md](docs/pipeline.md) for the code-connected workflow,
+[CONTRIBUTING.md](CONTRIBUTING.md) for change expectations, and
+[NOTICE.md](NOTICE.md) for project boundaries and third-party attribution context.
 
 ## Roadmap
 
-- Standalone risk extraction and standalone party/responsible-party extraction are unsupported.
-  Define their schemas, evidence constraints, and evaluation cases before adding either capability.
-- Persist embedding-provider/model identity on document revisions so a future non-evaluator path
-  can reject reuse across changed embedding spaces instead of relying on isolated benchmark state.
-- Add isolated OCR and malware-scanning stages only if a measured use case justifies their CPU and
-  parser risk.
+- Define evidence constraints and evaluation cases before adding standalone risk or party extraction.
+- Persist embedding-provider/model identity on document revisions before supporting changed
+  embedding spaces outside isolated evaluation state.
+- Add OCR and malware scanning only if a measured use case justifies their CPU and parser risk.
 - Add TLS, managed identity, tenant isolation, backups, monitoring, and release signing before any
   deployment beyond loopback demonstration use.
 
 ## License
 
-This repository is licensed under the [MIT License](LICENSE).
+LocalGuard AI is available under the [MIT License](LICENSE). Citation metadata is provided in
+[CITATION.cff](CITATION.cff).
 
 <div align="center">
 

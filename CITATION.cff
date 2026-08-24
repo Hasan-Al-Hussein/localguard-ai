@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: "If this engineering case study supports your work, please cite it using this metadata."
+title: "LocalGuard AI"
+type: software
+authors:
+  - family-names: "Ahmed"
+    given-names: "Hasan"
+repository-code: "https://github.com/Hasan-Al-Hussein/localguard-ai"
+url: "https://github.com/Hasan-Al-Hussein/localguard-ai"
+license: MIT
+version: 0.1.0
+date-released: 2026-08-24

@@ -11,6 +11,7 @@ LocalGuard AI is a local-first engineering portfolio project. Contributions shou
 5. Run `pwsh -File scripts/evaluate.ps1 -Provider fake` for CI-parity evaluation. Real-model claims require a separate `-Provider ollama` run.
 
 Project-local configuration belongs in the ignored `.env` file. Never commit passwords, tokens, personal documents, private datasets, or generated uploads.
+Report suspected vulnerabilities through the private process in [SECURITY.md](SECURITY.md), not in a public issue.
 
 ## Change expectations
 

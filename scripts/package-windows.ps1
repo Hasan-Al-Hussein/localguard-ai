@@ -26,14 +26,14 @@ $stagingRoot = Join-Path $stagingParent $packageName
 
 $rootFiles = @(
     '.dockerignore', '.editorconfig', '.env.example', '.gitattributes', '.gitignore', '.python-version',
-    'alembic.ini', 'CONTRIBUTING.md', 'docker-compose.bootstrap.yml', 'docker-compose.evaluation.yml',
+    'alembic.ini', 'CITATION.cff', 'CONTRIBUTING.md', 'docker-compose.bootstrap.yml', 'docker-compose.evaluation.yml',
     'docker-compose.yml', 'Dockerfile.backend', 'LICENSE', 'package-lock.json', 'package.json',
-    'pyproject.toml', 'README.md', 'README-WINDOWS.txt', 'requirements.lock',
+    'NOTICE.md', 'pyproject.toml', 'README.md', 'README-WINDOWS.txt', 'requirements.lock', 'SECURITY.md',
     'START-LOCALGUARD.cmd', 'STOP-LOCALGUARD.cmd', 'VIEW-LOCALGUARD-LOGIN.cmd'
 )
 $sourceDirectories = @('.github', 'apps', 'docs', 'evals', 'fixtures', 'packages', 'scripts', 'services', 'tests')
 $excludedSegments = [Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
-@('node_modules', '.next', '__pycache__', 'output', 'results', 'playwright-report', 'test-results') | ForEach-Object { [void]$excludedSegments.Add($_) }
+@('node_modules', '.next', '__pycache__', 'output', 'results', 'playwright-report', 'project-handoff', 'test-results') | ForEach-Object { [void]$excludedSegments.Add($_) }
 
 function Copy-LocalGuardPackageFile {
     param([Parameter(Mandatory = $true)][string]$SourcePath, [Parameter(Mandatory = $true)][string]$RelativePath)
@@ -87,7 +87,7 @@ try {
     $archiveEntries = [IO.Compression.ZipFile]::OpenRead($archivePath)
     try {
         $forbidden = @($archiveEntries.Entries | Where-Object {
-            $_.FullName -match '(^|/)(\.env|\.git|node_modules|\.next|results|artifacts)(/|$)'
+            $_.FullName -match '(^|/)(\.env|\.git|node_modules|\.next|results|artifacts|project-handoff)(/|$)'
         })
         if ($forbidden.Count -gt 0) { throw "Archive contains forbidden local state: $($forbidden[0].FullName)" }
         if (-not @($archiveEntries.Entries | Where-Object { $_.FullName -eq "$packageName/START-LOCALGUARD.cmd" }).Count) {

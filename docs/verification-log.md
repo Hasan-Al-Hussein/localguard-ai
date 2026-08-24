@@ -185,3 +185,11 @@ for all 13 fixtures, 727.49 ms for the demo PDF, and approximately 12.94 GB reta
 disk. Both memory and disk targets passed. The fully identified 11.39 GB LocalGuard build cache,
 one stale audit image, and 12 disposable audit volumes were removed; live app data and models were
 preserved.
+
+## 2026-08-24 — GitHub publication evidence
+
+The public repository is `Hasan-Al-Hussein/localguard-ai` on `main`. After the initial publication,
+all five jobs in GitHub Actions run `32687729728` passed for commit
+`c3ffeafb54a7037b93b6a494c71610ea517aa6c4`. A later local release gate recorded 384 Python
+unit/security tests; the earlier 383-test count above is retained as historical evidence for its
+exact frozen image rather than silently rewritten.

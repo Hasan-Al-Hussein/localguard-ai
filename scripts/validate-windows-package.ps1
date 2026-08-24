@@ -55,7 +55,7 @@ try {
     }
 
     $forbidden = @(Get-ChildItem -LiteralPath $packageRoot -Recurse -Force | Where-Object {
-        ($_.Name -in @('.env', '.git', 'node_modules', '.next', 'artifacts')) -or ($_.FullName -match '[\\/]evals[\\/]results(?:[\\/]|$)')
+        ($_.Name -in @('.env', '.git', 'node_modules', '.next', 'artifacts', 'project-handoff')) -or ($_.FullName -match '[\\/]evals[\\/]results(?:[\\/]|$)')
     })
     if ($forbidden.Count -gt 0) { throw "Forbidden local state: $($forbidden[0].FullName)" }
 
