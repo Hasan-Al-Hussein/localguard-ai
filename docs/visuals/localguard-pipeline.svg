@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="570" viewBox="0 0 1600 570" role="img" aria-labelledby="title desc">
+  <title id="title">LocalGuard AI end-to-end evidence and approval pipeline</title>
+  <desc id="desc">Six stages show local document intake, immutable indexing, hybrid retrieval, evidence confirmation and exact citation, human approval, and exactly-once task creation with audit.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#071827" />
+      <stop offset="0.55" stop-color="#0A2B42" />
+      <stop offset="1" stop-color="#073C40" />
+    </linearGradient>
+    <linearGradient id="card" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#123B53" />
+      <stop offset="1" stop-color="#0B2438" />
+    </linearGradient>
+    <linearGradient id="line" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#65E7D4" />
+      <stop offset="1" stop-color="#4F8CFF" />
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" fill="none" stroke="#8EDFD7" stroke-opacity="0.055" />
+    </pattern>
+    <filter id="shadow" x="-20%" y="-30%" width="140%" height="170%">
+      <feDropShadow dx="0" dy="12" stdDeviation="14" flood-color="#020A12" flood-opacity="0.4" />
+    </filter>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0 0 10 5 0 10Z" fill="#65E7D4" />
+    </marker>
+  </defs>
+
+  <rect width="1600" height="570" rx="28" fill="url(#background)" />
+  <rect width="1600" height="570" rx="28" fill="url(#grid)" />
+  <circle cx="1480" cy="50" r="260" fill="#65E7D4" opacity="0.05" />
+  <circle cx="100" cy="560" r="260" fill="#4F8CFF" opacity="0.055" />
+
+  <text x="70" y="54" fill="#BFF8EE" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" letter-spacing="2">ONE LOCAL, EVIDENCE-BOUND PIPELINE</text>
+  <text x="70" y="91" fill="#FFFFFF" font-family="Segoe UI, Arial, sans-serif" font-size="30" font-weight="700">From source document to one authorized task</text>
+
+  <g font-family="Segoe UI, Arial, sans-serif" filter="url(#shadow)">
+    <g transform="translate(70 135)">
+      <rect width="450" height="145" rx="18" fill="url(#card)" stroke="#4F8CFF" stroke-opacity="0.55" />
+      <rect x="22" y="22" width="48" height="30" rx="15" fill="#153B65" />
+      <text x="36" y="43" fill="#AFC9FF" font-size="15" font-weight="800">01</text>
+      <text x="88" y="46" fill="#FFFFFF" font-size="22" font-weight="700">Validate intake</text>
+      <text x="24" y="88" fill="#B8CDDA" font-size="16">PDF, DOCX, or TXT is checked by type, bytes,</text>
+      <text x="24" y="115" fill="#B8CDDA" font-size="16">size, and parser limits before storage.</text>
+    </g>
+
+    <g transform="translate(575 135)">
+      <rect width="450" height="145" rx="18" fill="url(#card)" stroke="#65E7D4" stroke-opacity="0.55" />
+      <rect x="22" y="22" width="48" height="30" rx="15" fill="#0B514C" />
+      <text x="36" y="43" fill="#BFF8EE" font-size="15" font-weight="800">02</text>
+      <text x="88" y="46" fill="#FFFFFF" font-size="22" font-weight="700">Preserve and index</text>
+      <text x="24" y="88" fill="#B8CDDA" font-size="16">Immutable revisions gain stable anchors, chunks,</text>
+      <text x="24" y="115" fill="#B8CDDA" font-size="16">MiniLM embeddings, pgvector, and full text.</text>
+    </g>
+
+    <g transform="translate(1080 135)">
+      <rect width="450" height="145" rx="18" fill="url(#card)" stroke="#65E7D4" stroke-opacity="0.55" />
+      <rect x="22" y="22" width="48" height="30" rx="15" fill="#0B514C" />
+      <text x="36" y="43" fill="#BFF8EE" font-size="15" font-weight="800">03</text>
+      <text x="88" y="46" fill="#FFFFFF" font-size="22" font-weight="700">Retrieve and assess</text>
+      <text x="24" y="88" fill="#B8CDDA" font-size="16">Vector and text ranks fuse, then a sufficient-</text>
+      <text x="24" y="115" fill="#B8CDDA" font-size="16">context gate answers or explicitly abstains.</text>
+    </g>
+
+    <g transform="translate(1080 365)">
+      <rect width="450" height="145" rx="18" fill="url(#card)" stroke="#65E7D4" stroke-opacity="0.55" />
+      <rect x="22" y="22" width="48" height="30" rx="15" fill="#0B514C" />
+      <text x="36" y="43" fill="#BFF8EE" font-size="15" font-weight="800">04</text>
+      <text x="88" y="46" fill="#FFFFFF" font-size="22" font-weight="700">Confirm and prove</text>
+      <text x="24" y="88" fill="#B8CDDA" font-size="16">Local Qwen confirms a scoped binding; the app</text>
+      <text x="24" y="115" fill="#B8CDDA" font-size="16">derives the answer and exact source offsets.</text>
+    </g>
+
+    <g transform="translate(575 365)">
+      <rect width="450" height="145" rx="18" fill="url(#card)" stroke="#F5B942" stroke-opacity="0.75" />
+      <rect x="22" y="22" width="48" height="30" rx="15" fill="#594215" />
+      <text x="36" y="43" fill="#FFE4A3" font-size="15" font-weight="800">05</text>
+      <text x="88" y="46" fill="#FFFFFF" font-size="22" font-weight="700">Pause for a human</text>
+      <text x="24" y="88" fill="#D8C9A2" font-size="16">Action requests become inert, hash-bound</text>
+      <text x="24" y="115" fill="#D8C9A2" font-size="16">proposals until an authorized decision.</text>
+    </g>
+
+    <g transform="translate(70 365)">
+      <rect width="450" height="145" rx="18" fill="#0C4544" stroke="#65E7D4" stroke-opacity="0.85" />
+      <rect x="22" y="22" width="48" height="30" rx="15" fill="#14625A" />
+      <text x="36" y="43" fill="#D6FFF8" font-size="15" font-weight="800">06</text>
+      <text x="88" y="46" fill="#FFFFFF" font-size="22" font-weight="700">Create once and audit</text>
+      <text x="24" y="88" fill="#C6E4DF" font-size="16">Approval is rechecked, one task is created,</text>
+      <text x="24" y="115" fill="#C6E4DF" font-size="16">and the full causal chain remains inspectable.</text>
+    </g>
+  </g>
+
+  <g fill="none" stroke="url(#line)" stroke-width="4" stroke-linecap="round" marker-end="url(#arrow)">
+    <path d="M520 207H564" />
+    <path d="M1025 207h44" />
+    <path d="M1305 280v72" />
+    <path d="M1080 437h-44" />
+    <path d="M575 437h-44" />
+  </g>
+
+  <g font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700">
+    <rect x="1165" y="292" width="280" height="32" rx="16" fill="#132F45" stroke="#65E7D4" stroke-opacity="0.35" />
+    <text x="1200" y="313" fill="#A8C6D6">ANSWER PATH OR ACTION PATH</text>
+  </g>
+</svg>

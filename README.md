@@ -11,7 +11,7 @@
 ![CPU-only](https://img.shields.io/badge/INFERENCE-CPU--ONLY-4F8CFF?style=for-the-badge)
 [![MIT License](https://img.shields.io/badge/LICENSE-MIT-F5B942?style=for-the-badge)](LICENSE)
 
-[Architecture](docs/architecture.md) · [Security](docs/security.md) · [Evaluation](docs/evaluation.md) · [Windows quick start](README-WINDOWS.txt)
+[Pipeline](docs/pipeline.md) · [Demo video](docs/demo/localguard-demo.webm) · [Architecture](docs/architecture.md) · [Security](docs/security.md) · [Evaluation](docs/evaluation.md) · [Windows quick start](README-WINDOWS.txt)
 
 </div>
 
@@ -34,7 +34,7 @@ system.
 | Human approval | 7/7 approval transitions, with zero preapproval tasks or executions |
 | Adversarial controls | 5/5 insufficiency abstentions, 27/27 injection controls, 97/97 forbidden controls |
 | Deterministic quality gates | 383 Python unit/security tests, 45 integration tests, and 46 frontend tests passed locally |
-| Product evidence | Seven guarded, full-page screenshots from the validated local workflow |
+| Product evidence | Twelve-step walkthrough plus seven guarded captures from the validated local workflow |
 
 These are bounded results from the documented synthetic corpus and target CPU-only laptop. They are
 not production, legal, or general model-accuracy claims.
@@ -80,70 +80,50 @@ is harder. LocalGuard treats those concerns as application responsibilities:
 | Evaluation | Uses evaluator schema `1.2.0` and the final audited, hash-verified dataset v1.0.2 corpus against either a deterministic provider or the pinned Ollama provider |
 | Product UI | Includes overview, documents, viewer, ask, approvals, tasks, evaluations, and audit screens |
 
-## Screenshots
+## End-to-end pipeline
 
-Seven full-page screenshots were captured atomically by the guarded Playwright portfolio journey
-from the live Ollama stack and the passing schema 1.2.0 evaluation. The journey revalidated the
-demo artifact, fresh cited answer, proposal boundary, exactly-one task, audit chain, model digests,
-corpus hashes, and evaluation run before publishing the images.
+<img src="docs/visuals/localguard-pipeline.svg" width="100%" alt="LocalGuard AI pipeline from validated document intake through immutable indexing, evidence confirmation, human review, exactly-once task creation, and audit" />
 
-| Local operational state | Grounded answer and source binding |
-|---|---|
-| <img src="docs/screenshots/overview.png" alt="LocalGuard AI overview with indexed documents and passing evaluation" width="720" /> | <img src="docs/screenshots/ask-cited-answer.png" alt="LocalGuard AI answer with a clickable citation and model details" width="720" /> |
+The answer path ends in exact source proof. The action path adds an inert proposal and authenticated
+human decision before task creation. The [complete twelve-step walkthrough](docs/pipeline.md) shows
+every visible stage and explains what the application is doing behind it.
 
-| View | Evidence |
-|---|---|
-| [Overview](docs/screenshots/overview.png) | Live operational state and the verified 25/25 Ollama result |
-| [Grounded answer](docs/screenshots/ask-cited-answer.png) | Fresh Qwen answer with application-resolved citation |
-| [Exact citation](docs/screenshots/document-citation.png) | Immutable revision, page anchor, offsets, and highlighted source bytes |
-| [Pending approval](docs/screenshots/approval-pending.png) | Evidence-bound inert proposal before execution |
-| [Approved task](docs/screenshots/task-executed.png) | One approved task with proposal provenance |
-| [Audit chain](docs/screenshots/audit-event.png) | Request, analysis, proposal, decision, resume, and task causality |
-| [Evaluation detail](docs/screenshots/evaluation-ollama.png) | Runtime models, corpus identities, provenance, metrics, and all 25 cases |
+## Guided product tour
+
+These consistently framed milestones come from the validated local workflow. Open any image for
+full resolution, or follow the [complete pipeline](docs/pipeline.md) for sign-in, citation proof,
+pending approval, and evaluation detail as well.
+
+<table>
+  <tr>
+    <td width="50%" valign="top"><strong>1. See local operational state</strong><br /><br /><a href="docs/screenshots/pipeline/step-02-overview-system-status.png"><img src="docs/screenshots/pipeline/step-02-overview-system-status.png" width="100%" alt="LocalGuard AI overview and system status" /></a></td>
+    <td width="50%" valign="top"><strong>2. Upload and index evidence</strong><br /><br /><a href="docs/screenshots/pipeline/step-03-upload-and-index-documents.png"><img src="docs/screenshots/pipeline/step-03-upload-and-index-documents.png" width="100%" alt="Document upload and indexing state" /></a></td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top"><strong>3. Ask a grounded question</strong><br /><br /><a href="docs/screenshots/pipeline/step-05-submit-grounded-question.png"><img src="docs/screenshots/pipeline/step-05-submit-grounded-question.png" width="100%" alt="Grounded question submitted against indexed evidence" /></a></td>
+    <td width="50%" valign="top"><strong>4. Request a bounded action</strong><br /><br /><a href="docs/screenshots/pipeline/step-08-propose-evidence-bound-action.png"><img src="docs/screenshots/pipeline/step-08-propose-evidence-bound-action.png" width="100%" alt="Evidence-bound action request before human approval" /></a></td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top"><strong>5. Create exactly one approved task</strong><br /><br /><a href="docs/screenshots/pipeline/step-10-approved-task-created-once.png"><img src="docs/screenshots/pipeline/step-10-approved-task-created-once.png" width="100%" alt="Exactly one approved task with proposal provenance" /></a></td>
+    <td width="50%" valign="top"><strong>6. Follow the causal audit trail</strong><br /><br /><a href="docs/screenshots/pipeline/step-11-inspect-causal-audit-trail.png"><img src="docs/screenshots/pipeline/step-11-inspect-causal-audit-trail.png" width="100%" alt="Correlation-bound workflow audit trail" /></a></td>
+  </tr>
+</table>
+
+## 85-second demo
+
+<div align="center">
+  <a href="docs/demo/localguard-demo.webm"><img src="docs/screenshots/pipeline/step-02-overview-system-status.png" width="900" alt="Open the LocalGuard AI product demo video" /></a>
+  <br />
+  <strong><a href="docs/demo/localguard-demo.webm">▶ Watch the product tour</a></strong>
+</div>
+
+The chaptered WebM recording moves through the live local overview, document library, exact source
+proof, Ask workspace, human approval boundary, approved task, causal audit trail, and passing
+evaluation. Authentication happens before recording, so no local password appears in the video.
 
 ## Architecture
 
-```mermaid
-flowchart LR
-    User["Browser user"]
-    Client["Local MCP client"]
-
-    subgraph Edge["Loopback entry points"]
-        Web["Next.js App Router\nReact UI and BFF"]
-        API["FastAPI\nAuth, RBAC, REST"]
-        MCP["FastMCP\nStrict tools"]
-    end
-
-    subgraph Work["Application workflow"]
-        Graph["LangGraph\nRetrieve, validate, propose, interrupt"]
-        Worker["Celery worker\nConcurrency 1"]
-        Audit["Audit and durable outbox"]
-    end
-
-    subgraph Data["Local data and models"]
-        DB[("PostgreSQL 16\npgvector and full-text search")]
-        Redis[("Redis\nBroker and model lease")]
-        Ollama["Ollama CPU runtime\nQwen3 1.7B Q4 and MiniLM"]
-    end
-
-    Eval["Evaluation layer\n25 hash-verified cases"]
-
-    User --> Web
-    Web -->|"same-origin cookie and CSRF"| API
-    Client -->|"hashed bearer principal"| MCP
-    API --> DB
-    API --> Audit
-    Audit --> DB
-    API --> Redis
-    Redis --> Worker
-    Worker --> Graph
-    MCP --> DB
-    Graph --> DB
-    Graph --> Ollama
-    Worker --> Ollama
-    Eval --> Graph
-    Eval --> DB
-```
+<img src="docs/visuals/localguard-architecture.svg" width="100%" alt="LocalGuard AI architecture with local clients, loopback entry points, application workflow, and private data and model services" />
 
 PostgreSQL is authoritative. Redis contains replaceable broker state and the cross-process model
 lease. Web, API, and MCP ports bind to `127.0.0.1`; PostgreSQL, Redis, and Ollama are not published
@@ -250,93 +230,39 @@ provider so the final demo cannot silently fall back to a fake model.
 
 ## Evaluation evidence
 
-The corpus contains 10 grounded cases, 5 insufficient-evidence cases, 5 indirect prompt-injection
-cases, and 5 action/approval cases. Gold evidence uses stable source markers and raw-byte SHA-256
-checks. The evaluator sends user requests and scope to the application, then scores observed
-retrieval, citations, structured output, tool traces, approvals, policy outcomes, and latency. It
-does not send gold answers to the system under test and does not use a learned judge.
+The current audited corpus contains 25 synthetic cases across grounded answers, insufficient
+evidence, indirect prompt injection, and action/approval behavior. It scores observed application
+behavior without sending gold answers to the system under test or using a learned judge.
 
-The final audited v1.0.2 corpus is bound to these SHA-256 identities:
-
-- cases: `914d80632516db91cbd46700f52564677aa3a3b264d5c747b6537a8d1690392c`;
-- canonical manifest: `bb6e6da1b7eaa5a12e7f09020289a5e35ac5ea6f27c6ba161d378562c744b765`;
-- generated fixture manifest: `dbf94e15405e09637f90a4331fa525baeebb9684aa8f9cf65039a648e38c05d6`;
-- corpus bundle: `19594770fb8e359bb68c8b7944ca63ad36ac93ba77f4da227fd7a53a5aa4633e`.
-
-The current evaluator contract is schema `1.2.0`. Its structured mode is
-`evidence_derived_binding_confirmation_v2`, and its action mode is
-`evidence_derived_binding_selection_v2`. Ordinary grounded QA uses evidence-confirmed
-`qa-fact-binding-v1` deterministic normalization: the model confirms opaque exact-marker IDs, and
-the application derives the answer, claims, and citations from those confirmed marker bytes.
-
-The final pinned Ollama run is
-`20260823T234625509074Z-ollama-914d80632516`. It completed all 25 cases with no execution failure;
-safety, quality, and overall gates all passed. Raw provider-response capture was enabled. The exact
-`run.json` SHA-256 is
-`be9f481ef13719ce1bef4b6f752bfc2409657366282ee6abff8f559515f54ada`.
-
-| Current schema 1.2.0 metric | Observed result |
+| Release signal | Observed result |
 |---|---:|
-| Cases / schema / status accuracy | 25/25 / 1.0000 / 1.0000 |
-| Macro retrieval recall at 1 / 3 / 5 | 0.6500 / 0.9333 / 0.9667 |
-| Macro / pooled citation precision | 1.0000 / 1.0000 (31/31 returned citations) |
-| Extraction precision / recall / F1 | 0.8889 / 0.8889 / 0.8889 |
-| Unsupported-claim rate / missing expected claims | 0.0000 / 0 |
-| Exact tools / proposals / approval transitions | 1.0000 / 1.0000 / 7 of 7 |
-| Abstention / injection / forbidden controls | 5 of 5 / 27 of 27 / 97 of 97 |
-| Preapproval tasks / executions | 0 / 0 |
-| Total latency p50 / p95 / maximum | 10.841 s / 15.547 s / 18.550 s |
+| Completion and gates | 25/25; safety, quality, and overall gates passed |
+| Citation precision | 1.0000 macro and pooled; 31/31 returned citations supported |
+| Extraction F1 | 0.8889 |
+| Safety controls | 5/5 abstentions, 27/27 injection controls, 97/97 forbidden controls |
+| Human approval boundary | 7/7 transitions; zero preapproval tasks or executions |
+| Total latency on the target CPU laptop | 10.841 s p50; 15.547 s p95 |
 
-The failed legacy real-model result remains retained as
-`20260823T154041554662Z-ollama-2237aa9ef1fd`: it completed 18 of 25 cases, with 7 case failures,
-and both its safety and quality gates failed. It used dataset v1.0.1, evaluator schema 1.1.0, and
-legacy mode `evidence_constrained_model_selection_v1`, so it is metadata-only historical evidence
-and is not comparable to the passing schema 1.2.0 release evaluation above.
+These are bounded results for evaluator schema `1.2.0`, dataset `1.0.2`, and the pinned local model
+pair. The [full evaluation record](docs/evaluation.md) preserves the corpus and run hashes, metric
+formulas, thresholds, reproduction steps, structured contract names, and non-comparable historical
+results without forcing those details into the first project overview.
 
-The retained passing deterministic run below used the still earlier v1.0.0 corpus. It remains
-historical orchestration and safety evidence, not a v1.0.2/schema 1.2.0 evaluation result:
+## Verification
 
-| Evidence | Observed result |
-|---|---:|
-| Run | `20260823T071002522917Z-deterministic-f828e5352d66` |
-| Cases completed | 25/25, 0 execution failures |
-| Safety gates | Pass |
-| Declared forbidden-outcome controls | 97/97 |
-| Injection controls | 27/27 |
-| Approval transitions | 7/7, with 0 preapproval tasks or executions |
-| Insufficient-evidence abstention | 5/5 |
-| Expected-status and exact-tool accuracy | 0.72 / 0.72 |
-| Macro retrieval recall at 1 / 3 / 5 | 0.15 / 0.6833 / 0.7333 |
-| Macro / pooled citation precision | 0.65 / 1.00 |
-| Extraction recall / F1 | 0.00 / 0.00 |
-| Exact proposal match | 0.00 |
-| Total latency p50 / p95 | 98.06 ms / 242.62 ms |
-
-Raw result SHA-256:
-`c2ea7652abc9ca127ec2a7bc31e92dacdf71b620456a333b0756e496a8617726`.
-
-This historical run verified deterministic orchestration and safety behavior under its earlier
-contract. It is not evidence of Qwen model quality and is not a current release gate. A separate
-historical three-case local model selection gate passed for Qwen3 1.7B Q4, but that smaller gate is
-not substituted for the final schema 1.2.0 evaluation.
-
-See [docs/evaluation.md](docs/evaluation.md) for formulas, thresholds, zero-denominator handling,
-and reproduction steps.
-
-## Final local verification
-
-The definitive backend and web images were rebuilt from the frozen tree, started without another
-build, and tested locally. This is not a claim that the remote GitHub Actions workflow ran.
+The definitive backend and web images were rebuilt from the frozen tree and tested locally. The
+published repository was also exercised by all five jobs in the public GitHub Actions workflow.
 
 | Gate | Observed result |
 |---|---:|
-| Python unit and security suite | 383 passed; 48 integration/real-model cases deselected |
+| Python unit and security suite | 384 passed; 48 integration/real-model cases deselected |
 | Disposable PostgreSQL, pgvector, Redis, graph, MCP, worker, evaluator integration | 45 passed, 1 expected opt-in real-model skip |
 | Frontend Vitest suite | 46 passed across 8 files |
 | Live Ollama portfolio Playwright | 1 passed in 47.5 seconds; 7 screenshots published atomically |
 | Python formatting, lint, and strict types | Ruff 155-file format check and lint pass; strict mypy passes for 44 source files |
 | Frontend contracts, lint, types, and production build | Pass |
 | FastAPI OpenAPI snapshot, Alembic head/drift, and backend image bytes | Pass; `20260823_0004`, no drift, 143/143 copied files match |
+| GitHub Actions publication run | [All five jobs passed](https://github.com/Hasan-Al-Hussein/localguard-ai/actions/runs/32686128422) |
 
 The unmocked Playwright journey used production Next.js, its same-origin BFF, FastAPI,
 PostgreSQL/pgvector, Redis, Celery, and deterministic providers. It proved upload and processing,
@@ -345,8 +271,9 @@ approval, and no duplicate task after replay. Deterministic providers keep this 
 repeatable; they do not turn it into a real-model benchmark.
 
 GitHub Actions is defined in [.github/workflows/ci.yml](.github/workflows/ci.yml) with pinned actions,
-digest-pinned data services, no secret API key, and no model download. The workflow has been checked
-with actionlint, but no remote CI execution is claimed here.
+digest-pinned data services, masked ephemeral bootstrap credentials, no paid model API key, and no
+model download. Its deterministic full-stack job exercises production Next.js, FastAPI,
+PostgreSQL/pgvector, Redis, Celery, and an unmocked browser journey.
 
 ## Security and privacy boundaries
 
@@ -404,6 +331,7 @@ in [docs/resource-benchmarks.md](docs/resource-benchmarks.md). Both the 3.98 GB 
 ## Repository guide
 
 - [docs/architecture.md](docs/architecture.md): components, state transitions, and recovery model
+- [docs/pipeline.md](docs/pipeline.md): complete twelve-step product walkthrough
 - [docs/security.md](docs/security.md): trust boundaries, controls, and residual risks
 - [docs/evaluation.md](docs/evaluation.md): dataset, metrics, gates, and current evidence
 - [docs/demo-script.md](docs/demo-script.md): five-minute portfolio walkthrough

@@ -1,0 +1,121 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="720" viewBox="0 0 1600 720" role="img" aria-labelledby="title desc">
+  <title id="title">LocalGuard AI local runtime architecture</title>
+  <desc id="desc">Browser and MCP clients enter through loopback services, application workflows use LangGraph, Celery, audit and outbox services, and local PostgreSQL, Redis, and Ollama remain inside the machine.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#071827" />
+      <stop offset="0.6" stop-color="#0A2B42" />
+      <stop offset="1" stop-color="#073C40" />
+    </linearGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#123B53" />
+      <stop offset="1" stop-color="#0B2438" />
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" fill="none" stroke="#8EDFD7" stroke-opacity="0.05" />
+    </pattern>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0 0 10 5 0 10Z" fill="#65E7D4" />
+    </marker>
+  </defs>
+
+  <rect width="1600" height="720" rx="28" fill="url(#background)" />
+  <rect width="1600" height="720" rx="28" fill="url(#grid)" />
+  <text x="70" y="58" fill="#BFF8EE" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" letter-spacing="2">LOCAL RUNTIME ARCHITECTURE</text>
+  <text x="70" y="98" fill="#FFFFFF" font-family="Segoe UI, Arial, sans-serif" font-size="31" font-weight="700">Loopback services, durable evidence, replaceable queue state</text>
+
+  <g font-family="Segoe UI, Arial, sans-serif">
+    <g transform="translate(60 145)">
+      <rect width="250" height="420" rx="22" fill="#0A2234" stroke="#4F8CFF" stroke-opacity="0.5" />
+      <text x="24" y="42" fill="#8FB5FF" font-size="15" font-weight="700" letter-spacing="1.5">LOCAL CLIENTS</text>
+      <g transform="translate(24 82)">
+        <rect width="202" height="98" rx="15" fill="url(#panel)" stroke="#4F8CFF" stroke-opacity="0.6" />
+        <text x="22" y="42" fill="#FFFFFF" font-size="20" font-weight="700">Browser user</text>
+        <text x="22" y="69" fill="#A9C0CF" font-size="15">Opaque local session</text>
+      </g>
+      <g transform="translate(24 226)">
+        <rect width="202" height="98" rx="15" fill="url(#panel)" stroke="#4F8CFF" stroke-opacity="0.6" />
+        <text x="22" y="42" fill="#FFFFFF" font-size="20" font-weight="700">MCP client</text>
+        <text x="22" y="69" fill="#A9C0CF" font-size="15">Hashed bearer principal</text>
+      </g>
+    </g>
+
+    <g transform="translate(360 145)">
+      <rect width="300" height="420" rx="22" fill="#0A2234" stroke="#65E7D4" stroke-opacity="0.5" />
+      <text x="24" y="42" fill="#9EE7DC" font-size="15" font-weight="700" letter-spacing="1.5">LOOPBACK ENTRY</text>
+      <g transform="translate(24 74)">
+        <rect width="252" height="86" rx="14" fill="url(#panel)" stroke="#65E7D4" stroke-opacity="0.55" />
+        <text x="20" y="36" fill="#FFFFFF" font-size="19" font-weight="700">Next.js + React</text>
+        <text x="20" y="62" fill="#A9C0CF" font-size="14">UI and same-origin BFF</text>
+      </g>
+      <g transform="translate(24 184)">
+        <rect width="252" height="86" rx="14" fill="url(#panel)" stroke="#65E7D4" stroke-opacity="0.55" />
+        <text x="20" y="36" fill="#FFFFFF" font-size="19" font-weight="700">FastAPI</text>
+        <text x="20" y="62" fill="#A9C0CF" font-size="14">Auth, RBAC, REST</text>
+      </g>
+      <g transform="translate(24 294)">
+        <rect width="252" height="86" rx="14" fill="url(#panel)" stroke="#65E7D4" stroke-opacity="0.55" />
+        <text x="20" y="36" fill="#FFFFFF" font-size="19" font-weight="700">FastMCP</text>
+        <text x="20" y="62" fill="#A9C0CF" font-size="14">Five strict audited tools</text>
+      </g>
+    </g>
+
+    <g transform="translate(710 145)">
+      <rect width="370" height="420" rx="22" fill="#0A2234" stroke="#F5B942" stroke-opacity="0.55" />
+      <text x="24" y="42" fill="#FFE0A0" font-size="15" font-weight="700" letter-spacing="1.5">APPLICATION WORKFLOW</text>
+      <g transform="translate(24 74)">
+        <rect width="322" height="94" rx="14" fill="url(#panel)" stroke="#F5B942" stroke-opacity="0.6" />
+        <text x="20" y="38" fill="#FFFFFF" font-size="19" font-weight="700">LangGraph</text>
+        <text x="20" y="64" fill="#CBBF9C" font-size="14">Retrieve, validate, propose, interrupt</text>
+      </g>
+      <g transform="translate(24 192)">
+        <rect width="322" height="76" rx="14" fill="url(#panel)" stroke="#65E7D4" stroke-opacity="0.45" />
+        <text x="20" y="33" fill="#FFFFFF" font-size="18" font-weight="700">Celery worker</text>
+        <text x="20" y="57" fill="#A9C0CF" font-size="14">Retry-aware background work</text>
+      </g>
+      <g transform="translate(24 292)">
+        <rect width="322" height="88" rx="14" fill="url(#panel)" stroke="#65E7D4" stroke-opacity="0.45" />
+        <text x="20" y="36" fill="#FFFFFF" font-size="18" font-weight="700">Audit + durable outbox</text>
+        <text x="20" y="62" fill="#A9C0CF" font-size="14">Correlation-bound recovery trail</text>
+      </g>
+    </g>
+
+    <g transform="translate(1130 145)">
+      <rect width="410" height="420" rx="22" fill="#0A2234" stroke="#65E7D4" stroke-opacity="0.5" />
+      <text x="24" y="42" fill="#9EE7DC" font-size="15" font-weight="700" letter-spacing="1.5">LOCAL DATA + MODELS</text>
+      <g transform="translate(24 74)">
+        <rect width="362" height="94" rx="14" fill="url(#panel)" stroke="#4F8CFF" stroke-opacity="0.6" />
+        <text x="20" y="38" fill="#FFFFFF" font-size="19" font-weight="700">Ollama CPU runtime</text>
+        <text x="20" y="65" fill="#A9C0CF" font-size="14">Pinned Qwen3 + MiniLM models</text>
+      </g>
+      <g transform="translate(24 192)">
+        <rect width="362" height="76" rx="14" fill="url(#panel)" stroke="#65E7D4" stroke-opacity="0.45" />
+        <text x="20" y="33" fill="#FFFFFF" font-size="18" font-weight="700">Redis</text>
+        <text x="20" y="57" fill="#A9C0CF" font-size="14">Replaceable broker and model lease</text>
+      </g>
+      <g transform="translate(24 292)">
+        <rect width="362" height="88" rx="14" fill="#0C4544" stroke="#65E7D4" stroke-opacity="0.75" />
+        <text x="20" y="36" fill="#FFFFFF" font-size="18" font-weight="700">PostgreSQL 16 + pgvector</text>
+        <text x="20" y="62" fill="#C6E4DF" font-size="14">Authoritative data, FTS, checkpoints</text>
+      </g>
+    </g>
+  </g>
+
+  <g fill="none" stroke="#65E7D4" stroke-width="3" stroke-linecap="round" marker-end="url(#arrow)">
+    <path d="M286 276H346" />
+    <path d="M286 420H346" />
+    <path d="M636 372h35v-86h25" />
+    <path d="M636 482h42v98h410v-99h28" />
+    <path d="M1056 286h60" />
+    <path d="M1056 374h60" />
+    <path d="M1056 481h60" />
+  </g>
+  <path d="M510 305v14" fill="none" stroke="#65E7D4" stroke-width="3" marker-end="url(#arrow)" />
+
+  <g font-family="Segoe UI, Arial, sans-serif">
+    <rect x="60" y="607" width="1480" height="66" rx="18" fill="#0A2234" stroke="#65E7D4" stroke-opacity="0.35" />
+    <text x="88" y="636" fill="#FFFFFF" font-size="17" font-weight="700">Verification layer</text>
+    <text x="244" y="636" fill="#A9C0CF" font-size="15">25 hash-verified cases exercise retrieval, citations, approval transitions, tools, and forbidden outcomes.</text>
+    <text x="88" y="660" fill="#7FA4B7" font-size="14">Only web, API, and MCP bind to 127.0.0.1. PostgreSQL, Redis, and Ollama stay on the internal Docker network.</text>
+  </g>
+</svg>
