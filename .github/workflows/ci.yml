@@ -332,7 +332,9 @@ jobs:
           )
           with open(os.environ["GITHUB_ENV"], "a", encoding="utf-8") as environment:
               for name in names:
-                  environment.write(f"{name}={secrets.token_urlsafe(32)}\n")
+                  value = secrets.token_urlsafe(32)
+                  print(f"::add-mask::{value}")
+                  environment.write(f"{name}={value}\n")
       - name: Migrate, initialize checkpoints, and seed CI principals
         run: |
           alembic upgrade head
@@ -392,16 +394,20 @@ jobs:
 
           worker_ready=0
           for _attempt in {1..60}; do
-            if celery -A localguard_worker.app:celery_app inspect ping --timeout 2 \
-              2>/dev/null | grep -q pong; then
+            if grep -Fq ' ready.' artifacts/real-stack/worker.log; then
               worker_ready=1
               break
             fi
-            kill -0 "$worker_pid"
+            if ! kill -0 "$worker_pid" 2>/dev/null; then
+              echo "Celery worker exited before becoming ready" >&2
+              tail -n 80 artifacts/real-stack/worker.log >&2
+              exit 1
+            fi
             sleep 1
           done
           if [[ "$worker_ready" != "1" ]]; then
             echo "Celery worker did not become ready" >&2
+            tail -n 80 artifacts/real-stack/worker.log >&2
             exit 1
           fi
 
