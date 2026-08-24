@@ -5,7 +5,6 @@ from __future__ import annotations
 import hashlib
 import json
 import os
-import shutil
 from dataclasses import replace
 from pathlib import Path
 from typing import cast
@@ -67,10 +66,44 @@ def _actor() -> User:
     return cast(User, object())
 
 
-def _copy_committed_run(results_root: Path, run_id: str) -> Path:
-    destination = results_root / run_id
-    shutil.copytree(ROOT / "evals" / "results" / run_id, destination)
-    return destination
+def _write_legacy_run(results_root: Path, run_id: str) -> Path:
+    schema_version = {
+        LEGACY_10_RUN_ID: "1.0.0",
+        LEGACY_11_RUN_ID: "1.1.0",
+    }[run_id]
+    shared_payload = {
+        "schema_version": schema_version,
+        "run_id": run_id,
+        "dataset_version": "1.0.0",
+        "dataset_sha256": "a" * 64,
+        "requested_provider": "fake",
+        "runtime_provider": "deterministic",
+        "aggregate": {"completed_case_count": 25, "case_count": 25},
+        "gates": {
+            "safety_passed": True,
+            "quality_passed": True,
+            "run_passed": True,
+        },
+    }
+    directory = results_root / run_id
+    raw = _write_json(
+        directory / "run.json",
+        {
+            **shared_payload,
+            "started_at": "2026-08-23T04:15:08.075000Z",
+            "completed_at": "2026-08-23T04:15:09.075000Z",
+            "wall_clock_ms": 1000.0,
+            "warmup_completed": True,
+        },
+    )
+    _write_json(
+        directory / "summary.json",
+        {
+            **shared_payload,
+            "raw_result_sha256": hashlib.sha256(raw).hexdigest(),
+        },
+    )
+    return directory
 
 
 def _write_json(path: Path, payload: object) -> bytes:
@@ -114,8 +147,8 @@ def _replace_nested(payload: dict[str, object], path: tuple[str, ...], value: ob
 async def test_legacy_10_and_11_are_explicit_metadata_and_exact_hash_verified(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
-    _copy_committed_run(tmp_path, LEGACY_10_RUN_ID)
-    _copy_committed_run(tmp_path, LEGACY_11_RUN_ID)
+    _write_legacy_run(tmp_path, LEGACY_10_RUN_ID)
+    _write_legacy_run(tmp_path, LEGACY_11_RUN_ID)
     monkeypatch.setattr(evaluation_routes, "_RESULTS_ROOT", tmp_path)
 
     legacy_10 = await evaluation_routes.get_evaluation(LEGACY_10_RUN_ID, _actor())
@@ -190,7 +223,7 @@ async def test_current_summary_must_exactly_match_every_run_derived_field(
 async def test_list_and_latest_surface_unknown_and_corrupt_entries_without_aborting(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
-    _copy_committed_run(tmp_path, LEGACY_11_RUN_ID)
+    _write_legacy_run(tmp_path, LEGACY_11_RUN_ID)
     _write_json(
         tmp_path / UNKNOWN_RUN_ID / "summary.json",
         {"schema_version": "9.0.0", "run_id": UNKNOWN_RUN_ID},
@@ -221,7 +254,7 @@ async def test_list_and_latest_surface_unknown_and_corrupt_entries_without_abort
 async def test_latest_surfaces_a_corrupt_newest_summary(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
-    _copy_committed_run(tmp_path, LEGACY_11_RUN_ID)
+    _write_legacy_run(tmp_path, LEGACY_11_RUN_ID)
     corrupt_directory = tmp_path / CORRUPT_RUN_ID
     corrupt_directory.mkdir()
     (corrupt_directory / "summary.json").write_bytes(b"{not-json")
@@ -297,7 +330,7 @@ async def test_nonstandard_or_ambiguous_json_is_corrupt(
 async def test_detail_surfaces_exact_byte_hash_mismatch(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
-    directory = _copy_committed_run(tmp_path, LEGACY_11_RUN_ID)
+    directory = _write_legacy_run(tmp_path, LEGACY_11_RUN_ID)
     with (directory / "run.json").open("ab") as handle:
         handle.write(b" ")
     monkeypatch.setattr(evaluation_routes, "_RESULTS_ROOT", tmp_path)
@@ -314,12 +347,12 @@ async def test_detail_surfaces_exact_byte_hash_mismatch(
 async def test_summary_and_run_ids_must_match_their_requested_directory(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
-    summary_swapped = _copy_committed_run(tmp_path, LEGACY_10_RUN_ID)
+    summary_swapped = _write_legacy_run(tmp_path, LEGACY_10_RUN_ID)
     summary_payload = _read_json(summary_swapped / "summary.json")
     summary_payload["run_id"] = LEGACY_11_RUN_ID
     _write_json(summary_swapped / "summary.json", summary_payload)
 
-    run_swapped = _copy_committed_run(tmp_path, LEGACY_11_RUN_ID)
+    run_swapped = _write_legacy_run(tmp_path, LEGACY_11_RUN_ID)
     run_payload = _read_json(run_swapped / "run.json")
     run_payload["run_id"] = LEGACY_10_RUN_ID
     raw = _write_json(run_swapped / "run.json", run_payload)

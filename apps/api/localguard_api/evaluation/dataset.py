@@ -61,10 +61,32 @@ class CorpusBundle:
 
 _SHA256 = re.compile(r"^[0-9a-f]{64}$")
 _MARKER = re.compile(r"\[(LG-(?:POL|ATK)-[0-9]{3}:(?:H[0-9]{2}|P[0-9]{3}|L[0-9]{3}))\]")
+_REPOSITORY_MARKERS = (
+    Path("pyproject.toml"),
+    Path("evals/dataset/source-manifest.json"),
+    Path("fixtures/documents/manifest.json"),
+    Path("scripts/validate-fixtures.py"),
+)
 
 
 def repository_root() -> Path:
-    return Path(__file__).resolve().parents[4]
+    """Locate the data-bearing checkout for source and installed-package execution."""
+
+    working_directory = Path.cwd().resolve()
+    module_path = Path(__file__).resolve()
+    candidates = (
+        working_directory,
+        *working_directory.parents,
+        *module_path.parents,
+    )
+    inspected: set[Path] = set()
+    for candidate in candidates:
+        if candidate in inspected:
+            continue
+        inspected.add(candidate)
+        if all((candidate / marker).is_file() for marker in _REPOSITORY_MARKERS):
+            return candidate
+    raise DatasetValidationError("LocalGuard repository root could not be located")
 
 
 def verify_dataset(root: Path, *, run_negative_self_tests: bool = True) -> str:

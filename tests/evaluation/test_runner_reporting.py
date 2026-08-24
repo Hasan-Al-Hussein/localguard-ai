@@ -10,6 +10,8 @@ from pathlib import Path
 from typing import Any, cast, get_args
 
 import pytest
+from click import unstyle
+from localguard_api.evaluation import dataset as evaluation_dataset
 from localguard_api.evaluation.cli import app
 from localguard_api.evaluation.contracts import (
     Capability,
@@ -55,7 +57,18 @@ def test_cli_exposes_the_run_subcommand_used_by_powershell_and_ci() -> None:
     result = CliRunner().invoke(app, ["run", "--help"])
 
     assert result.exit_code == 0
-    assert "--provider" in result.output
+    assert "--provider" in unstyle(result.output)
+
+
+def test_repository_root_uses_the_checkout_when_the_package_is_installed(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    root = Path(__file__).resolve().parents[2]
+    installed_module = tmp_path / "lib" / "site-packages" / "localguard_api" / "evaluation"
+    monkeypatch.chdir(root)
+    monkeypatch.setattr(evaluation_dataset, "__file__", str(installed_module / "dataset.py"))
+
+    assert evaluation_dataset.repository_root() == root
 
 
 def test_evaluation_script_exposes_explicit_raw_response_capture_switch() -> None:
