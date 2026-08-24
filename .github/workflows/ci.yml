@@ -55,7 +55,7 @@ jobs:
           AI_PROVIDER: deterministic
           EMBEDDING_PROVIDER: deterministic
         run: |
-          pytest -m "not integration and not real_model" \
+          python -m pytest -m "not integration and not real_model" \
             --junitxml=artifacts/pytest-unit.xml
       - name: Upload backend unit results
         if: always()
@@ -163,7 +163,7 @@ jobs:
           alembic upgrade head
           alembic current
       - name: Run PostgreSQL, Redis, graph, MCP, and worker integration tests
-        run: pytest -m integration --junitxml=artifacts/pytest-integration.xml
+        run: python -m pytest -m integration --junitxml=artifacts/pytest-integration.xml
       - name: Run exact deterministic 25-case evaluation
         run: python -m localguard_api.evaluation.cli run --provider fake
       - name: Upload integration and evaluation evidence
