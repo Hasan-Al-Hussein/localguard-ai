@@ -145,14 +145,61 @@ if ($CheckOnly) {
 }
 
 $environmentPath = Join-Path $projectRoot '.env'
-if (-not (Test-Path -LiteralPath $environmentPath -PathType Leaf)) {
+$bootstrapArtifactPath = Join-Path $projectRoot 'artifacts\verification\bootstrap.json'
+$bootstrapRequired = -not (Test-Path -LiteralPath $environmentPath -PathType Leaf)
+
+if (-not $bootstrapRequired) {
+    if (-not (Test-Path -LiteralPath $bootstrapArtifactPath -PathType Leaf)) {
+        $bootstrapRequired = $true
+    }
+    else {
+        try {
+            $bootstrapArtifact = Get-Content -LiteralPath $bootstrapArtifactPath -Raw | ConvertFrom-Json
+            $artifactProperties = @($bootstrapArtifact.PSObject.Properties.Name)
+            $requiredArtifactProperties = @(
+                'schema_version', 'bootstrap_complete', 'timestamp', 'docker_server', 'node',
+                'runtime_lock_sha256', 'model_pull_skipped'
+            )
+            $artifactHasRequiredProperties = @(
+                $requiredArtifactProperties | Where-Object { $_ -notin $artifactProperties }
+            ).Count -eq 0
+            $runtimeLockPath = Join-Path $projectRoot 'docs\runtime-lock.json'
+            $runtimeLockSha256 = (Get-FileHash -LiteralPath $runtimeLockPath -Algorithm SHA256).Hash.ToLowerInvariant()
+            if (
+                -not $artifactHasRequiredProperties -or
+                [string]$bootstrapArtifact.schema_version -ne '1.0' -or
+                $bootstrapArtifact.bootstrap_complete -isnot [bool] -or
+                -not [bool]$bootstrapArtifact.bootstrap_complete -or
+                [string]::IsNullOrWhiteSpace([string]$bootstrapArtifact.docker_server) -or
+                [string]::IsNullOrWhiteSpace([string]$bootstrapArtifact.node) -or
+                [string]::IsNullOrWhiteSpace([string]$bootstrapArtifact.timestamp) -or
+                [string]$bootstrapArtifact.runtime_lock_sha256 -ne $runtimeLockSha256 -or
+                $bootstrapArtifact.model_pull_skipped -isnot [bool]
+            ) {
+                $bootstrapRequired = $true
+            }
+            elseif (-not $SkipModelPull -and [bool]$bootstrapArtifact.model_pull_skipped) {
+                $bootstrapRequired = $true
+            }
+        }
+        catch {
+            Write-Warning 'The previous bootstrap completion record is unreadable; setup will resume safely.'
+            $bootstrapRequired = $true
+        }
+    }
+}
+
+if ($bootstrapRequired) {
     Write-Host ''
-    Write-Host 'First setup: generating local credentials and downloading the pinned runtime.' -ForegroundColor Cyan
+    Write-Host 'Completing first setup: preparing local credentials and the pinned runtime.' -ForegroundColor Cyan
     Write-Host 'This is the longest step and is safe to resume if the connection is interrupted.'
     $bootstrapArguments = @('-NoLogo', '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', (Join-Path $projectRoot 'scripts\bootstrap.ps1'))
     if ($SkipModelPull) { $bootstrapArguments += '-SkipModelPull' }
     & $pwsh.Source @bootstrapArguments
     if ($LASTEXITCODE -ne 0) { throw "LocalGuard bootstrap failed with exit code $LASTEXITCODE." }
+    if (-not (Test-Path -LiteralPath $bootstrapArtifactPath -PathType Leaf)) {
+        throw 'LocalGuard bootstrap finished without a completion record. Run the launcher again to resume safely.'
+    }
 }
 
 Write-Host ''

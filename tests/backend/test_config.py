@@ -60,6 +60,15 @@ def test_model_lease_exceeds_http_timeout_by_safety_margin() -> None:
         )
 
 
+def test_default_model_timeout_and_lease_budget(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.delenv("MODEL_HTTP_TIMEOUT_SECONDS", raising=False)
+    monkeypatch.delenv("MODEL_LOCK_TTL_SECONDS", raising=False)
+    settings = Settings(_env_file=None)
+
+    assert settings.model_http_timeout_seconds == 300
+    assert settings.model_lock_ttl_seconds == 360
+
+
 def test_allowed_hosts_parses_comma_separated_environment_value() -> None:
     settings = Settings(allowed_hosts="localhost, api,127.0.0.1")
     assert settings.allowed_hosts == ("localhost", "api", "127.0.0.1")

@@ -61,8 +61,8 @@ class Settings(BaseSettings):
     ollama_embed_model: str = "all-minilm:22m-l6-v2-fp16"
     model_context_tokens: int = Field(default=4096, ge=1024, le=8192)
     model_max_output_tokens: int = Field(default=512, ge=64, le=2048)
-    model_lock_ttl_seconds: int = Field(default=300, ge=30, le=900)
-    model_http_timeout_seconds: float = Field(default=180.0, ge=5, le=300)
+    model_lock_ttl_seconds: int = Field(default=360, ge=30, le=900)
+    model_http_timeout_seconds: float = Field(default=300.0, ge=5, le=300)
     ai_provider: Literal["ollama", "deterministic"] = "ollama"
     embedding_provider: Literal["ollama", "deterministic"] = "ollama"
     allow_test_providers: bool = False
