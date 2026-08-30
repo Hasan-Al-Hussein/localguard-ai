@@ -2,20 +2,24 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoginRequestSchema, type LoginRequest } from "@localguard/contracts";
-import { Eye, EyeOff, LockKeyhole, ShieldCheck } from "lucide-react";
+import { ArrowRight, Eye, EyeOff, LockKeyhole } from "lucide-react";
+import { motion, useReducedMotion } from "motion/react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { EvidenceLens } from "@/components/effects/evidence-lens";
+import { ProofGateMark } from "@/components/brand/proof-gate-mark";
 import { useAuth } from "@/components/providers/auth-provider";
 import { Button } from "@/components/ui/button";
 import { errorMessage } from "@/lib/api-client";
+import { cascadeVariants, revealFromRightVariants, revealVariants } from "@/lib/motion";
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const { user, login } = useAuth();
   const router = useRouter();
+  const reduceMotion = useReducedMotion();
   const {
     register,
     handleSubmit,
@@ -45,42 +49,84 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="grid min-h-dvh lg:grid-cols-[minmax(25rem,0.92fr)_minmax(34rem,1.08fr)]" id="main-content">
-      <section className="login-visual relative hidden overflow-hidden p-12 text-white lg:flex lg:flex-col lg:justify-between xl:p-16">
-        <EvidenceLens className="login-evidence-lens" variant="login" />
-        <div className="absolute inset-0 opacity-25 [background-image:linear-gradient(rgba(255,255,255,.1)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.1)_1px,transparent_1px)] [background-size:40px_40px]" />
-        <div className="absolute -top-28 -right-24 size-[28rem] rounded-full bg-[#67e8d2]/15 blur-3xl" />
-        <div className="absolute -bottom-40 -left-28 size-[34rem] rounded-full border border-white/10 bg-white/5" />
-        <div className="relative z-10">
-          <span className="grid size-12 place-items-center rounded-2xl bg-white/10 shadow-2xl ring-1 ring-white/20 backdrop-blur">
-            <ShieldCheck aria-hidden className="size-6" />
+    <main className="login-shell grid min-h-dvh lg:grid-cols-[minmax(34rem,1.18fr)_minmax(28rem,0.82fr)]" id="main-content">
+      <section className="login-visual relative hidden overflow-hidden text-white lg:flex lg:min-h-dvh lg:flex-col lg:justify-between">
+        <Image
+          alt=""
+          aria-hidden
+          className="login-vault-image object-cover object-[58%_50%]"
+          fill
+          priority
+          sizes="58vw"
+          src="/brand/evidence-vault-hero.png"
+        />
+        <div aria-hidden className="login-vault-overlay" />
+        <motion.div
+          animate="visible"
+          className="relative z-10 flex items-center gap-3 px-12 pt-10 xl:px-16 xl:pt-12"
+          initial={reduceMotion ? false : "hidden"}
+          variants={revealVariants}
+        >
+          <span className="proof-brand-tile grid size-12 place-items-center rounded-2xl">
+            <ProofGateMark className="size-8" />
           </span>
-          <p className="mt-5 font-heading text-xl font-bold tracking-[-0.03em]">LocalGuard AI</p>
-        </div>
-        <div className="relative z-10 max-w-xl">
-          <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/8 px-3 py-1.5 text-xs font-semibold tracking-wide text-[#bff9ef] uppercase backdrop-blur"><span className="size-1.5 rounded-full bg-[#67e8d2] shadow-[0_0_0_4px_rgb(103_232_210/0.12)]" />Private evidence workspace</span>
-          <p className="mt-6 font-heading text-4xl leading-[1.08] font-bold tracking-[-0.045em] xl:text-5xl">Every answer has a source. Every action waits for you.</p>
-          <p className="mt-6 max-w-lg text-base leading-7 text-slate-200">Inspect policies, find obligations, and review proposed work without sending documents to an external model service.</p>
-          <div className="mt-8 flex items-center gap-3 rounded-r-xl border-l-2 border-[#67e8d2] bg-white/5 px-4 py-3 text-sm text-slate-100 backdrop-blur">
-            <LockKeyhole aria-hidden className="size-5 text-[#5eead4]" />
-            Documents and model requests stay on this machine.
-          </div>
-        </div>
-        <p className="relative z-10 text-xs text-slate-300">Portfolio demonstration · Not legal advice</p>
+          <span>
+            <span className="block font-heading text-lg font-bold tracking-[-0.035em]">LocalGuard <span className="font-medium text-white/55">AI</span></span>
+            <span className="mt-0.5 block font-mono text-[0.58rem] tracking-[0.18em] text-[#74ead6] uppercase">Private evidence engine</span>
+          </span>
+        </motion.div>
+
+        <motion.div
+          animate="visible"
+          className="relative z-10 max-w-2xl px-12 pb-8 xl:px-16"
+          initial={reduceMotion ? false : "hidden"}
+          variants={cascadeVariants}
+        >
+          <motion.span className="login-kicker" variants={revealVariants}><span />Evidence before action</motion.span>
+          <motion.p className="login-display mt-5 max-w-[13ch] font-heading text-[clamp(2.75rem,4.3vw,5.35rem)] leading-[0.96] font-bold tracking-[-0.065em]" variants={revealVariants}>
+            Proof you can inspect. <span>Actions you control.</span>
+          </motion.p>
+          <motion.p className="mt-6 max-w-xl text-base leading-7 text-slate-200/88 xl:text-lg xl:leading-8" variants={revealVariants}>LocalGuard turns private policy documents into source-linked answers and reviewable work—without surrendering the final decision to AI.</motion.p>
+          <motion.ol aria-label="LocalGuard evidence flow" className="login-pipeline mt-7 grid max-w-xl grid-cols-3 gap-2" variants={revealVariants}>
+            {[
+              ["01", "Source", "Local document"],
+              ["02", "Proof", "Exact citation"],
+              ["03", "Gate", "Human approval"],
+            ].map(([index, label, detail]) => (
+              <li key={label}>
+                <span>{index}</span>
+                <strong>{label}</strong>
+                <small>{detail}</small>
+              </li>
+            ))}
+          </motion.ol>
+        </motion.div>
+        <motion.div animate="visible" className="relative z-10 flex items-center justify-between border-t border-white/10 px-12 py-5 text-[0.68rem] text-slate-300/80 xl:px-16" initial={reduceMotion ? false : "hidden"} variants={revealVariants}>
+          <span>Engineering demonstration · Not legal advice</span>
+          <span className="font-mono tracking-[0.12em]">LG / PRIVATE</span>
+        </motion.div>
       </section>
 
-      <section className="relative grid place-items-center overflow-hidden px-5 py-10 sm:px-8">
-        <div aria-hidden className="absolute top-[10%] right-[5%] size-72 rounded-full bg-evidence-soft/55 blur-3xl" />
-        <div className="login-panel panel relative w-full max-w-md p-6 sm:p-8">
+      <section className="login-auth-side relative grid place-items-center overflow-hidden px-5 py-10 sm:px-8">
+        <div aria-hidden className="login-auth-glow" />
+        <motion.div
+          animate="visible"
+          className="login-panel panel relative w-full max-w-[29rem] p-6 sm:p-9"
+          initial={reduceMotion ? false : "hidden"}
+          variants={revealFromRightVariants}
+        >
           <div className="mb-8 lg:hidden">
             <div className="flex items-center gap-3">
-            <span className="brand-mark grid size-10 place-items-center rounded-xl text-white"><ShieldCheck aria-hidden className="size-5" /></span>
-            <span className="font-heading font-bold">LocalGuard AI</span>
+              <span className="proof-brand-tile grid size-11 place-items-center rounded-xl"><ProofGateMark className="size-7" /></span>
+              <span><span className="block font-heading font-bold">LocalGuard AI</span><span className="block text-[0.65rem] font-semibold tracking-[0.13em] text-evidence uppercase">Evidence before action</span></span>
             </div>
             <p className="mt-3 max-w-sm text-sm leading-6 text-muted-foreground">Private document intelligence with source-linked answers and human-approved actions.</p>
           </div>
-          <p className="text-xs font-bold tracking-[0.14em] text-evidence uppercase">Private workspace</p>
-          <h1 className="mt-3 font-heading text-3xl font-bold tracking-[-0.045em]">Sign in to review evidence</h1>
+          <div className="flex items-center justify-between gap-3">
+            <p className="text-xs font-bold tracking-[0.14em] text-evidence uppercase">Private workspace</p>
+            <span className="login-local-status"><span />Local only</span>
+          </div>
+          <h1 className="mt-4 font-heading text-3xl font-bold tracking-[-0.05em]">Enter the evidence room</h1>
           <p className="mt-3 text-sm text-muted-foreground">Use a local account configured during bootstrap.</p>
 
           <form className="mt-8 space-y-5" noValidate onSubmit={handleSubmit(onSubmit)}>
@@ -111,10 +157,10 @@ export default function LoginPage() {
               </div>
               {errors.password ? <p className="mt-1.5 text-sm text-danger" role="alert">{errors.password.message}</p> : null}
             </div>
-            <Button className="w-full" isLoading={isSubmitting} type="submit">{isSubmitting ? "Signing in…" : "Sign in"}</Button>
+            <Button aria-label="Sign in" className="w-full" icon={<ArrowRight aria-hidden className="size-4" />} isLoading={isSubmitting} type="submit">{isSubmitting ? "Signing in…" : "Enter LocalGuard"}</Button>
           </form>
-          <p className="mt-8 text-center text-xs text-muted-foreground">Session credentials are stored in an HttpOnly cookie. No token is written to browser storage.</p>
-        </div>
+          <div className="mt-8 flex items-start gap-2.5 border-t border-border/70 pt-5 text-xs leading-5 text-muted-foreground"><LockKeyhole aria-hidden className="mt-0.5 size-3.5 shrink-0 text-evidence" /><p>Session credentials stay in an HttpOnly cookie. No token is written to browser storage.</p></div>
+        </motion.div>
       </section>
     </main>
   );

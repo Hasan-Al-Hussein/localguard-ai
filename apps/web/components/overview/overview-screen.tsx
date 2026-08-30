@@ -2,16 +2,19 @@
 
 import { OverviewResponseSchema, type EvaluationOverview } from "@localguard/contracts";
 import { useQuery } from "@tanstack/react-query";
-import { Activity, ArrowRight, CalendarClock, CircleAlert, CircleDotDashed, ClipboardCheck, FileCheck2, Files, MessagesSquare, ShieldCheck } from "lucide-react";
+import { Activity, ArrowRight, CalendarClock, Check, CircleAlert, CircleDotDashed, ClipboardCheck, FileCheck2, Files, MessagesSquare, ShieldCheck } from "lucide-react";
+import { motion, useReducedMotion } from "motion/react";
 import Link from "next/link";
 import { useState } from "react";
+import { ProofGateMark } from "@/components/brand/proof-gate-mark";
+import { ProofCoreScene } from "@/components/effects/proof-core-scene";
 import { useAuth } from "@/components/providers/auth-provider";
 import { EmptyState, ErrorState, PageSkeleton } from "@/components/ui/async-state";
 import { MetricCard } from "@/components/ui/metric-card";
-import { PageHeader } from "@/components/ui/page-header";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { apiRequest } from "@/lib/api-client";
 import { formatDate, formatDateTime } from "@/lib/format";
+import { cascadeVariants, revealFromRightVariants, revealVariants } from "@/lib/motion";
 import { queryKeys } from "@/lib/query-keys";
 
 function evaluationStatus(value: boolean | null): string {
@@ -28,6 +31,7 @@ function evaluationCases(summary: EvaluationOverview): string {
 
 export function OverviewScreen() {
   const [showAllActivity, setShowAllActivity] = useState(false);
+  const reduceMotion = useReducedMotion();
   const { user } = useAuth();
   const overview = useQuery({
     queryKey: queryKeys.overview,
@@ -42,22 +46,39 @@ export function OverviewScreen() {
   const { data } = overview;
   const canReview = user?.role === "reviewer" || user?.role === "admin";
   const visibleActivity = canReview || !showAllActivity ? data.recent_activity.slice(0, 5) : data.recent_activity;
+  const readyPercent = data.documents_total ? Math.round((data.documents_ready / data.documents_total) * 100) : 0;
   return (
-    <div className="space-y-7">
-      <PageHeader
-        description="See what the local API has indexed and how many evidence questions have completed or failed."
-        eyebrow="Operations"
-        title="Overview"
-      />
+    <motion.div animate="visible" className="space-y-7" initial={reduceMotion ? false : "hidden"} variants={cascadeVariants}>
+      <motion.section aria-labelledby="overview-title" className="overview-command-hero" variants={revealVariants}>
+        <motion.div className="overview-command-copy" variants={cascadeVariants}>
+          <motion.div className="overview-kicker" variants={revealVariants}><ProofGateMark className="size-4" />Local intelligence plane</motion.div>
+          <motion.h1 id="overview-title" variants={revealVariants}>Overview</motion.h1>
+          <motion.p className="overview-command-headline" variants={revealVariants}>Every claim connected. Every action gated.</motion.p>
+          <motion.p className="overview-command-description" variants={revealVariants}>Your private evidence engine is indexing documents, binding answers to exact source anchors, and holding proposed work for human review.</motion.p>
+          <motion.div className="overview-command-actions" variants={revealVariants}>
+            <Link className="command-primary" href="/ask">Ask the evidence <ArrowRight aria-hidden className="size-4" /></Link>
+            <Link className="command-secondary" href="/documents">Open document vault</Link>
+          </motion.div>
+          <motion.ol aria-label="Evidence pipeline" className="overview-pipeline" variants={revealVariants}>
+            {["Index", "Retrieve", "Cite", "Approve"].map((step, index) => <li key={step}><span><Check aria-hidden className="size-3" /></span><small>0{index + 1}</small>{step}</li>)}
+          </motion.ol>
+        </motion.div>
+        <motion.div variants={revealFromRightVariants}><ProofCoreScene className="overview-proof-core" compact priority /></motion.div>
+        <div className="overview-live-strip">
+          <span><i className="bg-[#52e0c4]" />System plane <strong>local</strong></span>
+          <span>Documents ready <strong>{readyPercent}%</strong></span>
+          <span>Awaiting human gate <strong>{data.pending_approvals}</strong></span>
+        </div>
+      </motion.section>
 
-      <section aria-label="Workspace metrics" className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-3 2xl:grid-cols-6">
-        <MetricCard href="/documents" icon={<Files aria-hidden className="size-5" />} label="Documents" value={data.documents_total} />
-        <MetricCard href="/documents" icon={<FileCheck2 aria-hidden className="size-5" />} label="Ready" tone="evidence" value={data.documents_ready} />
-        <MetricCard href="/documents" icon={<CircleDotDashed aria-hidden className="size-5" />} label="Processing" tone="pending" value={data.documents_processing} />
-        <MetricCard href="/ask" icon={<MessagesSquare aria-hidden className="size-5" />} label="Questions" value={data.questions_total} />
-        <MetricCard detail="Background jobs that returned a failure" href="/ask" icon={<CircleAlert aria-hidden className="size-5" />} label="Question failures" tone={data.questions_failed ? "danger" : "evidence"} value={data.questions_failed} />
-        <MetricCard detail="Evidence-bound proposals awaiting a decision" href={canReview ? "/approvals" : undefined} icon={<ClipboardCheck aria-hidden className="size-5" />} label="Pending approvals" tone={data.pending_approvals ? "pending" : "evidence"} value={data.pending_approvals} />
-      </section>
+      <motion.section aria-label="Workspace metrics" className="overview-metrics grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-3 2xl:grid-cols-6" variants={revealVariants}>
+        <motion.div className="h-full" variants={revealVariants}><MetricCard href="/documents" icon={<Files aria-hidden className="size-5" />} label="Documents" value={data.documents_total} /></motion.div>
+        <motion.div className="h-full" variants={revealVariants}><MetricCard href="/documents" icon={<FileCheck2 aria-hidden className="size-5" />} label="Ready" tone="evidence" value={data.documents_ready} /></motion.div>
+        <motion.div className="h-full" variants={revealVariants}><MetricCard href="/documents" icon={<CircleDotDashed aria-hidden className="size-5" />} label="Processing" tone="pending" value={data.documents_processing} /></motion.div>
+        <motion.div className="h-full" variants={revealVariants}><MetricCard href="/ask" icon={<MessagesSquare aria-hidden className="size-5" />} label="Questions" value={data.questions_total} /></motion.div>
+        <motion.div className="h-full" variants={revealVariants}><MetricCard detail="Background jobs that returned a failure" href="/ask" icon={<CircleAlert aria-hidden className="size-5" />} label="Question failures" tone={data.questions_failed ? "danger" : "evidence"} value={data.questions_failed} /></motion.div>
+        <motion.div className="h-full" variants={revealVariants}><MetricCard detail="Evidence-bound proposals awaiting a decision" href={canReview ? "/approvals" : undefined} icon={<ClipboardCheck aria-hidden className="size-5" />} label="Pending approvals" tone={data.pending_approvals ? "pending" : "evidence"} value={data.pending_approvals} /></motion.div>
+      </motion.section>
 
       <div className="grid gap-6 xl:grid-cols-2">
         <section className="panel overflow-hidden" aria-labelledby="deadlines-heading">
@@ -103,6 +124,6 @@ export function OverviewScreen() {
         <header className="flex items-center gap-3 border-b border-border px-5 py-4 sm:px-6"><Activity aria-hidden className="size-5 text-brand" /><div className="min-w-0 flex-1"><h2 className="font-heading text-lg font-semibold" id="recent-activity-heading">Recent activity</h2><p className="mt-1 text-sm text-muted-foreground">Redacted operational outcomes from the local audit stream.</p></div>{canReview ? <Link className="inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-md px-2 text-sm font-semibold text-brand hover:bg-surface-raised" href="/audit">View all <ArrowRight aria-hidden className="size-4" /></Link> : data.recent_activity.length > 5 ? <button aria-expanded={showAllActivity} className="inline-flex min-h-11 shrink-0 items-center rounded-md px-2 text-sm font-semibold text-brand hover:bg-surface-raised" onClick={() => setShowAllActivity((value) => !value)} type="button">{showAllActivity ? "Show less" : "Show all"}</button> : null}</header>
         {data.recent_activity.length ? <ol className="divide-y divide-border">{visibleActivity.map((event) => <li className="list-action flex flex-wrap items-center gap-3 px-5 py-4 sm:px-6" key={event.id}><div className="min-w-0 flex-1"><p className="text-sm font-semibold">{event.action}</p><p className="mt-1 text-xs text-muted-foreground">{event.resource_type} · {formatDateTime(event.occurred_at)}</p></div><StatusBadge status={event.outcome} /></li>)}</ol> : <p className="p-5 text-sm text-muted-foreground sm:p-6">No recent audit activity is available.</p>}
       </section>
-    </div>
+    </motion.div>
   );
 }

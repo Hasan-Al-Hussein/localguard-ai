@@ -14,12 +14,12 @@ import {
   LogOut,
   Menu,
   ScrollText,
-  ShieldCheck,
   X,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
+import { ProofGateMark } from "@/components/brand/proof-gate-mark";
 import { EvidenceLens } from "@/components/effects/evidence-lens";
 import { useAuth } from "@/components/providers/auth-provider";
 import { apiRequest } from "@/lib/api-client";
@@ -74,12 +74,12 @@ function NavigationContent({ onNavigate, role }: { onNavigate?: () => void; role
   return (
     <>
       <Link className="brand-lockup mx-2 mt-2 flex min-h-16 items-center gap-3 px-3" href="/overview" onClick={onNavigate}>
-        <span className="brand-mark grid size-10 place-items-center rounded-xl text-white">
-          <ShieldCheck aria-hidden className="size-5" />
+        <span className="proof-brand-tile grid size-10 place-items-center rounded-xl text-white">
+          <ProofGateMark className="size-7" />
         </span>
         <span>
-          <span className="block font-heading text-sm font-bold tracking-[-0.025em]">LocalGuard AI</span>
-          <span className="block text-xs text-muted-foreground">Evidence before action</span>
+          <span className="block font-heading text-sm font-bold tracking-[-0.035em]">LocalGuard <span className="brand-ai">AI</span></span>
+          <span className="brand-tagline block text-xs">Evidence before action</span>
         </span>
       </Link>
       <nav aria-label="Primary" className="flex-1 overflow-y-auto px-3 py-4">
@@ -115,7 +115,7 @@ function NavigationContent({ onNavigate, role }: { onNavigate?: () => void; role
           );
         })}
       </nav>
-      <div className="border-t border-border/80 p-4">
+      <div className="sidebar-footer border-t p-4">
         <div className="privacy-card flex items-center gap-2.5 rounded-xl px-3 py-3 text-xs font-semibold text-evidence">
           <span className="relative grid size-7 place-items-center rounded-lg bg-white/70"><LockKeyhole aria-hidden className="size-3.5" /><span aria-hidden className="privacy-dot absolute -right-0.5 -bottom-0.5" /></span>
           <span><span className="block">Local processing</span><span className="mt-0.5 block text-[0.6875rem] font-semibold text-evidence-hover">Private by design</span></span>
@@ -216,7 +216,7 @@ export function ProductShell({ children }: { children: ReactNode }) {
 
       {mobileOpen ? (
         <div className="fixed inset-0 z-40 lg:hidden">
-          <div aria-hidden className="absolute inset-0 bg-slate-950/55" onClick={() => setMobileOpen(false)} />
+          <button aria-label="Close navigation overlay" className="absolute inset-0 cursor-default bg-slate-950/55" onClick={() => setMobileOpen(false)} tabIndex={-1} type="button" />
           <aside
             aria-labelledby="mobile-navigation-title"
             aria-modal="true"
