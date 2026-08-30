@@ -2,55 +2,55 @@
   {
     "id": "problem",
     "start": 0,
-    "end": 11,
+    "end": 16,
     "text": "Operations reviewers turn long policies into time-sensitive work. Searching by hand can hide the rule, lose its source, or trigger action from an unverified answer."
   },
   {
     "id": "solution",
-    "start": 11,
-    "end": 22,
+    "start": 16,
+    "end": 32,
     "text": "LocalGuard AI is a private evidence workspace running on one computer. It answers from indexed files, opens exact proof, and keeps actions behind human review."
   },
   {
     "id": "example",
-    "start": 22,
-    "end": 30,
+    "start": 32,
+    "end": 44,
     "text": "Imagine vendor offboarding. A synthetic policy requires the Service Desk to disable an account within one hour of notice."
   },
   {
     "id": "input",
-    "start": 30,
-    "end": 38,
+    "start": 44,
+    "end": 56,
     "text": "Step one: open Documents. LocalGuard indexes the PDF pages locally and preserves an immutable revision."
   },
   {
     "id": "answer",
-    "start": 38,
-    "end": 57,
+    "start": 56,
+    "end": 84,
     "text": "Step two: ask, How long does the Service Desk have? LocalGuard searches the indexed evidence, checks whether it is sufficient, and returns, within one hour. The source opens page two and highlights the exact stored sentence, making the answer inspectable instead of merely plausible."
   },
   {
     "id": "proposal",
-    "start": 57,
-    "end": 75,
-    "text": "Step three: choose Propose an action. In a synthetic September first scenario, the notice arrives at nine A M U T C. LocalGuard derives a high-priority Service Desk proposal due at ten, but creates no task yet."
+    "start": 84,
+    "end": 110,
+    "text": "Step three: choose Propose an action. In a synthetic September first scenario, the notice arrives at 9:00 AM UTC. LocalGuard derives a high-priority Service Desk proposal due at ten, but creates no task yet."
   },
   {
     "id": "result",
-    "start": 75,
-    "end": 90,
+    "start": 110,
+    "end": 132,
     "text": "The reviewer checks the proposal and evidence, then approves it. Only then does one workflow task appear. Its owner, priority, deadline, and source stay visible. The audit log records the decision and task creation."
   },
   {
     "id": "pipeline",
-    "start": 90,
-    "end": 104,
+    "start": 132,
+    "end": 152,
     "text": "Next.js calls FastAPI. PostgreSQL and pgvector retrieve evidence. A Celery worker checks it with Ollama. LangGraph pauses actions for human approval, and PostgreSQL permits one task."
   },
   {
     "id": "close",
-    "start": 104,
-    "end": 110,
+    "start": 152,
+    "end": 160,
     "text": "LocalGuard: source-backed answers and reviewable work, with evidence before action."
   }
 ]

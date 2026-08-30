@@ -1,7 +1,7 @@
 1
-00:00:00,050 --> 00:00:04,720
+00:00:00,050 --> 00:00:05,454
 LocalGuard AI is a private evidence workspace running on one computer.
 
 2
-00:00:04,720 --> 00:00:10,594
+00:00:05,454 --> 00:00:12,215
 It answers from indexed files, opens exact proof, and keeps actions behind human review.

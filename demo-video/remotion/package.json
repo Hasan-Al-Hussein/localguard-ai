@@ -1,7 +1,7 @@
 {
   "name": "remotion",
   "version": "1.0.0",
-  "description": "Editable 110-second LocalGuard AI product demo",
+  "description": "Editable 160-second LocalGuard AI product demo",
   "repository": {},
   "license": "UNLICENSED",
   "private": true,
@@ -27,7 +27,7 @@
     "dev": "remotion studio --no-open",
     "build": "remotion bundle",
     "typecheck": "tsc --noEmit",
-    "still:check": "remotion still LocalGuardProductDemo out/check-frame.png --frame=2880 --scale=0.5",
+    "still:check": "remotion still LocalGuardProductDemo out/check-frame.png --frame=4260 --scale=0.5",
     "render:master": "remotion render LocalGuardProductDemo out/localguard-product-demo-master.mp4 --codec=h264 --pixel-format=yuv420p --crf=18",
     "upgrade": "remotion upgrade",
     "lint": "eslint src && tsc --noEmit"

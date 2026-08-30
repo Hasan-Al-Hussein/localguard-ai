@@ -1,6 +1,12 @@
-import {Video} from "@remotion/media";
-import {Easing, Img, interpolate, staticFile, useCurrentFrame} from "remotion";
-import {COLORS} from "../constants";
+import { Video } from "@remotion/media";
+import {
+  Easing,
+  Img,
+  interpolate,
+  staticFile,
+  useCurrentFrame,
+} from "remotion";
+import { COLORS } from "../constants";
 
 type Props = {
   screenshot?: string;
@@ -38,7 +44,8 @@ export const ProductFrame: React.FC<Props> = ({
         overflow: "hidden",
         backgroundColor: "rgba(5,17,26,.96)",
         outline: "1px solid rgba(189,248,237,.24)",
-        boxShadow: "0 45px 120px rgba(1,10,15,.52), 0 0 0 8px rgba(255,255,255,.025)",
+        boxShadow:
+          "0 45px 120px rgba(1,10,15,.52), 0 0 0 8px rgba(255,255,255,.025)",
         opacity: interpolate(frame, [0, 16], [0, 1], {
           extrapolateLeft: "clamp",
           extrapolateRight: "clamp",
@@ -48,7 +55,11 @@ export const ProductFrame: React.FC<Props> = ({
           frame,
           [0, 22],
           [
-            enterFrom === "left" ? "-80px 0px" : enterFrom === "bottom" ? "0px 70px" : "80px 0px",
+            enterFrom === "left"
+              ? "-80px 0px"
+              : enterFrom === "bottom"
+                ? "0px 70px"
+                : "80px 0px",
             "0px 0px",
           ],
           {
@@ -73,13 +84,35 @@ export const ProductFrame: React.FC<Props> = ({
           gap: 18,
           padding: "0 24px",
           borderBottom: "1px solid rgba(220,230,232,.12)",
-          background: "linear-gradient(180deg, rgba(17,39,52,.98), rgba(7,25,37,.98))",
+          background:
+            "linear-gradient(180deg, rgba(17,39,52,.98), rgba(7,25,37,.98))",
         }}
       >
-        <div style={{display: "flex", gap: 9}}>
-          <div style={{width: 12, height: 12, borderRadius: 12, backgroundColor: "#FF806C"}} />
-          <div style={{width: 12, height: 12, borderRadius: 12, backgroundColor: COLORS.amber}} />
-          <div style={{width: 12, height: 12, borderRadius: 12, backgroundColor: COLORS.mint}} />
+        <div style={{ display: "flex", gap: 9 }}>
+          <div
+            style={{
+              width: 12,
+              height: 12,
+              borderRadius: 12,
+              backgroundColor: "#FF806C",
+            }}
+          />
+          <div
+            style={{
+              width: 12,
+              height: 12,
+              borderRadius: 12,
+              backgroundColor: COLORS.amber,
+            }}
+          />
+          <div
+            style={{
+              width: 12,
+              height: 12,
+              borderRadius: 12,
+              backgroundColor: COLORS.mint,
+            }}
+          />
         </div>
         <div
           style={{
@@ -98,7 +131,15 @@ export const ProductFrame: React.FC<Props> = ({
           }}
         >
           <span>{title}</span>
-          <span style={{fontFamily: "monospace", fontSize: 14, color: COLORS.mint}}>localhost:3000{route}</span>
+          <span
+            style={{
+              fontFamily: "monospace",
+              fontSize: 14,
+              color: COLORS.mint,
+            }}
+          >
+            localhost:3000{route}
+          </span>
         </div>
         <div
           style={{
@@ -115,7 +156,15 @@ export const ProductFrame: React.FC<Props> = ({
           LOCAL · PRIVATE
         </div>
       </div>
-      <div style={{position: "relative", width: "100%", height: height - 66, overflow: "hidden", backgroundColor: "#DDE8EC"}}>
+      <div
+        style={{
+          position: "relative",
+          width: "100%",
+          height: height - 66,
+          overflow: "hidden",
+          backgroundColor: "#DDE8EC",
+        }}
+      >
         {video ? (
           <Video
             name="Real LocalGuard browser recording"
@@ -149,7 +198,8 @@ export const ProductFrame: React.FC<Props> = ({
             position: "absolute",
             inset: 0,
             pointerEvents: "none",
-            background: "linear-gradient(180deg, rgba(255,255,255,.025), transparent 22%, transparent 78%, rgba(5,20,30,.09))",
+            background:
+              "linear-gradient(180deg, rgba(255,255,255,.025), transparent 22%, transparent 78%, rgba(5,20,30,.09))",
           }}
         />
       </div>

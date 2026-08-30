@@ -1,12 +1,12 @@
 # LocalGuard AI demo video
 
-[Watch the 110-second MP4 recording](../../demo-video/output/product-demo.mp4) ·
+[Watch the 160-second MP4 recording](../../demo-video/output/product-demo.mp4) ·
 [Read the captions](../../demo-video/output/product-demo.srt) ·
 [Open the complete pipeline walkthrough](../pipeline.md)
 
 [![LocalGuard AI product demo poster](../screenshots/product-demo/localguard-product-demo.png)](../../demo-video/output/product-demo.mp4)
 
-The 110-second narrated cut uses validated 1920×1080 product footage and covers:
+The 160-second narrated cut uses validated 1920×1080 product footage and covers:
 
 1. the document-to-action problem and LocalGuard's local evidence boundary;
 2. local document evidence and immutable revisions;
