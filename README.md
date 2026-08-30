@@ -7,7 +7,7 @@
 **Local-first document intelligence where every answer resolves to source proof and every action waits for human approval.**
 
 [![CI](https://img.shields.io/github/actions/workflow/status/Hasan-Al-Hussein/localguard-ai/ci.yml?branch=main&style=for-the-badge&label=CI)](https://github.com/Hasan-Al-Hussein/localguard-ai/actions/workflows/ci.yml)
-[![Demo](https://img.shields.io/badge/DEMO-85_SECONDS-18BFA5?style=for-the-badge)](docs/demo/localguard-demo.webm)
+[![Demo](https://img.shields.io/badge/DEMO-110_SECONDS-18BFA5?style=for-the-badge)](demo-video/output/product-demo.mp4)
 ![Local-first](https://img.shields.io/badge/RUNTIME-LOCAL--FIRST-4F8CFF?style=for-the-badge)
 ![CPU-only](https://img.shields.io/badge/INFERENCE-CPU--ONLY-68758A?style=for-the-badge)
 [![MIT License](https://img.shields.io/badge/LICENSE-MIT-F5B942?style=for-the-badge)](LICENSE)
@@ -44,7 +44,7 @@ responsibilities:
 
 | Signal | Verified release evidence |
 |---|---|
-| Local-model evaluation | 25/25 hash-verified cases completed under schema 1.2.0 and dataset 1.0.2 |
+| Local-model evaluation | Stored August 24, 2026 run: 25/25 hash-verified cases completed under schema 1.2.0 and dataset 1.0.2 |
 | Grounding | 1.0000 macro and pooled citation precision; zero unsupported claims in the measured corpus |
 | Human approval | 7/7 approval transitions; zero preapproval tasks or executions |
 | Adversarial controls | 5/5 insufficiency abstentions, 27/27 injection controls, 97/97 forbidden controls |
@@ -57,14 +57,18 @@ are not production, legal, or general model-accuracy claims.
 ## See the complete workflow
 
 <div align="center">
-  <a href="docs/demo/localguard-demo.webm"><img src="docs/screenshots/pipeline/step-02-overview-system-status.png" width="900" alt="Open the 85-second LocalGuard AI product demo" /></a>
+  <a href="demo-video/output/product-demo.mp4"><img src="docs/screenshots/product-demo/localguard-product-demo.png" width="900" alt="Open the 110-second LocalGuard AI product demo" /></a>
   <br />
-  <strong><a href="docs/demo/localguard-demo.webm">▶ Watch the 85-second product tour</a></strong>
+  <strong><a href="demo-video/output/product-demo.mp4">▶ Watch the 110-second product tour</a></strong>
+  <br />
+  <a href="demo-video/output/product-demo.srt">Read the captions</a>
 </div>
 
-The recording moves through the live local overview, document library, exact source proof, Ask
-workspace, human approval boundary, approved task, causal audit trail, and passing evaluation.
-Authentication happens before recording, so no local password appears in the video.
+The narrated tour moves from the problem to a real local product journey: indexed evidence,
+grounded answering, exact source proof, a clearly synthetic action scenario, the human approval
+boundary, one internal task, its audit trail, and a concise architecture summary. Authentication
+happens before recording, so no local password appears in the video. Long local-model waits are
+shortened; the product states shown are preserved from the real browser run.
 
 These six equally framed captures show the core journey. Open any image for full resolution, or
 follow the [complete twelve-step walkthrough](docs/pipeline.md) for every intermediate state.
@@ -72,7 +76,7 @@ follow the [complete twelve-step walkthrough](docs/pipeline.md) for every interm
 <table>
   <tr>
     <td width="50%" valign="top"><strong>1. See local operational state</strong><br /><br /><a href="docs/screenshots/pipeline/step-02-overview-system-status.png"><img src="docs/screenshots/pipeline/step-02-overview-system-status.png" width="100%" alt="LocalGuard AI overview and system status" /></a></td>
-    <td width="50%" valign="top"><strong>2. Upload and index evidence</strong><br /><br /><a href="docs/screenshots/pipeline/step-03-upload-and-index-documents.png"><img src="docs/screenshots/pipeline/step-03-upload-and-index-documents.png" width="100%" alt="Document upload and indexing state" /></a></td>
+    <td width="50%" valign="top"><strong>2. Inspect ready indexed evidence</strong><br /><br /><a href="docs/screenshots/pipeline/step-03-inspect-indexed-document.png"><img src="docs/screenshots/pipeline/step-03-inspect-indexed-document.png" width="100%" alt="Ready indexed synthetic vendor-access policy" /></a></td>
   </tr>
   <tr>
     <td width="50%" valign="top"><strong>3. Ask a grounded question</strong><br /><br /><a href="docs/screenshots/pipeline/step-05-submit-grounded-question.png"><img src="docs/screenshots/pipeline/step-05-submit-grounded-question.png" width="100%" alt="Grounded question submitted against indexed evidence" /></a></td>
@@ -191,9 +195,11 @@ provider, so the portfolio demo cannot silently fall back to a fake model.
 
 ## Evaluation and verification
 
-The current audited corpus contains 25 synthetic cases across grounded answers, insufficient
-evidence, indirect prompt injection, and action/approval behavior. It scores observed application
-behavior without sending gold answers to the system under test or using a learned judge.
+The stored, verified August 24, 2026 run covers 25 synthetic cases across grounded answers,
+insufficient evidence, indirect prompt injection, and action/approval behavior. It scores observed
+application behavior without sending gold answers to the system under test or using a learned
+judge. It is documented release evidence, not a run performed during the August 30 screenshot or
+video capture.
 
 | Release signal | Observed result |
 |---|---:|

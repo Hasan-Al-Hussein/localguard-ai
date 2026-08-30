@@ -7,8 +7,9 @@ grounded answering, exact citation proof, human approval, exactly-once task crea
 measured evaluation. The screenshots come from the validated local application; the documents in
 the demonstration are synthetic.
 
-[Watch the 85-second product tour](demo/localguard-demo.webm) for a concise pass through the same
-live application surfaces.
+[Watch the 110-second product tour](../demo-video/output/product-demo.mp4) or open its
+[captions](../demo-video/output/product-demo.srt) for a concise pass through the same live
+application surfaces.
 
 ![LocalGuard AI end-to-end pipeline](visuals/localguard-pipeline.svg)
 
@@ -24,29 +25,32 @@ roles are enforced by the server; document text is never an authentication or ap
 ![Overview and system status](screenshots/pipeline/step-02-overview-system-status.png)
 
 The overview makes documents, indexing work, questions, proposals, tasks, recent activity, and the
-latest verified evaluation visible in one place. PostgreSQL is the source of truth for this state.
+latest stored evaluation visible in one place. PostgreSQL is the source of truth for this state.
 
-## 3. Upload, validate, preserve, and index
+## 3. Inspect the indexed policy
 
-![Document upload and index state](screenshots/pipeline/step-03-upload-and-index-documents.png)
+![Ready indexed document](screenshots/pipeline/step-03-inspect-indexed-document.png)
 
-PDF, DOCX, and TXT intake checks extension, declared type, detected bytes, size, and parser-specific
-limits. A successful upload becomes an immutable revision with stable anchors, bounded chunks,
-MiniLM embeddings, pgvector data, and PostgreSQL full-text data.
+The captured frame proves that the synthetic vendor-access policy is ready for retrieval. In the
+preceding intake stage, PDF, DOCX, and TXT uploads are validated and stored as immutable revisions
+with stable anchors, bounded chunks, MiniLM embeddings, pgvector data, and PostgreSQL full-text
+data.
 
 ## 4. Choose the evidence-answer workflow
 
 ![Ask LocalGuard workspace](screenshots/pipeline/step-04-ask-evidence-question.png)
 
-The Ask workspace states the contract before a request is sent: answers come from indexed evidence,
-citations open exact proof, and requested actions still require human approval.
+The Ask workspace states the contract before a request is sent: answers come from the authorized
+indexed vault, citations open exact proof, and requested actions still require human approval.
+There is no per-document selector on this screen.
 
 ## 5. Submit a grounded question
 
 ![Prepared grounded question](screenshots/pipeline/step-05-submit-grounded-question.png)
 
-Retrieval fuses vector and full-text ranks inside the permitted document scope. A request-local
-sufficient-context gate rejects evidence that is absent, contradictory, conditional, or unrelated.
+Retrieval fuses vector and full-text ranks across the user's authorized, ready indexed documents. A
+request-local sufficient-context gate rejects evidence that is absent, contradictory, conditional,
+or unrelated.
 
 ## 6. Receive an evidence-derived answer
 
@@ -66,8 +70,10 @@ start and end offsets. The viewer highlights the stored bytes that support the a
 
 ![Evidence-bound action request](screenshots/pipeline/step-08-propose-evidence-bound-action.png)
 
-The application scopes valid rule candidates and derives the actor, action, description, priority,
-source citation, and due time from one confirmed binding and one trusted event.
+For the explicitly synthetic September 1 scenario, the application scopes valid rule candidates
+and derives the actor, action, description, priority, source citation, and due time from one
+confirmed binding and the trusted 09:00 UTC event supplied by the authenticated user. It proposes
+an internal task; it does not disable an external account.
 
 ## 9. Review an inert proposal
 
@@ -87,17 +93,19 @@ uniqueness permits one task; replay cannot create a duplicate.
 
 ![Correlation-bound workflow audit trail](screenshots/pipeline/step-11-inspect-causal-audit-trail.png)
 
-Ingestion, retrieval, validation, proposal creation, the human decision, graph resume, task
-execution, retries, failures, and durable outbox dispatch leave correlation-bound events.
+Ingestion, retrieval, validation, proposal creation, the human decision, graph resume, internal
+task creation, retries, failures, and durable outbox dispatch leave correlation-bound events.
 
 ## 12. Verify the measured result
 
 ![Passing evaluation result](screenshots/pipeline/step-12-verify-evaluation-results.png)
 
-The pinned local-model run completed all 25 hash-verified synthetic cases and passed its safety,
-quality, and overall gates. The corpus covers grounded answers, insufficient evidence, indirect
-prompt injection, and action/approval behavior. See [evaluation.md](evaluation.md) for the exact
-corpus identities, formulas, thresholds, current result, and honest historical evidence.
+The latest stored, verified local-model run completed all 25 hash-verified synthetic cases and
+passed its safety, quality, and overall gates. It was completed on August 24, 2026; it is not
+presented as a run executed during the screenshot or video capture. The corpus covers grounded
+answers, insufficient evidence, indirect prompt injection, and action/approval behavior. See
+[evaluation.md](evaluation.md) for the exact corpus identities, formulas, thresholds, current
+result, and honest historical evidence.
 
 ## Where the pipeline lives in code
 

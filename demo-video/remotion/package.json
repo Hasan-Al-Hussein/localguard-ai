@@ -1,0 +1,38 @@
+{
+  "name": "remotion",
+  "version": "1.0.0",
+  "description": "Editable 110-second LocalGuard AI product demo",
+  "repository": {},
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "@fontsource-variable/geist": "^5.2.8",
+    "@fontsource-variable/manrope": "^5.2.8",
+    "@remotion/captions": "^4.0.518",
+    "@remotion/cli": "4.0.518",
+    "@remotion/media": "^4.0.518",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "remotion": "4.0.518"
+  },
+  "devDependencies": {
+    "@remotion/eslint-config-flat": "4.0.518",
+    "@types/react": "19.2.7",
+    "@types/web": "0.0.166",
+    "eslint": "9.19.0",
+    "prettier": "3.8.1",
+    "typescript": "5.9.3"
+  },
+  "scripts": {
+    "dev": "remotion studio --no-open",
+    "build": "remotion bundle",
+    "typecheck": "tsc --noEmit",
+    "still:check": "remotion still LocalGuardProductDemo out/check-frame.png --frame=2880 --scale=0.5",
+    "render:master": "remotion render LocalGuardProductDemo out/localguard-product-demo-master.mp4 --codec=h264 --pixel-format=yuv420p --crf=18",
+    "upgrade": "remotion upgrade",
+    "lint": "eslint src && tsc --noEmit"
+  },
+  "sideEffects": [
+    "*.css"
+  ]
+}

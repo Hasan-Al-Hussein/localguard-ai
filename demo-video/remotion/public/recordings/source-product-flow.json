@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "source": "source-product-flow.webm",
+  "sha256": "fea7cdfe91340b789193a2b4cbc15d4a625d6c1bbb20ceb233bd88a14ebfa9b0",
+  "durationSeconds": 142.96,
+  "video": {
+    "codec": "vp8",
+    "width": 1920,
+    "height": 1080,
+    "capturedFrameRate": 25
+  },
+  "privacy": {
+    "authenticationRecorded": false,
+    "credentialsRecorded": false,
+    "applicationData": "synthetic demonstration records only"
+  },
+  "markers": [
+    {"label": "overview", "seconds": 3.886, "route": "/overview"},
+    {"label": "documents", "seconds": 7.392, "route": "/documents"},
+    {"label": "questionReady", "seconds": 15.818, "route": "/ask"},
+    {"label": "questionQueued", "seconds": 18.901, "route": "/ask"},
+    {"label": "answer", "seconds": 86.008, "route": "/ask"},
+    {"label": "citation", "seconds": 88.507, "route": "/documents/b09a1e54-a30f-4f65-b9da-1859048bf44d"},
+    {"label": "actionReady", "seconds": 99.553, "route": "/ask"},
+    {"label": "approval", "seconds": 131.519, "route": "/approvals/d3456544-ae03-446b-80de-0621a997788c"},
+    {"label": "task", "seconds": 136.41, "route": "/tasks/073adb6e-6309-42ef-8a1f-54971274e5a8"},
+    {"label": "audit", "seconds": 139.062, "route": "/audit"},
+    {"label": "evaluation", "seconds": 142.063, "route": "/evaluations/20260823T234625509074Z-ollama-914d80632516"}
+  ],
+  "editingNote": "The long local-model waits are shortened in the final edit and disclosed on screen."
+}

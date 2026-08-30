@@ -1,0 +1,7 @@
+1
+00:00:00,050 --> 00:00:04,587
+Operations reviewers turn long policies into time-sensitive work.
+
+2
+00:00:04,587 --> 00:00:10,800
+Searching by hand can hide the rule, lose its source, or trigger action from an unverified answer.

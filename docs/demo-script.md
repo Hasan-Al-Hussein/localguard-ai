@@ -1,8 +1,10 @@
-# Five-minute LocalGuard AI demo
+# Extended LocalGuard AI live-demo script
 
 This walkthrough uses only the committed synthetic fixtures and the real local Ollama providers.
-It is designed for a portfolio screen recording or a live interview. Nothing in the final path is
-mocked.
+It is designed for a five-minute live interview walkthrough. For the edited presentation cut, use
+the [110-second product tour](../demo-video/output/product-demo.mp4), its
+[captions](../demo-video/output/product-demo.srt), and the concise
+[production script](../demo-video/script.md). Nothing in this live path is mocked.
 
 ## Before the recording
 
@@ -53,27 +55,29 @@ be visibly recognizable.
 
 ## 1:25–2:15 — ask a cited question
 
-Open **Ask LocalGuard**, scope the ready document, and ask:
+Open **Ask LocalGuard** and ask:
 
 > How long does the Service Desk have to disable a vendor account after it receives an offboarding
 > notice?
 
 Expected substance: **within one hour after receiving the notice**. The wording may vary because
-this is the real local model.
+this is the real local model. Ask searches the authenticated user's ready indexed vault; this
+screen has no per-document selector.
 
 Click the citation. Show that it opens the immutable source revision and exact cited range on the
 correct PDF page. Explain that the model returned only an allowed opaque chunk ID; the server
 resolved the title, revision, anchor, quote, and offsets.
 
-If the response abstains, do not hide it. Confirm the selected document is ready and keep the
-failure in the demo evidence; never lower the guardrail live simply to force an answer.
+If the response abstains, do not hide it. Confirm that the intended document revision is ready and
+keep the failure in the demo evidence; never lower the guardrail live simply to force an answer.
 
 ## 2:15–3:45 — prove the human approval boundary
 
-Submit this action request with the same document selected:
+Submit this explicitly synthetic action request:
 
-> An authorized sponsor's vendor offboarding notice was received at 2026-09-01T09:00:00Z.
-> Propose the required account-disable task; do not execute it without review.
+> For a synthetic September 1 scenario, an authorized sponsor's vendor offboarding notice was
+> received at 2026-09-01T09:00:00Z. Propose the required account-disable task; do not execute it
+> without review.
 
 Open **Approvals** when the workflow reaches `waiting_approval`. The proposal should identify the
 Service Desk, high priority, and a due time of `2026-09-01T10:00:00Z`, supported by the one-hour
@@ -115,9 +119,11 @@ shown in the report:
 
 - A schema-matching deterministic run can exercise orchestration, exact metrics, and safety
   invariants on the CI path; it is not claimed as model quality or as a remote CI pass.
-- The final Ollama run, `20260823T234625509074Z-ollama-914d80632516`, uses schema 1.2.0/dataset
-  v1.0.2, completed 25 of 25 cases, and passed safety, quality, and overall gates. Its raw response
-  capture is enabled and its exact raw-file SHA-256 is `be9f481ef13719ce1bef4b6f752bfc2409657366282ee6abff8f559515f54ada`.
+- The latest stored, verified Ollama run, `20260823T234625509074Z-ollama-914d80632516`, completed on
+  August 24, 2026. It uses schema 1.2.0/dataset v1.0.2, completed 25 of 25 cases, and passed safety,
+  quality, and overall gates. Its raw response capture is enabled and its exact raw-file SHA-256
+  is `be9f481ef13719ce1bef4b6f752bfc2409657366282ee6abff8f559515f54ada`. Do not present it as a run
+  performed during a later live demo, screenshot session, or video capture.
 - The older `20260823T154041554662Z-ollama-2237aa9ef1fd` run remains a failed schema 1.1.0/dataset
   v1.0.1 historical artifact: 18 of 25 completed, 7 failed, and both safety and quality failed.
   Show it only as preserved, non-comparable failure evidence.
@@ -159,17 +165,13 @@ direct-resume route, which invokes the same binding, current-reviewer, current-e
 exactly-once task, and audit checks as the graph route. Show zero tasks before approval and exactly
 one after replaying the approved decision.
 
-## Suggested screenshot set
+## Screenshot evidence
 
-1. Overview with local service status and populated operational metrics.
-2. Document viewer with an exact highlighted citation.
-3. Ask screen with the one-hour grounded answer and source chip.
-4. Pending proposal with version/evidence binding visible and no corresponding task.
-5. Executed proposal beside the single approved workflow task.
-6. Audit thread showing request → decision → execution causality.
-7. Evaluation dashboard/report with provider, schema/dataset versions, mode identifiers, all 25
-   case outcomes, provenance, and passing gates.
+The refreshed release set contains 12 ordered frames, from local sign-in through the stored,
+verified evaluation result. Open the [complete visual pipeline](screenshots/pipeline/README.md) for
+the filenames, capture conditions, and per-frame labels, or the
+[pipeline walkthrough](pipeline.md) for the matching technical explanation.
 
-The seven fresh screenshots are committed under `docs/screenshots/`. They were published atomically
-by the guarded Playwright portfolio journey from the live Ollama demo and final evaluation. Do not
-composite, edit, or substitute fixture screens for behavior that was not observed.
+The evaluation frame shows the stored August 24, 2026 result; it does not imply that evaluation was
+rerun during the August 30 capture. Do not composite, edit, or substitute fixture screens for
+behavior that was not observed.

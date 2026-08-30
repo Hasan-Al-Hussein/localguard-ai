@@ -1,0 +1,15 @@
+1
+00:00:00,050 --> 00:00:02,463
+Next.js calls FastAPI.
+
+2
+00:00:02,463 --> 00:00:06,189
+PostgreSQL and pgvector retrieve evidence.
+
+3
+00:00:06,189 --> 00:00:08,907
+A Celery worker checks it with Ollama.
+
+4
+00:00:08,907 --> 00:00:14,356
+LangGraph pauses actions for human approval, and PostgreSQL permits one task.
