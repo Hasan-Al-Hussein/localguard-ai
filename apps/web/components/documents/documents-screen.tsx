@@ -8,7 +8,6 @@ import {
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { ColumnDef } from "@tanstack/react-table";
 import { FilePlus2, RefreshCw, Search, Trash2, UploadCloud } from "lucide-react";
-import Link from "next/link";
 import { useMemo, useState } from "react";
 import { z } from "zod";
 import { useAuth } from "@/components/providers/auth-provider";
@@ -17,6 +16,11 @@ import { EmptyState, ErrorState, InlineBanner, PageSkeleton } from "@/components
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
 import { Modal } from "@/components/ui/modal";
+import {
+  MobileRecordCard,
+  OperationalLink,
+  OperationalPagination,
+} from "@/components/ui/operational-list";
 import { PageHeader } from "@/components/ui/page-header";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { apiRequest, errorMessage } from "@/lib/api-client";
@@ -25,7 +29,7 @@ import { queryKeys } from "@/lib/query-keys";
 import { UploadDialog } from "./upload-dialog";
 
 const activeStatuses = new Set(["queued", "processing"]);
-const pageSize = 25;
+const PAGE_SIZE = 15;
 
 export function DocumentsScreen() {
   const [page, setPage] = useState(1);
@@ -38,8 +42,8 @@ export function DocumentsScreen() {
   const { notify } = useNotice();
   const canManage = user?.role === "reviewer" || user?.role === "admin";
   const canDelete = user?.role === "admin";
-  const offset = (page - 1) * pageSize;
-  const filterString = `offset=${offset}&limit=${pageSize}`;
+  const offset = (page - 1) * PAGE_SIZE;
+  const filterString = `offset=${offset}&limit=${PAGE_SIZE}`;
 
   const documents = useQuery({
     queryKey: queryKeys.documents(filterString),
@@ -75,13 +79,13 @@ export function DocumentsScreen() {
       header: "Document",
       cell: ({ row }) => (
         <div className="min-w-0">
-          <Link className="inline-flex min-h-11 max-w-sm items-center truncate font-semibold text-brand hover:underline" href={`/documents/${encodeURIComponent(row.original.id)}`}>{row.original.title}</Link>
-          <p className="mt-0.5 max-w-48 truncate font-mono text-xs text-muted-foreground">{row.original.id}</p>
+          <OperationalLink className="max-w-sm truncate" href={`/documents/${encodeURIComponent(row.original.id)}`}>{row.original.title}</OperationalLink>
+          <p className="mt-0.5 max-w-48 truncate font-mono text-xs text-muted-foreground" title={row.original.id}>{row.original.id}</p>
         </div>
       ),
     },
     { accessorKey: "state", header: "State", cell: ({ row }) => <StatusBadge status={row.original.state} /> },
-    { accessorKey: "current_revision_id", header: "Current revision", cell: ({ row }) => row.original.current_revision_id ? <span className="block max-w-40 truncate font-mono text-xs">{row.original.current_revision_id}</span> : "—" },
+    { accessorKey: "current_revision_id", header: "Current revision", cell: ({ row }) => row.original.current_revision_id ? <span className="block max-w-40 truncate font-mono text-xs" title={row.original.current_revision_id}>{row.original.current_revision_id}</span> : "—" },
     { accessorKey: "created_at", header: "Created", cell: ({ row }) => <time dateTime={row.original.created_at}>{formatDateTime(row.original.created_at)}</time> },
     { accessorKey: "updated_at", header: "Updated", cell: ({ row }) => <time dateTime={row.original.updated_at}>{formatDateTime(row.original.updated_at)}</time> },
     {
@@ -90,8 +94,8 @@ export function DocumentsScreen() {
       enableSorting: false,
       cell: ({ row }) => canManage ? (
         <div className="flex items-center justify-end gap-1">
-          <button aria-label={`Reprocess ${row.original.title}`} className="icon-button grid size-11 place-items-center rounded-xl text-muted-foreground hover:bg-info-soft hover:text-info disabled:opacity-40" disabled={activeStatuses.has(row.original.state) || reprocessPending} onClick={() => reprocessDocument(row.original.id)} title="Reprocess" type="button"><RefreshCw aria-hidden className="size-4" /></button>
-          {canDelete ? <button aria-label={`Delete ${row.original.title}`} className="icon-button grid size-11 place-items-center rounded-xl text-muted-foreground hover:bg-danger-soft hover:text-danger" onClick={() => setDeleteTarget(row.original)} title="Delete" type="button"><Trash2 aria-hidden className="size-4" /></button> : null}
+          <button aria-label={`Reprocess ${row.original.title}`} className="icon-button grid size-11 place-items-center rounded-lg text-muted-foreground hover:bg-info-soft hover:text-info disabled:opacity-40" disabled={activeStatuses.has(row.original.state) || reprocessPending} onClick={() => reprocessDocument(row.original.id)} title="Reprocess" type="button"><RefreshCw aria-hidden className="size-4" /></button>
+          {canDelete ? <button aria-label={`Delete ${row.original.title}`} className="icon-button grid size-11 place-items-center rounded-lg text-muted-foreground hover:bg-danger-soft hover:text-danger" onClick={() => setDeleteTarget(row.original)} title="Delete" type="button"><Trash2 aria-hidden className="size-4" /></button> : null}
         </div>
       ) : <span className="text-xs text-muted-foreground">Read only</span>,
     },
@@ -106,10 +110,11 @@ export function DocumentsScreen() {
     (!search.trim() || document.title.toLocaleLowerCase().includes(search.trim().toLocaleLowerCase())),
   );
   const total = documents.data?.total ?? 0;
-  const totalPages = Math.max(Math.ceil(total / pageSize), 1);
+  const first = total === 0 ? 0 : offset + 1;
+  const last = Math.min(offset + sourceRows.length, total);
 
   return (
-    <div className="space-y-7">
+    <div className="space-y-5">
       <PageHeader
         actions={<Button disabled={!canManage} icon={<UploadCloud aria-hidden className="size-4" />} onClick={() => setUploadOpen(true)}>Upload document</Button>}
         description="Upload, process, and inspect synthetic operational documents without sending them off-device."
@@ -118,7 +123,7 @@ export function DocumentsScreen() {
       />
       {!canManage ? <InlineBanner tone="info" title="Read-only access">Viewer accounts can inspect indexed evidence but cannot upload, reprocess, or delete documents.</InlineBanner> : null}
 
-      <section aria-label="Document filters" className="flex flex-col gap-3 sm:flex-row">
+      <section aria-label="Document filters" className="document-filters flex flex-col gap-2 sm:flex-row">
         <label className="relative flex-1">
           <span className="sr-only">Filter the current document page</span>
           <Search aria-hidden className="pointer-events-none absolute top-1/2 left-3.5 size-4 -translate-y-1/2 text-muted-foreground" />
@@ -139,16 +144,39 @@ export function DocumentsScreen() {
           empty={<EmptyState action={search || status !== "all" ? <Button onClick={() => { setSearch(""); setStatus("all"); }} variant="secondary">Clear page filters</Button> : canManage ? <Button icon={<FilePlus2 aria-hidden className="size-4" />} onClick={() => setUploadOpen(true)}>Upload a synthetic document</Button> : undefined} description={search || status !== "all" ? "No records on this server page match the local filter." : "Add the first PDF, DOCX, or TXT fixture to begin the cited-question workflow."} title={search || status !== "all" ? "No documents match on this page" : "No documents yet"} />}
           getRowId={(row) => row.id}
           mobileRow={(document) => (
-            <article className="panel interactive-card p-4">
-              <div className="flex items-start gap-3"><div className="min-w-0 flex-1"><Link className="block truncate font-semibold text-brand" href={`/documents/${encodeURIComponent(document.id)}`}>{document.title}</Link><p className="mt-1 truncate font-mono text-xs text-muted-foreground">{document.id}</p></div><StatusBadge status={document.state} /></div>
-              <dl className="mt-4 grid grid-cols-2 gap-3 border-t border-border pt-3 text-xs"><div><dt className="text-muted-foreground">Created</dt><dd className="mt-1 font-semibold">{formatDateTime(document.created_at)}</dd></div><div><dt className="text-muted-foreground">Updated</dt><dd className="mt-1 font-semibold">{formatDateTime(document.updated_at)}</dd></div></dl>
-              {canManage ? <div className="mt-3 flex justify-end gap-1"><button aria-label={`Reprocess ${document.title}`} className="grid size-11 place-items-center rounded-md text-muted-foreground hover:bg-info-soft hover:text-info disabled:opacity-40" disabled={activeStatuses.has(document.state) || reprocess.isPending} onClick={() => reprocess.mutate(document.id)} type="button"><RefreshCw aria-hidden className="size-4" /></button>{canDelete ? <button aria-label={`Delete ${document.title}`} className="grid size-11 place-items-center rounded-md text-muted-foreground hover:bg-danger-soft hover:text-danger" onClick={() => setDeleteTarget(document)} type="button"><Trash2 aria-hidden className="size-4" /></button> : null}</div> : null}
-            </article>
+            <MobileRecordCard>
+              <div className="flex min-w-0 items-start gap-3">
+                <div className="min-w-0 flex-1">
+                  <OperationalLink className="max-w-full truncate" href={`/documents/${encodeURIComponent(document.id)}`}>{document.title}</OperationalLink>
+                  <p className="mt-1 truncate font-mono text-[0.65rem] text-muted-foreground" title={document.id}>{document.id}</p>
+                  <p className="mt-1 text-xs text-muted-foreground">Updated {formatDateTime(document.updated_at)}</p>
+                </div>
+                <StatusBadge status={document.state} />
+              </div>
+              {canManage ? (
+                <div className="mt-2 flex min-h-11 justify-end gap-2 border-t border-border/80 pt-1.5">
+                  <button aria-label={`Reprocess ${document.title}`} className="grid size-11 place-items-center self-center rounded-md text-muted-foreground hover:bg-info-soft hover:text-info disabled:opacity-40" disabled={activeStatuses.has(document.state) || reprocess.isPending} onClick={() => reprocess.mutate(document.id)} title="Reprocess" type="button"><RefreshCw aria-hidden className="size-4" /></button>
+                  {canDelete ? <button aria-label={`Delete ${document.title}`} className="grid size-11 place-items-center self-center rounded-md text-muted-foreground hover:bg-danger-soft hover:text-danger" onClick={() => setDeleteTarget(document)} title="Delete" type="button"><Trash2 aria-hidden className="size-4" /></button> : null}
+                </div>
+              ) : null}
+            </MobileRecordCard>
           )}
         />
       </div>
 
-      {total > pageSize ? <nav aria-label="Document pagination" className="flex items-center justify-between border-t border-border pt-4 text-sm"><p className="text-muted-foreground">Page {page} of {totalPages} · {total} documents</p><div className="flex gap-2"><Button disabled={page === 1 || documents.isFetching} onClick={() => setPage((value) => Math.max(1, value - 1))} variant="secondary">Previous</Button><Button disabled={page >= totalPages || documents.isFetching} onClick={() => setPage((value) => value + 1)} variant="secondary">Next</Button></div></nav> : null}
+      <OperationalPagination
+        ariaLabel="Document pagination"
+        first={first}
+        isFetching={documents.isFetching}
+        last={last}
+        noun="documents"
+        onNext={() => setPage((value) => value + 1)}
+        onPrevious={() => setPage((value) => Math.max(1, value - 1))}
+        pageSize={PAGE_SIZE}
+        startOffset={offset}
+        summary={search.trim() || status !== "all" ? <>{rows.length} matches on this page · {total} total documents</> : undefined}
+        total={total}
+      />
 
       <UploadDialog onClose={() => setUploadOpen(false)} open={uploadOpen && canManage} />
       <Modal description="This removes the stored document from the active evidence library. Audit history remains." footer={<><Button disabled={remove.isPending} onClick={() => setDeleteTarget(null)} variant="secondary">Cancel</Button><Button isLoading={remove.isPending} onClick={() => deleteTarget && remove.mutate(deleteTarget.id)} variant="danger">Delete document</Button></>} onClose={() => setDeleteTarget(null)} open={Boolean(deleteTarget && canDelete)} title={`Delete ${deleteTarget?.title ?? "document"}?`}>

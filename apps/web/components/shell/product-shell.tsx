@@ -14,12 +14,13 @@ import {
   LogOut,
   Menu,
   ScrollText,
-  ShieldCheck,
   X,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
+import { ProofGateMark } from "@/components/brand/proof-gate-mark";
+import { EvidenceLens } from "@/components/effects/evidence-lens";
 import { useAuth } from "@/components/providers/auth-provider";
 import { apiRequest } from "@/lib/api-client";
 import { cn } from "@/lib/cn";
@@ -73,12 +74,12 @@ function NavigationContent({ onNavigate, role }: { onNavigate?: () => void; role
   return (
     <>
       <Link className="brand-lockup mx-2 mt-2 flex min-h-16 items-center gap-3 px-3" href="/overview" onClick={onNavigate}>
-        <span className="brand-mark grid size-10 place-items-center rounded-xl text-white">
-          <ShieldCheck aria-hidden className="size-5" />
+        <span className="proof-brand-tile grid size-10 place-items-center rounded-xl text-white">
+          <ProofGateMark className="size-7" />
         </span>
         <span>
-          <span className="block font-heading text-sm font-bold tracking-[-0.025em]">LocalGuard AI</span>
-          <span className="block text-xs text-muted-foreground">Evidence before action</span>
+          <span className="block font-heading text-sm font-bold tracking-[-0.035em]">LocalGuard <span className="brand-ai">AI</span></span>
+          <span className="brand-tagline block text-xs">Evidence before action</span>
         </span>
       </Link>
       <nav aria-label="Primary" className="flex-1 overflow-y-auto px-3 py-4">
@@ -114,10 +115,10 @@ function NavigationContent({ onNavigate, role }: { onNavigate?: () => void; role
           );
         })}
       </nav>
-      <div className="border-t border-border/80 p-4">
+      <div className="sidebar-footer border-t p-4">
         <div className="privacy-card flex items-center gap-2.5 rounded-xl px-3 py-3 text-xs font-semibold text-evidence">
           <span className="relative grid size-7 place-items-center rounded-lg bg-white/70"><LockKeyhole aria-hidden className="size-3.5" /><span aria-hidden className="privacy-dot absolute -right-0.5 -bottom-0.5" /></span>
-          <span><span className="block">Local processing</span><span className="mt-0.5 block text-[0.65rem] font-medium text-evidence/75">Private by design</span></span>
+          <span><span className="block">Local processing</span><span className="mt-0.5 block text-[0.6875rem] font-semibold text-evidence-hover">Private by design</span></span>
         </div>
       </div>
     </>
@@ -170,7 +171,7 @@ export function ProductShell({ children }: { children: ReactNode }) {
   }, [mobileOpen]);
 
   useEffect(() => {
-    const media = window.matchMedia("(min-width: 64rem)");
+    const media = window.matchMedia("(min-width: 72rem)");
     const handleChange = (event: MediaQueryListEvent) => {
       if (event.matches) setMobileOpen(false);
     };
@@ -207,14 +208,15 @@ export function ProductShell({ children }: { children: ReactNode }) {
   }
 
   return (
-    <div className="workspace-shell min-h-dvh lg:grid lg:grid-cols-[264px_minmax(0,1fr)]">
-      <aside className="workspace-sidebar fixed inset-y-0 left-0 z-30 hidden w-[264px] flex-col border-r border-border/80 lg:flex" ref={desktopNavigationRef}>
+    <div className="workspace-shell min-h-dvh min-[72rem]:grid min-[72rem]:grid-cols-[var(--sidebar-width)_minmax(0,1fr)]">
+      {pathname === "/overview" || pathname === "/ask" ? <EvidenceLens className="workspace-evidence-lens" /> : null}
+      <aside className="workspace-sidebar fixed inset-y-0 left-0 z-30 hidden w-[var(--sidebar-width)] flex-col border-r border-border/80 min-[72rem]:flex" ref={desktopNavigationRef}>
         <NavigationContent role={user?.role} />
       </aside>
 
       {mobileOpen ? (
-        <div className="fixed inset-0 z-40 lg:hidden">
-          <div aria-hidden className="absolute inset-0 bg-slate-950/55" onClick={() => setMobileOpen(false)} />
+        <div className="fixed inset-0 z-40 min-[72rem]:hidden">
+          <button aria-label="Close navigation overlay" className="absolute inset-0 cursor-default bg-slate-950/55" onClick={() => setMobileOpen(false)} tabIndex={-1} type="button" />
           <aside
             aria-labelledby="mobile-navigation-title"
             aria-modal="true"
@@ -238,9 +240,9 @@ export function ProductShell({ children }: { children: ReactNode }) {
         </div>
       ) : null}
 
-      <div className="min-w-0 lg:col-start-2" ref={contentRef}>
-        <header className="workspace-header sticky top-0 z-20 flex h-[4.5rem] items-center gap-3 border-b border-border/80 px-4 backdrop-blur-xl sm:px-6 lg:px-8">
-          <button aria-expanded={mobileOpen} aria-label="Open navigation" className="icon-button grid size-11 place-items-center rounded-xl text-muted-foreground hover:bg-surface-raised hover:text-foreground lg:hidden" onClick={() => setMobileOpen(true)} type="button">
+      <div className="workspace-content min-w-0 min-[72rem]:col-start-2" ref={contentRef}>
+        <header className="workspace-header sticky top-0 z-20 flex h-[var(--topbar-height)] items-center gap-3 border-b border-border/80 px-4 backdrop-blur-xl sm:px-6 lg:px-8">
+          <button aria-expanded={mobileOpen} aria-label="Open navigation" className="icon-button grid size-11 place-items-center rounded-xl text-muted-foreground hover:bg-surface-raised hover:text-foreground min-[72rem]:hidden" onClick={() => setMobileOpen(true)} type="button">
             <Menu aria-hidden className="size-5" />
           </button>
           <nav aria-label="Breadcrumb" className="min-w-0">
@@ -270,7 +272,7 @@ export function ProductShell({ children }: { children: ReactNode }) {
             </button>
           </div>
         </header>
-        <main className="workspace-main mx-auto w-full max-w-[1600px] px-4 py-6 sm:px-6 sm:py-8 lg:px-8" id="main-content" tabIndex={-1}>
+        <main className="workspace-main mx-auto w-full max-w-[var(--content-max)] px-4 py-5 sm:px-6 sm:py-6 lg:px-8" id="main-content" tabIndex={-1}>
           <div className="page-stage" key={pathname}>{children}</div>
         </main>
       </div>

@@ -1,0 +1,11 @@
+1
+00:00:00,050 --> 00:00:03,495
+Step two: ask, How long does the Service Desk have?
+
+2
+00:00:03,495 --> 00:00:10,206
+LocalGuard searches the indexed evidence, checks whether it is sufficient, and returns, within one hour.
+
+3
+00:00:10,206 --> 00:00:18,507
+The source opens page two and highlights the exact stored sentence, making the answer inspectable instead of merely plausible.

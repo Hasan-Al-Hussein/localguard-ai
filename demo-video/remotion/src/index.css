@@ -1,0 +1,12 @@
+@import "@fontsource-variable/geist";
+@import "@fontsource-variable/manrope";
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  background: #07121c;
+}

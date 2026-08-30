@@ -4,19 +4,23 @@ import { ProposalsResponseSchema, type Proposal } from "@localguard/contracts";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import type { ColumnDef } from "@tanstack/react-table";
 import { ClipboardCheck } from "lucide-react";
-import Link from "next/link";
 import { useMemo, useState } from "react";
 import { useAuth } from "@/components/providers/auth-provider";
 import { EmptyState, ErrorState, InlineBanner, PageSkeleton } from "@/components/ui/async-state";
-import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
+import {
+  MobileRecordCard,
+  OperationalLink,
+  OperationalNotice,
+  OperationalPagination,
+} from "@/components/ui/operational-list";
 import { PageHeader } from "@/components/ui/page-header";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { apiRequest } from "@/lib/api-client";
 import { formatDate, formatDateTime } from "@/lib/format";
 import { queryKeys } from "@/lib/query-keys";
 
-const PAGE_SIZE = 25;
+const PAGE_SIZE = 15;
 
 export function ApprovalsScreen() {
   const [offset, setOffset] = useState(0);
@@ -38,7 +42,7 @@ export function ApprovalsScreen() {
       header: "Proposal",
       cell: ({ row }) => (
         <div className="max-w-sm">
-          <Link className="inline-flex min-h-11 items-center font-semibold text-brand hover:underline" href={`/approvals/${encodeURIComponent(row.original.id)}`}>{row.original.title}</Link>
+          <OperationalLink href={`/approvals/${encodeURIComponent(row.original.id)}`}>{row.original.title}</OperationalLink>
           <p className="line-clamp-1 text-xs text-muted-foreground">{row.original.reasoning_summary}</p>
         </div>
       ),
@@ -52,7 +56,7 @@ export function ApprovalsScreen() {
 
   if (!canReview) {
     return (
-      <div className="space-y-7">
+      <div className="space-y-5">
         <PageHeader description="Review proposed local workflow tasks before any state-changing action can execute." eyebrow="Human control" title="Approval queue" />
         <InlineBanner title="Reviewer role required" tone="info">Approval records are available only to reviewer and administrator accounts. Your viewer account can inspect its approved tasks instead.</InlineBanner>
       </div>
@@ -66,11 +70,11 @@ export function ApprovalsScreen() {
   const first = total === 0 ? 0 : offset + 1;
   const last = Math.min(offset + rows.length, total);
   return (
-    <div className="space-y-7">
+    <div className="space-y-5">
       <PageHeader description="Review immutable proposal bindings before an authorized decision may create one local task." eyebrow="Human control" title="Approval queue" />
-      <div className="rounded-xl border border-pending/30 bg-pending-soft p-4">
-        <p className="flex items-center gap-2 text-sm font-semibold text-pending"><ClipboardCheck aria-hidden className="size-5" />A pending proposal is not a task. Approval is an explicit, audited boundary.</p>
-      </div>
+      <OperationalNotice icon={<ClipboardCheck className="size-4" />} title="Approval boundary" tone="pending">
+        Pending proposals cannot create tasks until an authorized, audited decision approves their bound evidence.
+      </OperationalNotice>
       <div className={approvals.isPlaceholderData ? "opacity-60" : undefined}>
         <DataTable
           columns={columns}
@@ -78,20 +82,35 @@ export function ApprovalsScreen() {
           empty={<EmptyState description="Action proposals appear here only after a workflow produces an evidence-bound request." icon={<ClipboardCheck aria-hidden className="size-6" />} title="No proposals need review" />}
           getRowId={(row) => row.id}
           mobileRow={(proposal) => (
-            <Link className="panel block min-h-11 p-4 transition-colors hover:border-brand/40" href={`/approvals/${encodeURIComponent(proposal.id)}`}>
-              <div className="flex items-start gap-3"><h2 className="min-w-0 flex-1 font-semibold">{proposal.title}</h2><StatusBadge status={proposal.state} /></div>
-              <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">{proposal.reasoning_summary}</p>
-              <dl className="mt-4 grid grid-cols-2 gap-3 border-t border-border pt-3 text-xs"><div><dt className="text-muted-foreground">Assignee</dt><dd className="mt-1 font-semibold">{proposal.assignee ?? "Unassigned"}</dd></div><div><dt className="text-muted-foreground">Due</dt><dd className="mt-1 font-semibold">{formatDate(proposal.due_at)}</dd></div></dl>
-            </Link>
+            <MobileRecordCard>
+              <div className="flex items-start gap-3">
+                <h2 className="min-w-0 flex-1">
+                  <OperationalLink className="max-w-full whitespace-normal text-left" href={`/approvals/${encodeURIComponent(proposal.id)}`} title={proposal.title}><span className="line-clamp-2">{proposal.title}</span></OperationalLink>
+                </h2>
+                <StatusBadge status={proposal.state} />
+              </div>
+              <p className="mt-1.5 line-clamp-1 text-sm text-muted-foreground">{proposal.reasoning_summary}</p>
+              <dl className="mt-2 flex flex-wrap gap-x-4 gap-y-1 border-t border-border/80 pt-2 text-xs">
+                <div className="flex min-w-0 gap-1"><dt className="text-muted-foreground">Assignee</dt><dd className="truncate font-semibold">{proposal.assignee ?? "Unassigned"}</dd></div>
+                <div className="flex gap-1"><dt className="text-muted-foreground">Due</dt><dd className="font-semibold">{formatDate(proposal.due_at)}</dd></div>
+                <div className="flex gap-1"><dt className="text-muted-foreground">Priority</dt><dd className="font-semibold capitalize">{proposal.priority}</dd></div>
+              </dl>
+            </MobileRecordCard>
           )}
         />
       </div>
-      {total > PAGE_SIZE ? (
-        <nav aria-label="Approval pagination" className="flex flex-col gap-3 border-t border-border pt-4 text-sm sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-muted-foreground">Showing {first}–{last} of {total} proposals</p>
-          <div className="flex gap-2"><Button disabled={offset === 0 || approvals.isFetching} onClick={() => setOffset((value) => Math.max(0, value - PAGE_SIZE))} variant="secondary">Previous</Button><Button disabled={offset + PAGE_SIZE >= total || approvals.isFetching} onClick={() => setOffset((value) => value + PAGE_SIZE)} variant="secondary">Next</Button></div>
-        </nav>
-      ) : null}
+      <OperationalPagination
+        ariaLabel="Approval pagination"
+        first={first}
+        isFetching={approvals.isFetching}
+        last={last}
+        noun="proposals"
+        onNext={() => setOffset((value) => value + PAGE_SIZE)}
+        onPrevious={() => setOffset((value) => Math.max(0, value - PAGE_SIZE))}
+        pageSize={PAGE_SIZE}
+        startOffset={offset}
+        total={total}
+      />
     </div>
   );
 }

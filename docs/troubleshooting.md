@@ -110,6 +110,10 @@ Keep the defaults unless measurement shows a problem:
 - 4096-token context;
 - at most 512 output tokens.
 
+Bootstrap intentionally never overwrites an existing `.env`. Installations created before the
+current CPU timeout defaults should set `MODEL_HTTP_TIMEOUT_SECONDS=300` and
+`MODEL_LOCK_TTL_SECONDS=360`; keep the lease at least 30 seconds longer than the HTTP timeout.
+
 Do not enable CUDA on this project’s target machine. Avoid running the Playwright browser process,
 real evaluation, and an interactive demo simultaneously.
 
@@ -171,8 +175,9 @@ reached its terminal database transition.
 
 This may be the correct guardrail. LocalGuard requires an absolute relevance signal as well as a
 good rank. Check that the intended revision is ready and that the question names terms present in
-the selected document scope. Do not lower the retrieval thresholds merely to force an answer;
-evaluate the change against irrelevant and injection cases first.
+the authorized indexed vault. The Ask screen searches that vault and does not expose a
+per-document selector. Do not lower the retrieval thresholds merely to force an answer; evaluate
+the change against irrelevant and injection cases first.
 
 ## Login is temporarily blocked
 

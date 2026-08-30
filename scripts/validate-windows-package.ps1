@@ -45,8 +45,21 @@ try {
     if ($manifest.product -ne 'LocalGuard AI' -or $manifest.schema_version -ne '1.0') { throw 'Package manifest identity is invalid.' }
     if ([int]$manifest.file_count -ne @($manifest.files).Count) { throw 'Package manifest file count is inconsistent.' }
 
+    $manifestPaths = @($manifest.files | ForEach-Object { ([string]$_.path).Replace('\', '/') })
+    if (@($manifestPaths | Sort-Object -Unique).Count -ne $manifestPaths.Count) {
+        throw 'Package manifest contains duplicate paths.'
+    }
+
     foreach ($record in $manifest.files) {
-        $relativePath = ([string]$record.path).Replace('/', [IO.Path]::DirectorySeparatorChar)
+        $manifestRecordPath = ([string]$record.path).Replace('\', '/')
+        if (
+            [string]::IsNullOrWhiteSpace($manifestRecordPath) -or
+            $manifestRecordPath.StartsWith('/', [StringComparison]::Ordinal) -or
+            $manifestRecordPath.Contains('../', [StringComparison]::Ordinal)
+        ) {
+            throw "Unsafe package manifest path: $manifestRecordPath"
+        }
+        $relativePath = $manifestRecordPath.Replace('/', [IO.Path]::DirectorySeparatorChar)
         $path = Join-Path $packageRoot $relativePath
         if (-not (Test-Path -LiteralPath $path -PathType Leaf)) { throw "Manifest file missing: $($record.path)" }
         $actualHash = (Get-FileHash -LiteralPath $path -Algorithm SHA256).Hash.ToLowerInvariant()
@@ -55,16 +68,46 @@ try {
     }
 
     $forbidden = @(Get-ChildItem -LiteralPath $packageRoot -Recurse -Force | Where-Object {
-        ($_.Name -in @('.env', '.git', 'node_modules', '.next', 'artifacts', 'project-handoff')) -or ($_.FullName -match '[\\/]evals[\\/]results(?:[\\/]|$)')
+        ($_.Name.StartsWith('.env', [StringComparison]::OrdinalIgnoreCase) -and -not $_.Name.Equals('.env.example', [StringComparison]::OrdinalIgnoreCase)) -or
+        ($_.Name -in @('.git', 'node_modules', '.next', '.venv', '__pycache__', 'build', 'out', 'artifacts', 'project-handoff')) -or
+        ($_.FullName -match '[\\/]evals[\\/]results(?:[\\/]|$)')
     })
     if ($forbidden.Count -gt 0) { throw "Forbidden local state: $($forbidden[0].FullName)" }
 
     $actualFiles = @(Get-ChildItem -LiteralPath $packageRoot -Recurse -File)
-    if ($actualFiles.Count -ne ([int]$manifest.file_count + 1)) {
-        throw 'Extracted package contains files not covered by the manifest.'
+    $actualPayloadPaths = @($actualFiles | Where-Object { $_.FullName -ne $manifestPath } | ForEach-Object {
+        [IO.Path]::GetRelativePath($packageRoot, $_.FullName).Replace('\', '/')
+    })
+    $payloadDifference = @(Compare-Object `
+        -ReferenceObject @($manifestPaths | Sort-Object) `
+        -DifferenceObject @($actualPayloadPaths | Sort-Object) `
+        -CaseSensitive)
+    if ($payloadDifference.Count -gt 0) {
+        throw 'Extracted package file set does not exactly match the manifest.'
     }
     if (-not (Test-Path -LiteralPath (Join-Path $packageRoot 'START-LOCALGUARD.cmd') -PathType Leaf)) {
         throw 'Windows launcher is missing from the extracted package.'
+    }
+    foreach ($requiredDemoFile in @('product-demo.mp4', 'product-demo.srt')) {
+        $demoPath = Join-Path $packageRoot "demo-video\output\$requiredDemoFile"
+        if (-not (Test-Path -LiteralPath $demoPath -PathType Leaf)) {
+            throw "Final product demo asset is missing: $requiredDemoFile"
+        }
+    }
+    $allowedDemoPaths = @(
+        'demo-video/output/product-demo.mp4',
+        'demo-video/output/product-demo.srt'
+    )
+    $actualDemoPaths = @($actualPayloadPaths | Where-Object { $_.StartsWith('demo-video/', [StringComparison]::Ordinal) })
+    $demoDifference = @(Compare-Object `
+        -ReferenceObject @($allowedDemoPaths | Sort-Object) `
+        -DifferenceObject @($actualDemoPaths | Sort-Object) `
+        -CaseSensitive)
+    if ($demoDifference.Count -gt 0) {
+        throw 'Package contains unexpected or missing demo-video assets.'
+    }
+    if (Test-Path -LiteralPath (Join-Path $packageRoot 'artifacts\verification\bootstrap.json')) {
+        throw 'Fresh package unexpectedly contains a local bootstrap completion record.'
     }
 
     Push-Location $packageRoot
@@ -80,7 +123,7 @@ try {
         Pop-Location
     }
 
-    Write-Host "PACKAGE_VALIDATION_PASS package=$archiveBaseName files=$($actualFiles.Count) secret_findings=0 compose=valid"
+    Write-Host "PACKAGE_VALIDATION_PASS package=$archiveBaseName files=$($actualFiles.Count) forbidden_local_state=0 compose=valid"
     if ($KeepExtracted) { Write-Host "Extracted package retained at: $packageRoot" }
 }
 finally {

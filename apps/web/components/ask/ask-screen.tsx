@@ -15,6 +15,8 @@ import {
 } from "@localguard/contracts";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { BookOpenCheck, Bot, ChevronDown, ClipboardCheck, Database, FileSearch, Link2, Send, ShieldAlert, UserCheck, UserRound } from "lucide-react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
@@ -28,6 +30,7 @@ import { StatusBadge } from "@/components/ui/status-badge";
 import { apiRequest, errorMessage } from "@/lib/api-client";
 import { cn } from "@/lib/cn";
 import { formatDuration } from "@/lib/format";
+import { cascadeVariants, revealVariants, stateTransition } from "@/lib/motion";
 import { queryKeys } from "@/lib/query-keys";
 
 type ConversationItem =
@@ -57,6 +60,25 @@ const trustCues = [
   { icon: UserCheck, label: "Human approval for actions" },
 ];
 
+function WorkflowModeSelector({
+  embedded = false,
+  mode,
+  onChange,
+}: {
+  embedded?: boolean;
+  mode: "question" | "action";
+  onChange: (mode: "question" | "action") => void;
+}) {
+  const reduceMotion = useReducedMotion();
+  return (
+    <fieldset className={cn("ask-mode-rail grid gap-2 p-2 sm:grid-cols-2", !embedded && "panel")}>
+      <legend className="sr-only">Choose an evidence workflow</legend>
+      <motion.label className={cn("mode-option flex min-h-12 cursor-pointer items-center rounded-xl border px-4 py-3 text-sm font-semibold", mode === "question" ? "border-brand bg-brand text-white shadow-[0_8px_20px_rgb(18_63_97/0.18)]" : "border-transparent bg-surface-raised text-muted-foreground hover:text-foreground")} layout transition={stateTransition()} whileTap={reduceMotion ? undefined : { scale: 0.985 }}><input className="sr-only" name="workflow-mode" onChange={() => onChange("question")} type="radio" checked={mode === "question"} /><BookOpenCheck aria-hidden className="mr-2 size-4" />Evidence answer</motion.label>
+      <motion.label className={cn("mode-option flex min-h-12 cursor-pointer items-center rounded-xl border px-4 py-3 text-sm font-semibold", mode === "action" ? "border-pending/40 bg-pending-soft text-pending shadow-[0_8px_20px_rgb(146_64_14/0.12)]" : "border-transparent bg-surface-raised text-muted-foreground hover:text-foreground")} layout transition={stateTransition()} whileTap={reduceMotion ? undefined : { scale: 0.985 }}><input className="sr-only" name="workflow-mode" onChange={() => onChange("action")} type="radio" checked={mode === "action"} /><ClipboardCheck aria-hidden className="mr-2 size-4" />Propose an action</motion.label>
+    </fieldset>
+  );
+}
+
 function AnswerText({ text }: { text: string }) {
   return <div className="space-y-3 text-[0.98rem] leading-7">{text.split(/\n{2,}/).filter(Boolean).map((paragraph, index) => <p key={`${index}-${paragraph.slice(0, 20)}`}>{paragraph}</p>)}</div>;
 }
@@ -70,19 +92,20 @@ function AnswerCard({ job }: { job: QuestionJob }) {
 
   return (
     <article className="panel answer-card overflow-hidden">
-      <header className="flex flex-wrap items-center gap-2 border-b border-border bg-surface-muted/70 px-5 py-4 sm:px-6">
+      <header className="flex flex-wrap items-center gap-2 border-b border-border bg-surface-muted/70 px-5 py-3.5 sm:px-6">
         <span className="brand-mark grid size-9 place-items-center rounded-xl text-white"><Bot aria-hidden className="size-4" /></span>
         <p className="font-heading text-sm font-semibold">LocalGuard</p>
         <StatusBadge className="ml-auto" status={answer.insufficient_evidence ? "insufficient" : answer.citations.length ? "cited" : "completed"} />
       </header>
-      <div className="space-y-5 p-5 sm:p-6">
+      <div className="answer-evidence-stack space-y-4 p-5 sm:p-6">
         {answer.insufficient_evidence ? <InlineBanner title="The indexed evidence is not sufficient" tone="pending">LocalGuard did not find enough support to answer safely. Try narrowing the question or add a relevant document.</InlineBanner> : null}
-        <AnswerText text={answer.text} />
+        <section aria-label="Evidence answer" className="answer-primary"><AnswerText text={answer.text} /></section>
 
         {answer.citations.length ? (
-          <section aria-labelledby={`sources-${job.id}`}>
+          <section aria-labelledby={`sources-${job.id}`} className="answer-source-proof rounded-xl border border-evidence/20 bg-evidence-soft/30 p-4">
             <h3 className="text-xs font-bold tracking-[0.12em] text-muted-foreground uppercase" id={`sources-${job.id}`}>Sources</h3>
-            <div className="mt-3 flex flex-wrap gap-2">{answer.citations.map((citation) => <AnswerCitationLink citation={citation} key={citation.id} />)}</div>
+            <p className="mt-1 text-xs text-muted-foreground">Open the exact stored passage behind this answer.</p>
+            <div className="mt-2.5 flex flex-wrap gap-2">{answer.citations.map((citation) => <AnswerCitationLink citation={citation} key={citation.id} />)}</div>
           </section>
         ) : null}
 
@@ -118,12 +141,12 @@ function WorkflowCard({
   const failed = run.state === "failed";
   return (
     <article className="panel answer-card overflow-hidden">
-      <header className="flex flex-wrap items-center gap-2 border-b border-border bg-surface-muted/70 px-5 py-4 sm:px-6">
+      <header className="flex flex-wrap items-center gap-2 border-b border-border bg-surface-muted/70 px-5 py-3.5 sm:px-6">
         <span className="brand-mark grid size-9 place-items-center rounded-xl text-white"><Bot aria-hidden className="size-4" /></span>
         <p className="font-heading text-sm font-semibold">Action analysis</p>
         <StatusBadge className="ml-auto" status={run.state} />
       </header>
-      <div className="space-y-5 p-5 sm:p-6">
+      <div className="space-y-4 p-5 sm:p-6">
         {waiting ? <InlineBanner title="Human approval is required" tone="pending">The workflow produced a proposal, not a task. No task exists until a reviewer approves the bound proposal.</InlineBanner> : null}
         {run.insufficient_evidence ? <InlineBanner title="The indexed evidence is not sufficient" tone="pending">No proposal or task was created because the action could not be grounded safely.</InlineBanner> : null}
         {failed ? <InlineBanner title="The workflow failed" tone="danger">{run.error_detail ?? run.error_code ?? "The local workflow did not return a failure detail."}</InlineBanner> : null}
@@ -135,7 +158,7 @@ function WorkflowCard({
           </section>
         ) : null}
         {waiting ? (
-          <div className="flex flex-wrap items-center gap-3 border-t border-border pt-5">
+          <div className="flex flex-wrap items-center gap-3 border-t border-border pt-4">
             <ClipboardCheck aria-hidden className="size-5 text-pending" />
             <p className="min-w-0 flex-1 text-sm text-muted-foreground">{canReview ? "Review the immutable proposal binding before deciding." : "A reviewer or administrator must decide this proposal."}</p>
             {canReview ? <Link className="button-base button-primary inline-flex min-h-11 items-center border px-4 text-sm font-semibold" href={proposalId ? `/approvals/${encodeURIComponent(proposalId)}` : "/approvals"}>{proposalId ? "Review proposal" : "Open approval queue"}</Link> : null}
@@ -153,6 +176,7 @@ export function AskScreen() {
   const [pendingId, setPendingId] = useState<string | null>(null);
   const [workflowId, setWorkflowId] = useState<string | null>(null);
   const [requestError, setRequestError] = useState<string | null>(null);
+  const reduceMotion = useReducedMotion();
   const { user } = useAuth();
   const canReview = user?.role === "reviewer" || user?.role === "admin";
   const { register, handleSubmit, setValue, reset, control, formState: { errors } } = useForm<QuestionRequest>({
@@ -225,44 +249,90 @@ export function AskScreen() {
   const workflowRecord = workflow.data ?? createWorkflow.data?.run;
   const proposal = proposals.data?.items.find((item) => item.workflow_run_id === workflowId);
   const isWorking = createQuestion.isPending || createWorkflow.isPending || Boolean(pendingId && !pendingTerminal && !pendingQuestion.isError) || Boolean(workflowId && workflowRecord?.state === "running" && !workflow.isError);
+  const isEmptyWorkbench = conversation.length === 0 && !workflowRecord;
+  const composer = (
+    <form className={cn("ask-composer-form composer-panel p-3", isEmptyWorkbench ? "ask-composer-embedded" : "ask-composer panel")} onSubmit={handleSubmit(submit)}>
+      <label className="sr-only" htmlFor="question">{mode === "question" ? "Ask a question about indexed documents" : "Describe an action to ground in indexed documents"}</label>
+      <textarea aria-describedby="question-help" className="min-h-24 w-full resize-y rounded-xl border border-transparent bg-surface-raised px-4 py-3 text-base leading-6 placeholder:text-slate-400 focus:border-evidence/30 focus:bg-white" disabled={isWorking} id="question" maxLength={4000} placeholder={mode === "question" ? "Ask about an obligation, deadline, risk, or required action…" : "Create a task for an evidence-backed deadline or obligation…"} {...register("question")} />
+      <div className="mt-2 flex items-center gap-3 px-1"><p className={cn("text-xs text-muted-foreground", errors.question && "text-danger")} id="question-help" role={errors.question ? "alert" : undefined}>{errors.question?.message ?? `${questionText.length.toLocaleString()} / 4,000 characters`}</p><Button aria-busy={isWorking} className="ml-auto" disabled={isWorking} icon={<Send aria-hidden className="size-4" />} type="submit">{mode === "question" ? "Ask" : "Analyze action"}</Button></div>
+    </form>
+  );
   return (
-    <div className="mx-auto max-w-6xl space-y-7">
-      <PageHeader description="Ask questions across indexed documents. Answers are constrained to retrieved evidence and link to stable stored anchors." eyebrow="Evidence workbench" title="Ask LocalGuard" />
+    <motion.div animate="visible" className="ask-screen mx-auto max-w-6xl space-y-5" initial={reduceMotion ? false : "hidden"} variants={cascadeVariants}>
+      <motion.div className="ask-page-header" variants={revealVariants}><PageHeader description="Ask questions across indexed documents. Answers are constrained to retrieved evidence and link to stable stored anchors." eyebrow="Evidence workbench" title="Ask LocalGuard" /></motion.div>
 
-      <fieldset className="panel grid gap-2 p-2 sm:grid-cols-2">
-        <legend className="sr-only">Choose an evidence workflow</legend>
-        <label className={cn("mode-option flex min-h-12 cursor-pointer items-center rounded-xl border px-4 py-3 text-sm font-semibold", mode === "question" ? "border-brand bg-brand text-white shadow-[0_8px_20px_rgb(18_63_97/0.18)]" : "border-transparent bg-surface-raised text-muted-foreground hover:text-foreground")}><input className="sr-only" name="workflow-mode" onChange={() => setMode("question")} type="radio" checked={mode === "question"} /><BookOpenCheck aria-hidden className="mr-2 size-4" />Evidence answer</label>
-        <label className={cn("mode-option flex min-h-12 cursor-pointer items-center rounded-xl border px-4 py-3 text-sm font-semibold", mode === "action" ? "border-pending/40 bg-pending-soft text-pending shadow-[0_8px_20px_rgb(146_64_14/0.12)]" : "border-transparent bg-surface-raised text-muted-foreground hover:text-foreground")}><input className="sr-only" name="workflow-mode" onChange={() => setMode("action")} type="radio" checked={mode === "action"} /><ClipboardCheck aria-hidden className="mr-2 size-4" />Propose an action</label>
-      </fieldset>
-
-      {conversation.length === 0 && !workflowRecord ? (
-        <section className="ask-hero panel relative overflow-hidden p-6 sm:p-8 lg:p-10">
-          <span className="relative grid size-12 place-items-center rounded-2xl bg-evidence-soft text-evidence shadow-[inset_0_1px_0_rgb(255_255_255/0.8)]"><BookOpenCheck aria-hidden className="size-6" /></span>
-          <h2 className="mt-5 font-heading text-2xl font-semibold tracking-[-0.03em]">{mode === "question" ? "Start with an evidence question" : "Draft an evidence-bound action"}</h2>
-          <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">{mode === "question" ? "LocalGuard treats document text as untrusted evidence. Instructions embedded inside a document cannot change permissions." : "An action workflow may produce a proposal, but never a task before an authorized reviewer explicitly approves it."}</p>
-          <ul aria-label="LocalGuard safeguards" className="mt-5 flex flex-wrap gap-2">
-            {trustCues.map(({ icon: Icon, label }) => (
-              <li className="trust-cue inline-flex min-h-9 items-center gap-2 rounded-full px-3 text-xs font-semibold text-muted-foreground" key={label}>
-                <Icon aria-hidden className="size-3.5 text-evidence" />
-                {label}
-              </li>
+      <motion.section className={cn("ask-query-surface", isEmptyWorkbench ? "ask-workbench panel overflow-hidden" : "ask-query-surface--active space-y-3")} variants={revealVariants}>
+        <WorkflowModeSelector embedded={isEmptyWorkbench} mode={mode} onChange={setMode} />
+        {composer}
+        <AnimatePresence initial={false}>
+          {isEmptyWorkbench ? (
+            <motion.div animate={{ opacity: 1, y: 0 }} className="ask-hero ask-hero--compact relative overflow-hidden p-5 sm:p-6 lg:p-7" exit={reduceMotion ? undefined : { opacity: 0, y: -8 }} initial={reduceMotion ? false : { opacity: 0, y: 8 }} key="ask-onboarding" transition={stateTransition()}>
+              <div className="ask-hero-grid ask-hero-grid--compact">
+                <AnimatePresence initial={false} mode="wait">
+                  <motion.div
+                    animate={{ opacity: 1, y: 0 }}
+                    className="ask-hero-copy"
+                    exit={reduceMotion ? undefined : { opacity: 0, y: -4 }}
+                    initial={reduceMotion ? false : { opacity: 0, y: 6 }}
+                    key={mode}
+                    transition={stateTransition()}
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className="relative grid size-10 place-items-center rounded-xl bg-evidence-soft text-evidence shadow-[inset_0_1px_0_rgb(255_255_255/0.8)]">{mode === "question" ? <BookOpenCheck aria-hidden className="size-5" /> : <ClipboardCheck aria-hidden className="size-5" />}</span>
+                      <p className="ask-hero-kicker mt-0">Private evidence workbench</p>
+                    </div>
+                    <h2 className="mt-4 max-w-2xl font-heading text-2xl font-semibold tracking-[-0.04em]">{mode === "question" ? "Ask the document. Inspect the proof." : "Turn proven evidence into reviewable work."}</h2>
+                    <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">{mode === "question" ? "Get an answer constrained to indexed evidence, then open the exact stored passage." : "Bind a proposal to one source rule. It stays inert until an authorized reviewer decides."}</p>
+                    <ol aria-label="LocalGuard safeguards" className="evidence-journey evidence-journey--compact mt-4 flex flex-wrap gap-2">
+                      {trustCues.map(({ icon: Icon, label }) => (
+                        <li className="evidence-stage relative flex min-h-10 items-center gap-2 rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-xs font-semibold text-muted-foreground" key={label}>
+                          <Icon aria-hidden className="size-3.5 shrink-0 text-evidence" />
+                          <span>{label}</span>
+                        </li>
+                      ))}
+                    </ol>
+                  </motion.div>
+                </AnimatePresence>
+                <div aria-hidden className="ask-vault-visual ask-vault-visual--compact hidden sm:block">
+                  <Image alt="" fill priority sizes="(max-width: 767px) 0px, 34vw" src="/brand/evidence-vault-hero.png" />
+                  <span className="ask-vault-badge ask-vault-badge-source">SOURCE / LOCAL</span>
+                  <span className="ask-vault-badge ask-vault-badge-proof">PROOF / EXACT</span>
+                  <span className="ask-vault-badge ask-vault-badge-gate">GATE / HUMAN</span>
+                </div>
+              </div>
+              <AnimatePresence initial={false} mode="wait">
+                <motion.div animate={{ opacity: 1, y: 0 }} aria-label="Suggested prompts" className="ask-prompt-grid relative mt-5 grid gap-2 sm:grid-cols-3" exit={reduceMotion ? undefined : { opacity: 0, y: 4 }} initial={reduceMotion ? false : { opacity: 0, y: 6 }} key={`${mode}-starters`} role="group" transition={stateTransition(0.03)}>
+                  {(mode === "question" ? starters : actionStarters).map((starter) => <motion.button className="prompt-starter min-h-14 rounded-xl border border-border bg-surface-raised p-3 text-left text-sm font-semibold leading-5" key={starter} onClick={() => setValue("question", starter, { shouldValidate: true })} transition={stateTransition()} type="button" whileHover={reduceMotion ? undefined : { y: -2, scale: 1.005 }} whileTap={reduceMotion ? undefined : { scale: 0.985 }}>{starter}</motion.button>)}
+                </motion.div>
+              </AnimatePresence>
+            </motion.div>
+          ) : null}
+        </AnimatePresence>
+      </motion.section>
+      <AnimatePresence initial={false}>
+        {conversation.length ? (
+          <motion.section aria-label="Conversation" className="ask-evidence-results space-y-4" layout>
+            {conversation.map((item) => (
+              <motion.div animate={{ opacity: 1, y: 0 }} initial={reduceMotion ? false : { opacity: 0, y: 12 }} key={item.id} layout="position" transition={stateTransition()}>
+                {item.role === "user" ? <article className="ml-auto max-w-2xl rounded-2xl rounded-br-md bg-[linear-gradient(135deg,#174d73,#0e3655)] px-5 py-4 text-white shadow-[0_12px_26px_rgb(18_63_97/0.18)]"><div className="flex items-center gap-2 text-xs font-semibold text-slate-200"><UserRound aria-hidden className="size-4" />You</div><p className="mt-2 leading-7">{item.text}</p></article> : <AnswerCard job={item.job} />}
+              </motion.div>
             ))}
-          </ul>
-          <div className="relative mt-6 grid gap-3 sm:grid-cols-3">{(mode === "question" ? starters : actionStarters).map((starter) => <button className="prompt-starter min-h-24 rounded-xl border border-border bg-surface-raised p-4 text-left text-sm font-semibold leading-6" key={starter} onClick={() => setValue("question", starter, { shouldValidate: true })} type="button">{starter}</button>)}</div>
-        </section>
-      ) : null}
-      {conversation.length ? <section aria-label="Conversation" className="space-y-5">{conversation.map((item) => item.role === "user" ? <article className="ml-auto max-w-2xl rounded-2xl rounded-br-md bg-[linear-gradient(135deg,#174d73,#0e3655)] px-5 py-4 text-white shadow-[0_12px_26px_rgb(18_63_97/0.18)]" key={item.id}><div className="flex items-center gap-2 text-xs font-semibold text-slate-200"><UserRound aria-hidden className="size-4" />You</div><p className="mt-2 leading-7">{item.text}</p></article> : <AnswerCard job={item.job} key={item.id} />)}{pendingTerminal && pendingQuestion.data ? <AnswerCard job={pendingQuestion.data} /> : null}</section> : null}
-      {workflowRecord && workflowRecord.state !== "running" ? <WorkflowCard canReview={canReview} findings={findings.data?.items ?? []} proposalId={proposal?.id} run={workflowRecord} /> : null}
+            {pendingTerminal && pendingQuestion.data ? <motion.div animate={{ opacity: 1, y: 0 }} initial={reduceMotion ? false : { opacity: 0, y: 12 }} key={pendingQuestion.data.id} transition={stateTransition()}><AnswerCard job={pendingQuestion.data} /></motion.div> : null}
+          </motion.section>
+        ) : null}
+      </AnimatePresence>
+      <AnimatePresence initial={false}>
+        {workflowRecord && workflowRecord.state !== "running" ? <motion.div animate={{ opacity: 1, y: 0 }} initial={reduceMotion ? false : { opacity: 0, y: 12 }} key={workflowRecord.id} transition={stateTransition()}><WorkflowCard canReview={canReview} findings={findings.data?.items ?? []} proposalId={proposal?.id} run={workflowRecord} /></motion.div> : null}
+      </AnimatePresence>
 
-      {isWorking ? <div aria-live="polite" className="panel flex items-center gap-3 p-4" role="status"><span className="relative grid size-9 place-items-center rounded-xl bg-info-soft text-info"><Bot aria-hidden className="size-4" /><span className="absolute -right-0.5 -bottom-0.5 size-2.5 animate-pulse rounded-full bg-info ring-2 ring-surface" /></span><div><p className="text-sm font-semibold">LocalGuard is checking the evidence</p><p className="text-xs text-muted-foreground">{workflowRecord?.state ?? pendingQuestion.data?.state ?? createQuestion.data?.state ?? (createWorkflow.isPending ? "submitting workflow" : "submitting")}…</p></div></div> : null}
-      {requestError || pendingQuestion.isError || workflow.isError ? <InlineBanner title="The request could not be completed" tone="danger">{requestError ?? errorMessage(pendingQuestion.error ?? workflow.error)}</InlineBanner> : null}
+      <AnimatePresence initial={false}>
+        {isWorking ? <motion.div animate={{ opacity: 1, y: 0 }} aria-live="polite" className="evidence-progress panel flex items-center gap-3 p-4" exit={reduceMotion ? undefined : { opacity: 0, y: -6 }} initial={reduceMotion ? false : { opacity: 0, y: 8 }} key="evidence-progress" role="status" transition={stateTransition()}><span className="relative grid size-9 place-items-center rounded-xl bg-info-soft text-info"><Bot aria-hidden className="size-4" /><span className="absolute -right-0.5 -bottom-0.5 size-2.5 animate-pulse rounded-full bg-info ring-2 ring-surface" /></span><div className="min-w-0 flex-1"><p className="text-sm font-semibold">LocalGuard is checking the evidence</p><p className="text-xs text-muted-foreground">{workflowRecord?.state ?? pendingQuestion.data?.state ?? createQuestion.data?.state ?? (createWorkflow.isPending ? "submitting workflow" : "submitting")}…</p><span aria-hidden className="evidence-progress-line mt-2 block h-1 overflow-hidden rounded-full bg-brand-soft"><span className="block h-full w-1/3 rounded-full bg-evidence" /></span></div></motion.div> : null}
+      </AnimatePresence>
+      <AnimatePresence initial={false}>
+        {requestError || pendingQuestion.isError || workflow.isError ? <motion.div animate={{ opacity: 1, y: 0 }} exit={reduceMotion ? undefined : { opacity: 0, y: -4 }} initial={reduceMotion ? false : { opacity: 0, y: 8 }} key="request-error" transition={stateTransition()}><InlineBanner title="The request could not be completed" tone="danger">{requestError ?? errorMessage(pendingQuestion.error ?? workflow.error)}</InlineBanner></motion.div> : null}
+      </AnimatePresence>
 
-      <form className="composer-panel panel p-3" onSubmit={handleSubmit(submit)}>
-        <label className="sr-only" htmlFor="question">{mode === "question" ? "Ask a question about indexed documents" : "Describe an action to ground in indexed documents"}</label>
-        <textarea className="min-h-24 w-full resize-y rounded-xl border border-transparent bg-surface-raised px-4 py-3 text-base leading-6 outline-none placeholder:text-slate-400 focus:border-evidence/30 focus:bg-white focus:ring-0" disabled={isWorking} id="question" maxLength={4000} placeholder={mode === "question" ? "Ask about an obligation, deadline, risk, or required action…" : "Create a task for an evidence-backed deadline or obligation…"} {...register("question")} />
-        <div className="mt-2 flex items-center gap-3 px-1"><p className={cn("text-xs text-muted-foreground", errors.question && "text-danger")} role={errors.question ? "alert" : undefined}>{errors.question?.message ?? `${questionText.length.toLocaleString()} / 4,000 characters`}</p><Button className="ml-auto" disabled={isWorking} icon={<Send aria-hidden className="size-4" />} type="submit">{mode === "question" ? "Ask" : "Analyze action"}</Button></div>
-      </form>
       <p className="flex items-center gap-2 text-xs text-muted-foreground"><ShieldAlert aria-hidden className="size-4 text-pending" />Document text is untrusted. Action proposals remain inert until an authorized human decision passes the bound approval gate.</p>
-    </div>
+    </motion.div>
   );
 }

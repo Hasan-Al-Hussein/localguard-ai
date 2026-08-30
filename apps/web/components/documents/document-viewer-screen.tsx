@@ -236,7 +236,7 @@ export function DocumentViewerScreen({ documentId }: { documentId: string }) {
           role="tabpanel"
           tabIndex={0}
         >
-          <div className="panel sticky top-[4.75rem] z-10 mb-4 flex flex-wrap items-center gap-2 px-4 py-3">
+          <div className="panel sticky top-[var(--sticky-offset)] z-10 mb-4 flex flex-wrap items-center gap-2 px-4 py-3">
             <span className="flex items-center gap-2 text-sm font-semibold"><ListTree aria-hidden className="size-4 text-brand" />{detail.anchors.length} stored anchors</span>
             {revision ? <span className="ml-auto text-xs text-muted-foreground">{revision.extracted_characters?.toLocaleString() ?? "—"} extracted characters</span> : null}
           </div>
@@ -274,7 +274,7 @@ export function DocumentViewerScreen({ documentId }: { documentId: string }) {
           role="tabpanel"
           tabIndex={0}
         >
-          <div className="panel overflow-hidden xl:sticky xl:top-[4.75rem] xl:max-h-[calc(100dvh-6.5rem)] xl:overflow-y-auto">
+          <div className="panel overflow-hidden xl:sticky xl:top-[var(--sticky-offset)] xl:max-h-[calc(100dvh-6.5rem)] xl:overflow-y-auto">
             <header className="border-b border-border px-5 py-4"><h2 className="font-heading text-lg font-semibold" id="anchor-index-heading">Anchor index</h2><p className="mt-1 text-sm text-muted-foreground">Stable source locations returned by the current revision.</p></header>
             {detail.anchors.length ? <ol className="divide-y divide-border">{detail.anchors.map((anchor) => <li key={anchor.id}><button aria-current={targetAnchor?.id === anchor.id ? "location" : undefined} className={cn("mode-option min-h-11 w-full px-5 py-4 text-left hover:bg-surface-raised", targetAnchor?.id === anchor.id && "bg-evidence-soft")} onClick={() => selectAnchor(anchor)} type="button"><span className="block text-sm font-semibold">{anchor.label}</span><span className="mt-1 block text-xs capitalize text-muted-foreground">{anchorKindLabel(anchor.kind)} · {anchor.stable_key}</span></button></li>)}</ol> : <p className="p-5 text-sm text-muted-foreground">No anchors are available yet.</p>}
           </div>

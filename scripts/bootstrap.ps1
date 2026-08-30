@@ -108,9 +108,12 @@ if (-not $SkipModelPull) {
 }
 
 $artifact = Write-VerificationJson -Name 'bootstrap.json' -Value ([ordered]@{
+    schema_version = '1.0'
+    bootstrap_complete = $true
     timestamp = (Get-Date).ToUniversalTime().ToString('o')
     docker_server = (docker info --format '{{.ServerVersion}}')
     node = (node --version)
+    runtime_lock_sha256 = (Get-FileHash -LiteralPath (Join-Path $script:ProjectRoot 'docs\runtime-lock.json') -Algorithm SHA256).Hash.ToLowerInvariant()
     model_pull_skipped = [bool]$SkipModelPull
     verified_models = $verifiedModels
     model_lock_artifact = $modelLockArtifact

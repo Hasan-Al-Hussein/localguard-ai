@@ -1,0 +1,7 @@
+1
+00:00:00,050 --> 00:00:02,402
+Step one: open Documents.
+
+2
+00:00:02,402 --> 00:00:07,718
+LocalGuard indexes the PDF pages locally and preserves an immutable revision.

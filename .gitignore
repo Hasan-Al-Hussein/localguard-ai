@@ -23,6 +23,12 @@ test-results/
 output/
 *.tsbuildinfo
 
+# Publish only the canonical demo render and captions; keep raw/intermediate output local.
+!demo-video/output/
+demo-video/output/*
+!demo-video/output/product-demo.mp4
+!demo-video/output/product-demo.srt
+
 data/
 artifacts/verification/*.json
 artifacts/verification/*.log

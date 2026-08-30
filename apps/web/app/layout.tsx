@@ -26,7 +26,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   await headers();
 
   return (
-    <html lang="en" className={`${manrope.variable} ${geist.variable}`}>
+    <html lang="en" className={`${manrope.variable} ${geist.variable}`} data-scroll-behavior="smooth">
       <body>
         <a className="skip-link" href="#main-content">
           Skip to main content

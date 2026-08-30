@@ -1,0 +1,15 @@
+1
+00:00:00,050 --> 00:00:04,004
+The reviewer checks the proposal and evidence, then approves it.
+
+2
+00:00:04,004 --> 00:00:06,468
+Only then does one workflow task appear.
+
+3
+00:00:06,468 --> 00:00:10,667
+Its owner, priority, deadline, and source stay visible.
+
+4
+00:00:10,667 --> 00:00:13,968
+The audit log records the decision and task creation.
