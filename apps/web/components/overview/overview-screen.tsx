@@ -11,6 +11,7 @@ import { ProofCoreScene } from "@/components/effects/proof-core-scene";
 import { useAuth } from "@/components/providers/auth-provider";
 import { EmptyState, ErrorState, PageSkeleton } from "@/components/ui/async-state";
 import { MetricCard } from "@/components/ui/metric-card";
+import { ScrollReveal, ScrollRevealGroup, ScrollRevealItem } from "@/components/ui/scroll-reveal";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { apiRequest } from "@/lib/api-client";
 import { formatDate, formatDateTime } from "@/lib/format";
@@ -49,8 +50,8 @@ export function OverviewScreen() {
   const readyPercent = data.documents_total ? Math.round((data.documents_ready / data.documents_total) * 100) : 0;
   const evaluation = data.evaluation_summary;
   return (
-    <motion.div animate="visible" className="overview-screen space-y-6" initial={reduceMotion ? false : "hidden"} variants={cascadeVariants}>
-      <motion.section aria-labelledby="overview-title" className="overview-command-hero overview-command-hero--compact" variants={revealVariants}>
+    <div className="overview-screen space-y-6">
+      <motion.section animate="visible" aria-labelledby="overview-title" className="overview-command-hero overview-command-hero--compact" initial={reduceMotion ? false : "hidden"} variants={revealVariants}>
         <motion.div className="overview-command-copy overview-command-copy--compact" variants={cascadeVariants}>
           <motion.div className="overview-kicker" variants={revealVariants}><ProofGateMark className="size-4" />Local intelligence plane</motion.div>
           <motion.h1 id="overview-title" variants={revealVariants}>Overview</motion.h1>
@@ -72,16 +73,16 @@ export function OverviewScreen() {
         </div>
       </motion.section>
 
-      <motion.section aria-label="Workspace metrics" className="overview-metrics grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-3 2xl:grid-cols-6" variants={revealVariants}>
-        <motion.div className="h-full" variants={revealVariants}><MetricCard href="/documents" icon={<Files aria-hidden className="size-5" />} label="Documents" value={data.documents_total} /></motion.div>
-        <motion.div className="h-full" variants={revealVariants}><MetricCard href="/documents" icon={<FileCheck2 aria-hidden className="size-5" />} label="Ready" tone="evidence" value={data.documents_ready} /></motion.div>
-        <motion.div className="h-full" variants={revealVariants}><MetricCard href="/documents" icon={<CircleDotDashed aria-hidden className="size-5" />} label="Processing" tone="pending" value={data.documents_processing} /></motion.div>
-        <motion.div className="h-full" variants={revealVariants}><MetricCard href="/ask" icon={<MessagesSquare aria-hidden className="size-5" />} label="Questions" value={data.questions_total} /></motion.div>
-        <motion.div className="h-full" variants={revealVariants}><MetricCard detail="Background jobs that returned a failure" href="/ask" icon={<CircleAlert aria-hidden className="size-5" />} label="Question failures" tone={data.questions_failed ? "danger" : "evidence"} value={data.questions_failed} /></motion.div>
-        <motion.div className="h-full" variants={revealVariants}><MetricCard detail="Evidence-bound proposals awaiting a decision" href={canReview ? "/approvals" : undefined} icon={<ClipboardCheck aria-hidden className="size-5" />} label="Pending approvals" tone={data.pending_approvals ? "pending" : "evidence"} value={data.pending_approvals} /></motion.div>
-      </motion.section>
+      <ScrollRevealGroup className="overview-metrics grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-3 2xl:grid-cols-6" label="Workspace metrics">
+        <ScrollRevealItem className="h-full"><MetricCard href="/documents" icon={<Files aria-hidden className="size-5" />} label="Documents" value={data.documents_total} /></ScrollRevealItem>
+        <ScrollRevealItem className="h-full"><MetricCard href="/documents" icon={<FileCheck2 aria-hidden className="size-5" />} label="Ready" tone="evidence" value={data.documents_ready} /></ScrollRevealItem>
+        <ScrollRevealItem className="h-full"><MetricCard href="/documents" icon={<CircleDotDashed aria-hidden className="size-5" />} label="Processing" tone="pending" value={data.documents_processing} /></ScrollRevealItem>
+        <ScrollRevealItem className="h-full"><MetricCard href="/ask" icon={<MessagesSquare aria-hidden className="size-5" />} label="Questions" value={data.questions_total} /></ScrollRevealItem>
+        <ScrollRevealItem className="h-full"><MetricCard detail="Background jobs that returned a failure" href="/ask" icon={<CircleAlert aria-hidden className="size-5" />} label="Question failures" tone={data.questions_failed ? "danger" : "evidence"} value={data.questions_failed} /></ScrollRevealItem>
+        <ScrollRevealItem className="h-full"><MetricCard detail="Evidence-bound proposals awaiting a decision" href={canReview ? "/approvals" : undefined} icon={<ClipboardCheck aria-hidden className="size-5" />} label="Pending approvals" tone={data.pending_approvals ? "pending" : "evidence"} value={data.pending_approvals} /></ScrollRevealItem>
+      </ScrollRevealGroup>
 
-      <div className="overview-snapshot-grid grid gap-5 xl:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+      <ScrollReveal className="overview-snapshot-grid grid gap-5 xl:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
         <section className="overview-deadlines-panel panel overflow-hidden" aria-labelledby="deadlines-heading">
           <header className="overview-section-header flex items-center gap-3 border-b border-border px-5 py-3.5 sm:px-6"><CalendarClock aria-hidden className="size-5 text-pending" /><div><h2 className="font-heading text-lg font-semibold" id="deadlines-heading">Extracted deadlines</h2><p className="mt-0.5 text-sm text-muted-foreground">Structured dates from grounded workflows.</p></div></header>
           {data.extracted_deadlines.length ? (
@@ -125,9 +126,9 @@ export function OverviewScreen() {
             <div className="overview-inline-empty flex flex-col gap-3 px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6"><p className="text-sm text-muted-foreground">No evaluation artifacts are available.</p>{canReview ? <Link className="inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-md px-2 text-sm font-semibold text-brand hover:bg-surface-raised" href="/evaluations">View evaluations <ArrowRight aria-hidden className="size-4" /></Link> : null}</div>
           )}
         </section>
-      </div>
+      </ScrollReveal>
 
-      <div className="overview-operations-grid grid gap-5 xl:grid-cols-2">
+      <ScrollReveal className="overview-operations-grid grid gap-5 xl:grid-cols-2">
         <section className="panel overflow-hidden" aria-labelledby="recent-documents-heading">
           <div className="overview-section-header flex items-center justify-between gap-3 border-b border-border px-5 py-3.5 sm:px-6">
             <div>
@@ -160,7 +161,7 @@ export function OverviewScreen() {
           <header className="overview-section-header flex items-center gap-3 border-b border-border px-5 py-3.5 sm:px-6"><Activity aria-hidden className="size-5 text-brand" /><div className="min-w-0 flex-1"><h2 className="font-heading text-lg font-semibold" id="recent-activity-heading">Recent activity</h2><p className="mt-0.5 text-sm text-muted-foreground">Redacted outcomes from the local audit stream.</p></div>{canReview ? <Link className="inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-md px-2 text-sm font-semibold text-brand hover:bg-surface-raised" href="/audit">View all <ArrowRight aria-hidden className="size-4" /></Link> : data.recent_activity.length > 5 ? <button aria-expanded={showAllActivity} className="inline-flex min-h-11 shrink-0 items-center rounded-md px-2 text-sm font-semibold text-brand hover:bg-surface-raised" onClick={() => setShowAllActivity((value) => !value)} type="button">{showAllActivity ? "Show less" : "Show all"}</button> : null}</header>
           {data.recent_activity.length ? <ol className="divide-y divide-border">{visibleActivity.map((event) => <li className="list-action flex flex-wrap items-center gap-3 px-5 py-3 sm:px-6" key={event.id}><div className="min-w-0 flex-1"><p className="text-sm font-semibold">{event.action}</p><p className="mt-0.5 text-xs text-muted-foreground">{event.resource_type} · {formatDateTime(event.occurred_at)}</p></div><StatusBadge status={event.outcome} /></li>)}</ol> : <p className="p-5 text-sm text-muted-foreground sm:p-6">No recent audit activity is available.</p>}
         </section>
-      </div>
-    </motion.div>
+      </ScrollReveal>
+    </div>
   );
 }

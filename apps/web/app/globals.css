@@ -1345,42 +1345,9 @@ button:not(:disabled):active,
   z-index: 0;
   object-fit: cover;
   object-position: 57% 50%;
-  opacity: 0.82;
-  transform: scale(1.04);
-  transition: opacity 700ms ease;
-}
-
-.proof-core-poster-dimmed {
-  opacity: 0.34;
-}
-
-.proof-core-webgl {
-  position: absolute;
-  z-index: 1;
-  inset: 0;
-  opacity: 0.92;
-  filter: contrast(1.04) saturate(1.1);
-  mask-image: radial-gradient(circle at 56% 48%, #000 0 45%, rgb(0 0 0 / 0.72) 62%, transparent 82%);
-}
-
-.proof-core-webgl .threeui-background,
-.proof-core-webgl .energy-orb {
-  position: absolute !important;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  min-width: 0;
-  min-height: 0;
-  overflow: hidden;
-  background: transparent !important;
-}
-
-.proof-core-webgl canvas {
-  position: absolute;
-  inset: 0;
-  display: block;
-  width: 100%;
-  height: 100%;
+  opacity: 0.95;
+  filter: saturate(1.04) contrast(1.03);
+  transform: scale(1.025);
 }
 
 .proof-core-depth {
@@ -1388,22 +1355,104 @@ button:not(:disabled):active,
   z-index: 2;
   inset: 0;
   background:
-    radial-gradient(circle at 57% 48%, transparent 0 22%, rgb(82 224 196 / 0.06) 22.4% 22.7%, transparent 23.1% 34%, rgb(79 140 255 / 0.07) 34.4% 34.7%, transparent 35.1%),
-    linear-gradient(90deg, rgb(5 11 17 / 0.62), transparent 32%, transparent 70%, rgb(5 11 17 / 0.32));
+    linear-gradient(90deg, rgb(5 11 17 / 0.52), transparent 28%, transparent 74%, rgb(5 11 17 / 0.28)),
+    linear-gradient(180deg, rgb(5 11 17 / 0.2), transparent 24%, transparent 76%, rgb(5 11 17 / 0.34));
   pointer-events: none;
 }
 
-.proof-core-filament {
+.proof-flow-rail {
   position: absolute;
   z-index: 4;
-  top: 49%;
-  left: 8%;
-  width: 72%;
+  top: 51.5%;
+  left: 6%;
+  width: 80%;
   height: 1px;
-  background: linear-gradient(90deg, transparent, #52e0c4 18%, #a4fff0 56%, #f2a93b 85%, transparent);
-  box-shadow: 0 0 8px #52e0c4, 0 0 22px rgb(82 224 196 / 0.55);
-  transform-origin: left;
-  animation: proof-filament 4.8s var(--ease-out) infinite;
+  background: linear-gradient(90deg, transparent, rgb(82 224 196 / 0.68) 14%, #a4fff0 61%, #f2a93b 88%, transparent);
+  box-shadow: 0 0 8px rgb(82 224 196 / 0.62), 0 0 24px rgb(82 224 196 / 0.28);
+  opacity: 0.78;
+  pointer-events: none;
+}
+
+.proof-flow-packet {
+  position: absolute;
+  z-index: 7;
+  top: 51.5%;
+  left: 59%;
+  display: grid;
+  width: 1.15rem;
+  height: 1.15rem;
+  place-items: center;
+  border: 1px solid #a4fff0;
+  border-radius: 0.28rem;
+  background: #071b25;
+  box-shadow: 0 0 0 4px rgb(82 224 196 / 0.12), 0 0 22px rgb(82 224 196 / 0.84);
+  color: #d9fff8;
+  opacity: 0.96;
+  pointer-events: none;
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.proof-flow-packet svg {
+  width: 0.64rem;
+  height: 0.64rem;
+  transform: rotate(-45deg);
+}
+
+.proof-anchor-reticle {
+  position: absolute;
+  z-index: 5;
+  top: 51.5%;
+  left: 59%;
+  width: 5rem;
+  height: 5rem;
+  border: 1px solid rgb(164 255 240 / 0.68);
+  background: linear-gradient(135deg, rgb(82 224 196 / 0.08), transparent 55%);
+  box-shadow: inset 0 0 24px rgb(82 224 196 / 0.08), 0 0 34px rgb(82 224 196 / 0.16);
+  clip-path: polygon(50% 0, 100% 24%, 100% 76%, 50% 100%, 0 76%, 0 24%);
+  opacity: 0.78;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+}
+
+.proof-anchor-reticle span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0.48rem;
+  height: 0.48rem;
+  border: 1px solid #d7fff7;
+  background: #52e0c4;
+  box-shadow: 0 0 16px #52e0c4;
+  clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+  transform: translate(-50%, -50%);
+}
+
+.proof-citation-confirm {
+  position: absolute;
+  z-index: 6;
+  top: 43%;
+  left: 66%;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.28rem;
+  border: 1px solid rgb(164 255 240 / 0.28);
+  border-radius: 999px;
+  background: rgb(5 18 26 / 0.78);
+  padding: 0.26rem 0.42rem;
+  color: #a4fff0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.48rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  box-shadow: 0 8px 20px rgb(0 0 0 / 0.25), 0 0 20px rgb(82 224 196 / 0.12);
+  opacity: 0.88;
+  pointer-events: none;
+}
+
+.proof-citation-confirm svg {
+  width: 0.68rem;
+  height: 0.68rem;
 }
 
 .proof-core-gate {
@@ -1429,6 +1478,39 @@ button:not(:disabled):active,
   box-shadow: 0 0 14px #f2a93b;
   content: "";
   transform: translateY(-50%);
+}
+
+.proof-gate-scan {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 3.5rem;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #ffd68b, transparent);
+  box-shadow: 0 0 14px #f2a93b;
+  opacity: 0.86;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+}
+
+.proof-core-scene[data-active="true"] .proof-flow-rail {
+  animation: proof-flow-rail 6.8s linear infinite;
+}
+
+.proof-core-scene[data-active="true"] .proof-flow-packet {
+  animation: proof-flow-packet 6.8s var(--ease-out) infinite;
+}
+
+.proof-core-scene[data-active="true"] .proof-anchor-reticle {
+  animation: proof-anchor-lock 6.8s var(--ease-out) infinite;
+}
+
+.proof-core-scene[data-active="true"] .proof-citation-confirm {
+  animation: proof-citation-confirm 6.8s var(--ease-out) infinite;
+}
+
+.proof-core-scene[data-active="true"] .proof-gate-scan {
+  animation: proof-gate-scan 6.8s var(--ease-out) infinite;
 }
 
 .proof-core-nodes {
@@ -1461,9 +1543,9 @@ button:not(:disabled):active,
   letter-spacing: 0.08em;
 }
 
-.proof-node-source { top: 23%; left: 6%; }
-.proof-node-anchor { top: 66%; left: 18%; }
-.proof-node-answer { top: 20%; right: 21%; }
+.proof-node-source { top: 25%; left: 5%; }
+.proof-node-anchor { bottom: 20%; left: 45%; }
+.proof-node-answer { top: 22%; right: 21%; }
 .proof-node-gate {
   right: 5%;
   bottom: 19%;
@@ -1801,10 +1883,65 @@ button:not(:disabled):active,
   50% { opacity: 0.28; transform: scale(1.12); }
 }
 
-@keyframes proof-filament {
-  0%, 10% { opacity: 0.2; transform: scaleX(0.04); }
-  45%, 78% { opacity: 1; transform: scaleX(1); }
-  100% { opacity: 0.2; transform: scaleX(1); }
+@keyframes proof-flow-rail {
+  0%, 8%, 84%, 100% { opacity: 0.38; filter: saturate(0.86); }
+  22%, 72% { opacity: 0.94; filter: saturate(1.18); }
+}
+
+@keyframes proof-flow-packet {
+  0%, 6% {
+    left: 7%;
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(45deg) scale(0.72);
+  }
+  12% {
+    left: 7%;
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(45deg) scale(1);
+  }
+  34% {
+    left: 59%;
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(45deg) scale(1);
+  }
+  42% {
+    left: 59%;
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(45deg) scale(1.18);
+  }
+  54% {
+    left: 66%;
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(45deg) scale(0.92);
+  }
+  72% {
+    left: 84%;
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(45deg) scale(1);
+  }
+  80%, 100% {
+    left: 84%;
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(45deg) scale(0.74);
+  }
+}
+
+@keyframes proof-anchor-lock {
+  0%, 27%, 82%, 100% { opacity: 0.46; transform: translate(-50%, -50%) scale(0.92); }
+  36%, 49% { opacity: 1; transform: translate(-50%, -50%) scale(1.04); }
+  58%, 72% { opacity: 0.72; transform: translate(-50%, -50%) scale(0.98); }
+}
+
+@keyframes proof-citation-confirm {
+  0%, 43%, 84%, 100% { opacity: 0.26; transform: translateY(0.32rem); }
+  52%, 73% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes proof-gate-scan {
+  0%, 61%, 84%, 100% { top: 6%; opacity: 0; }
+  66% { top: 6%; opacity: 1; }
+  77% { top: 94%; opacity: 1; }
+  81% { top: 94%; opacity: 0; }
 }
 
 @keyframes vault-image-arrival {
@@ -1917,8 +2054,10 @@ button:not(:disabled):active,
   .overview-live-strip > span:last-child { border-bottom: 0; }
   .proof-node { font-size: 0.52rem; }
   .proof-node-source { left: 3%; }
+  .proof-node-anchor { bottom: 4%; left: 3%; }
   .proof-node-answer { right: 8%; }
-  .proof-node-gate { right: 3%; }
+  .proof-node-gate { right: 3%; bottom: 4%; }
+  .proof-core-status { display: none; }
 
   .ask-hero-grid {
     grid-template-columns: 1fr;
@@ -1936,7 +2075,11 @@ button:not(:disabled):active,
 @media (prefers-reduced-motion: reduce) {
   .proof-gate-core,
   .proof-gate-pulse,
-  .proof-core-filament,
+  .proof-flow-rail,
+  .proof-flow-packet,
+  .proof-anchor-reticle,
+  .proof-citation-confirm,
+  .proof-gate-scan,
   .login-vault-image {
     animation: none !important;
   }

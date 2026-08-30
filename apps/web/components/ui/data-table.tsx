@@ -10,6 +10,7 @@ import {
 } from "@tanstack/react-table";
 import { ArrowDown, ArrowUp, ChevronsUpDown } from "lucide-react";
 import { useState, type ReactNode } from "react";
+import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
 export function DataTable<T>({
   columns,
@@ -43,7 +44,7 @@ export function DataTable<T>({
   if (data.length === 0) return <>{empty}</>;
 
   return (
-    <>
+    <ScrollReveal className="min-w-0">
       <div
         className={`panel hidden max-w-full overflow-x-auto ${wide ? "min-[90rem]:block" : "lg:block"}`}
         data-table-surface="table"
@@ -93,6 +94,6 @@ export function DataTable<T>({
         </table>
       </div>
       {mobileRow ? <div className={`grid min-w-0 gap-2.5 ${wide ? "min-[90rem]:hidden" : "lg:hidden"}`} data-table-surface="cards">{table.getRowModel().rows.map((row) => <div className="min-w-0 w-full" key={row.id}>{mobileRow(row.original)}</div>)}</div> : null}
-    </>
+    </ScrollReveal>
   );
 }

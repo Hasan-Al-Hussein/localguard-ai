@@ -21,6 +21,22 @@ export const revealFromRightVariants: Variants = {
   },
 };
 
+export const viewportRevealVariants: Variants = {
+  hidden: { opacity: 0, y: 14 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.42, ease: premiumEase },
+  },
+};
+
+export const viewportCascadeVariants: Variants = {
+  hidden: {},
+  visible: {
+    transition: { delayChildren: 0.035, staggerChildren: 0.055 },
+  },
+};
+
 export const cascadeVariants: Variants = {
   hidden: {},
   visible: {
