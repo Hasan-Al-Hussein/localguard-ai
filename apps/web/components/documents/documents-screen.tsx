@@ -118,7 +118,7 @@ export function DocumentsScreen() {
       />
       {!canManage ? <InlineBanner tone="info" title="Read-only access">Viewer accounts can inspect indexed evidence but cannot upload, reprocess, or delete documents.</InlineBanner> : null}
 
-      <section aria-label="Document filters" className="flex flex-col gap-3 sm:flex-row">
+      <section aria-label="Document filters" className="document-filters flex flex-col gap-3 sm:flex-row">
         <label className="relative flex-1">
           <span className="sr-only">Filter the current document page</span>
           <Search aria-hidden className="pointer-events-none absolute top-1/2 left-3.5 size-4 -translate-y-1/2 text-muted-foreground" />
@@ -139,10 +139,9 @@ export function DocumentsScreen() {
           empty={<EmptyState action={search || status !== "all" ? <Button onClick={() => { setSearch(""); setStatus("all"); }} variant="secondary">Clear page filters</Button> : canManage ? <Button icon={<FilePlus2 aria-hidden className="size-4" />} onClick={() => setUploadOpen(true)}>Upload a synthetic document</Button> : undefined} description={search || status !== "all" ? "No records on this server page match the local filter." : "Add the first PDF, DOCX, or TXT fixture to begin the cited-question workflow."} title={search || status !== "all" ? "No documents match on this page" : "No documents yet"} />}
           getRowId={(row) => row.id}
           mobileRow={(document) => (
-            <article className="panel interactive-card p-4">
-              <div className="flex items-start gap-3"><div className="min-w-0 flex-1"><Link className="block truncate font-semibold text-brand" href={`/documents/${encodeURIComponent(document.id)}`}>{document.title}</Link><p className="mt-1 truncate font-mono text-xs text-muted-foreground">{document.id}</p></div><StatusBadge status={document.state} /></div>
-              <dl className="mt-4 grid grid-cols-2 gap-3 border-t border-border pt-3 text-xs"><div><dt className="text-muted-foreground">Created</dt><dd className="mt-1 font-semibold">{formatDateTime(document.created_at)}</dd></div><div><dt className="text-muted-foreground">Updated</dt><dd className="mt-1 font-semibold">{formatDateTime(document.updated_at)}</dd></div></dl>
-              {canManage ? <div className="mt-3 flex justify-end gap-1"><button aria-label={`Reprocess ${document.title}`} className="grid size-11 place-items-center rounded-md text-muted-foreground hover:bg-info-soft hover:text-info disabled:opacity-40" disabled={activeStatuses.has(document.state) || reprocess.isPending} onClick={() => reprocess.mutate(document.id)} type="button"><RefreshCw aria-hidden className="size-4" /></button>{canDelete ? <button aria-label={`Delete ${document.title}`} className="grid size-11 place-items-center rounded-md text-muted-foreground hover:bg-danger-soft hover:text-danger" onClick={() => setDeleteTarget(document)} type="button"><Trash2 aria-hidden className="size-4" /></button> : null}</div> : null}
+            <article className="panel interactive-card min-w-0 w-full p-3.5">
+              <div className="flex min-w-0 items-start gap-3"><div className="min-w-0 flex-1"><Link className="block truncate font-semibold text-brand" href={`/documents/${encodeURIComponent(document.id)}`}>{document.title}</Link><p className="mt-1 truncate font-mono text-[0.65rem] text-muted-foreground">{document.id}</p><p className="mt-1 text-[0.7rem] text-muted-foreground">Created {formatDateTime(document.created_at)} · Updated {formatDateTime(document.updated_at)}</p></div><StatusBadge status={document.state} /></div>
+              {canManage ? <div className="mt-2 flex justify-end gap-1 border-t border-border/80 pt-2"><button aria-label={`Reprocess ${document.title}`} className="grid size-11 place-items-center rounded-md text-muted-foreground hover:bg-info-soft hover:text-info disabled:opacity-40" disabled={activeStatuses.has(document.state) || reprocess.isPending} onClick={() => reprocess.mutate(document.id)} type="button"><RefreshCw aria-hidden className="size-4" /></button>{canDelete ? <button aria-label={`Delete ${document.title}`} className="grid size-11 place-items-center rounded-md text-muted-foreground hover:bg-danger-soft hover:text-danger" onClick={() => setDeleteTarget(document)} type="button"><Trash2 aria-hidden className="size-4" /></button> : null}</div> : null}
             </article>
           )}
         />

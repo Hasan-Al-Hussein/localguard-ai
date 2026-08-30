@@ -87,7 +87,7 @@ export function DataTable<T>({
           </tbody>
         </table>
       </div>
-      {mobileRow ? <div className="grid gap-3 md:hidden">{table.getRowModel().rows.map((row) => <div key={row.id}>{mobileRow(row.original)}</div>)}</div> : null}
+      {mobileRow ? <div className="grid min-w-0 gap-3 md:hidden">{table.getRowModel().rows.map((row) => <div className="min-w-0 w-full" key={row.id}>{mobileRow(row.original)}</div>)}</div> : null}
     </>
   );
 }

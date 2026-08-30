@@ -57,6 +57,24 @@ const trustCues = [
   { icon: UserCheck, label: "Human approval for actions" },
 ];
 
+function WorkflowModeSelector({
+  embedded = false,
+  mode,
+  onChange,
+}: {
+  embedded?: boolean;
+  mode: "question" | "action";
+  onChange: (mode: "question" | "action") => void;
+}) {
+  return (
+    <fieldset className={cn("ask-mode-rail grid gap-2 p-2 sm:grid-cols-2", !embedded && "panel")}>
+      <legend className="sr-only">Choose an evidence workflow</legend>
+      <label className={cn("mode-option flex min-h-12 cursor-pointer items-center rounded-xl border px-4 py-3 text-sm font-semibold", mode === "question" ? "border-brand bg-brand text-white shadow-[0_8px_20px_rgb(18_63_97/0.18)]" : "border-transparent bg-surface-raised text-muted-foreground hover:text-foreground")}><input className="sr-only" name="workflow-mode" onChange={() => onChange("question")} type="radio" checked={mode === "question"} /><BookOpenCheck aria-hidden className="mr-2 size-4" />Evidence answer</label>
+      <label className={cn("mode-option flex min-h-12 cursor-pointer items-center rounded-xl border px-4 py-3 text-sm font-semibold", mode === "action" ? "border-pending/40 bg-pending-soft text-pending shadow-[0_8px_20px_rgb(146_64_14/0.12)]" : "border-transparent bg-surface-raised text-muted-foreground hover:text-foreground")}><input className="sr-only" name="workflow-mode" onChange={() => onChange("action")} type="radio" checked={mode === "action"} /><ClipboardCheck aria-hidden className="mr-2 size-4" />Propose an action</label>
+    </fieldset>
+  );
+}
+
 function AnswerText({ text }: { text: string }) {
   return <div className="space-y-3 text-[0.98rem] leading-7">{text.split(/\n{2,}/).filter(Boolean).map((paragraph, index) => <p key={`${index}-${paragraph.slice(0, 20)}`}>{paragraph}</p>)}</div>;
 }
@@ -225,43 +243,45 @@ export function AskScreen() {
   const workflowRecord = workflow.data ?? createWorkflow.data?.run;
   const proposal = proposals.data?.items.find((item) => item.workflow_run_id === workflowId);
   const isWorking = createQuestion.isPending || createWorkflow.isPending || Boolean(pendingId && !pendingTerminal && !pendingQuestion.isError) || Boolean(workflowId && workflowRecord?.state === "running" && !workflow.isError);
+  const isEmptyWorkbench = conversation.length === 0 && !workflowRecord;
+  const composer = (
+    <form className={cn("composer-panel p-3", isEmptyWorkbench ? "ask-composer-embedded" : "ask-composer panel")} onSubmit={handleSubmit(submit)}>
+      <label className="sr-only" htmlFor="question">{mode === "question" ? "Ask a question about indexed documents" : "Describe an action to ground in indexed documents"}</label>
+      <textarea className="min-h-24 w-full resize-y rounded-xl border border-transparent bg-surface-raised px-4 py-3 text-base leading-6 outline-none placeholder:text-slate-400 focus:border-evidence/30 focus:bg-white focus:ring-0" disabled={isWorking} id="question" maxLength={4000} placeholder={mode === "question" ? "Ask about an obligation, deadline, risk, or required action…" : "Create a task for an evidence-backed deadline or obligation…"} {...register("question")} />
+      <div className="mt-2 flex items-center gap-3 px-1"><p className={cn("text-xs text-muted-foreground", errors.question && "text-danger")} role={errors.question ? "alert" : undefined}>{errors.question?.message ?? `${questionText.length.toLocaleString()} / 4,000 characters`}</p><Button className="ml-auto" disabled={isWorking} icon={<Send aria-hidden className="size-4" />} type="submit">{mode === "question" ? "Ask" : "Analyze action"}</Button></div>
+    </form>
+  );
   return (
     <div className="mx-auto max-w-6xl space-y-7">
       <PageHeader description="Ask questions across indexed documents. Answers are constrained to retrieved evidence and link to stable stored anchors." eyebrow="Evidence workbench" title="Ask LocalGuard" />
 
-      <fieldset className="panel grid gap-2 p-2 sm:grid-cols-2">
-        <legend className="sr-only">Choose an evidence workflow</legend>
-        <label className={cn("mode-option flex min-h-12 cursor-pointer items-center rounded-xl border px-4 py-3 text-sm font-semibold", mode === "question" ? "border-brand bg-brand text-white shadow-[0_8px_20px_rgb(18_63_97/0.18)]" : "border-transparent bg-surface-raised text-muted-foreground hover:text-foreground")}><input className="sr-only" name="workflow-mode" onChange={() => setMode("question")} type="radio" checked={mode === "question"} /><BookOpenCheck aria-hidden className="mr-2 size-4" />Evidence answer</label>
-        <label className={cn("mode-option flex min-h-12 cursor-pointer items-center rounded-xl border px-4 py-3 text-sm font-semibold", mode === "action" ? "border-pending/40 bg-pending-soft text-pending shadow-[0_8px_20px_rgb(146_64_14/0.12)]" : "border-transparent bg-surface-raised text-muted-foreground hover:text-foreground")}><input className="sr-only" name="workflow-mode" onChange={() => setMode("action")} type="radio" checked={mode === "action"} /><ClipboardCheck aria-hidden className="mr-2 size-4" />Propose an action</label>
-      </fieldset>
-
-      {conversation.length === 0 && !workflowRecord ? (
-        <section className="ask-hero panel relative overflow-hidden p-6 sm:p-8 lg:p-10">
-          <span className="relative grid size-12 place-items-center rounded-2xl bg-evidence-soft text-evidence shadow-[inset_0_1px_0_rgb(255_255_255/0.8)]"><BookOpenCheck aria-hidden className="size-6" /></span>
-          <h2 className="mt-5 font-heading text-2xl font-semibold tracking-[-0.03em]">{mode === "question" ? "Start with an evidence question" : "Draft an evidence-bound action"}</h2>
-          <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">{mode === "question" ? "LocalGuard treats document text as untrusted evidence. Instructions embedded inside a document cannot change permissions." : "An action workflow may produce a proposal, but never a task before an authorized reviewer explicitly approves it."}</p>
-          <ul aria-label="LocalGuard safeguards" className="mt-5 flex flex-wrap gap-2">
-            {trustCues.map(({ icon: Icon, label }) => (
-              <li className="trust-cue inline-flex min-h-9 items-center gap-2 rounded-full px-3 text-xs font-semibold text-muted-foreground" key={label}>
-                <Icon aria-hidden className="size-3.5 text-evidence" />
-                {label}
-              </li>
-            ))}
-          </ul>
-          <div className="relative mt-6 grid gap-3 sm:grid-cols-3">{(mode === "question" ? starters : actionStarters).map((starter) => <button className="prompt-starter min-h-24 rounded-xl border border-border bg-surface-raised p-4 text-left text-sm font-semibold leading-6" key={starter} onClick={() => setValue("question", starter, { shouldValidate: true })} type="button">{starter}</button>)}</div>
+      {isEmptyWorkbench ? (
+        <section className="ask-workbench panel overflow-hidden">
+          <WorkflowModeSelector embedded mode={mode} onChange={setMode} />
+          <div className="ask-hero relative overflow-hidden p-6 sm:p-8 lg:p-10">
+            <span className="relative grid size-12 place-items-center rounded-2xl bg-evidence-soft text-evidence shadow-[inset_0_1px_0_rgb(255_255_255/0.8)]"><BookOpenCheck aria-hidden className="size-6" /></span>
+            <h2 className="mt-5 max-w-2xl font-heading text-2xl font-semibold tracking-[-0.03em] sm:text-[1.75rem]">{mode === "question" ? "Start with an evidence question" : "Draft an evidence-bound action"}</h2>
+            <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">{mode === "question" ? "LocalGuard treats document text as untrusted evidence. Instructions embedded inside a document cannot change permissions." : "An action workflow may produce a proposal, but never a task before an authorized reviewer explicitly approves it."}</p>
+            <ol aria-label="LocalGuard safeguards" className="evidence-journey mt-6 grid gap-3 sm:grid-cols-3">
+              {trustCues.map(({ icon: Icon, label }, index) => (
+                <li className="evidence-stage relative flex min-h-16 items-center gap-3 rounded-xl border border-white/60 bg-white/45 px-4 py-3 text-xs font-semibold text-muted-foreground" key={label}>
+                  <span className="grid size-8 shrink-0 place-items-center rounded-lg bg-evidence-soft text-evidence"><Icon aria-hidden className="size-3.5" /></span>
+                  <span><span className="mb-0.5 block font-mono text-[0.6rem] tracking-[0.12em] text-evidence">0{index + 1}</span>{label}</span>
+                </li>
+              ))}
+            </ol>
+            <div className="relative mt-6 grid gap-3 sm:grid-cols-3">{(mode === "question" ? starters : actionStarters).map((starter) => <button className="prompt-starter min-h-24 rounded-xl border border-border bg-surface-raised p-4 text-left text-sm font-semibold leading-6" key={starter} onClick={() => setValue("question", starter, { shouldValidate: true })} type="button">{starter}</button>)}</div>
+          </div>
+          {composer}
         </section>
-      ) : null}
+      ) : <WorkflowModeSelector mode={mode} onChange={setMode} />}
       {conversation.length ? <section aria-label="Conversation" className="space-y-5">{conversation.map((item) => item.role === "user" ? <article className="ml-auto max-w-2xl rounded-2xl rounded-br-md bg-[linear-gradient(135deg,#174d73,#0e3655)] px-5 py-4 text-white shadow-[0_12px_26px_rgb(18_63_97/0.18)]" key={item.id}><div className="flex items-center gap-2 text-xs font-semibold text-slate-200"><UserRound aria-hidden className="size-4" />You</div><p className="mt-2 leading-7">{item.text}</p></article> : <AnswerCard job={item.job} key={item.id} />)}{pendingTerminal && pendingQuestion.data ? <AnswerCard job={pendingQuestion.data} /> : null}</section> : null}
       {workflowRecord && workflowRecord.state !== "running" ? <WorkflowCard canReview={canReview} findings={findings.data?.items ?? []} proposalId={proposal?.id} run={workflowRecord} /> : null}
 
-      {isWorking ? <div aria-live="polite" className="panel flex items-center gap-3 p-4" role="status"><span className="relative grid size-9 place-items-center rounded-xl bg-info-soft text-info"><Bot aria-hidden className="size-4" /><span className="absolute -right-0.5 -bottom-0.5 size-2.5 animate-pulse rounded-full bg-info ring-2 ring-surface" /></span><div><p className="text-sm font-semibold">LocalGuard is checking the evidence</p><p className="text-xs text-muted-foreground">{workflowRecord?.state ?? pendingQuestion.data?.state ?? createQuestion.data?.state ?? (createWorkflow.isPending ? "submitting workflow" : "submitting")}…</p></div></div> : null}
+      {isWorking ? <div aria-live="polite" className="evidence-progress panel flex items-center gap-3 p-4" role="status"><span className="relative grid size-9 place-items-center rounded-xl bg-info-soft text-info"><Bot aria-hidden className="size-4" /><span className="absolute -right-0.5 -bottom-0.5 size-2.5 animate-pulse rounded-full bg-info ring-2 ring-surface" /></span><div className="min-w-0 flex-1"><p className="text-sm font-semibold">LocalGuard is checking the evidence</p><p className="text-xs text-muted-foreground">{workflowRecord?.state ?? pendingQuestion.data?.state ?? createQuestion.data?.state ?? (createWorkflow.isPending ? "submitting workflow" : "submitting")}…</p><span aria-hidden className="evidence-progress-line mt-2 block h-1 overflow-hidden rounded-full bg-brand-soft"><span className="block h-full w-1/3 rounded-full bg-evidence" /></span></div></div> : null}
       {requestError || pendingQuestion.isError || workflow.isError ? <InlineBanner title="The request could not be completed" tone="danger">{requestError ?? errorMessage(pendingQuestion.error ?? workflow.error)}</InlineBanner> : null}
 
-      <form className="composer-panel panel p-3" onSubmit={handleSubmit(submit)}>
-        <label className="sr-only" htmlFor="question">{mode === "question" ? "Ask a question about indexed documents" : "Describe an action to ground in indexed documents"}</label>
-        <textarea className="min-h-24 w-full resize-y rounded-xl border border-transparent bg-surface-raised px-4 py-3 text-base leading-6 outline-none placeholder:text-slate-400 focus:border-evidence/30 focus:bg-white focus:ring-0" disabled={isWorking} id="question" maxLength={4000} placeholder={mode === "question" ? "Ask about an obligation, deadline, risk, or required action…" : "Create a task for an evidence-backed deadline or obligation…"} {...register("question")} />
-        <div className="mt-2 flex items-center gap-3 px-1"><p className={cn("text-xs text-muted-foreground", errors.question && "text-danger")} role={errors.question ? "alert" : undefined}>{errors.question?.message ?? `${questionText.length.toLocaleString()} / 4,000 characters`}</p><Button className="ml-auto" disabled={isWorking} icon={<Send aria-hidden className="size-4" />} type="submit">{mode === "question" ? "Ask" : "Analyze action"}</Button></div>
-      </form>
+      {!isEmptyWorkbench ? composer : null}
       <p className="flex items-center gap-2 text-xs text-muted-foreground"><ShieldAlert aria-hidden className="size-4 text-pending" />Document text is untrusted. Action proposals remain inert until an authorized human decision passes the bound approval gate.</p>
     </div>
   );

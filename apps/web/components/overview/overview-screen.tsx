@@ -4,6 +4,7 @@ import { OverviewResponseSchema, type EvaluationOverview } from "@localguard/con
 import { useQuery } from "@tanstack/react-query";
 import { Activity, ArrowRight, CalendarClock, CircleAlert, CircleDotDashed, ClipboardCheck, FileCheck2, Files, MessagesSquare, ShieldCheck } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
 import { useAuth } from "@/components/providers/auth-provider";
 import { EmptyState, ErrorState, PageSkeleton } from "@/components/ui/async-state";
 import { MetricCard } from "@/components/ui/metric-card";
@@ -26,6 +27,7 @@ function evaluationCases(summary: EvaluationOverview): string {
 }
 
 export function OverviewScreen() {
+  const [showAllActivity, setShowAllActivity] = useState(false);
   const { user } = useAuth();
   const overview = useQuery({
     queryKey: queryKeys.overview,
@@ -39,6 +41,7 @@ export function OverviewScreen() {
 
   const { data } = overview;
   const canReview = user?.role === "reviewer" || user?.role === "admin";
+  const visibleActivity = canReview || !showAllActivity ? data.recent_activity.slice(0, 5) : data.recent_activity;
   return (
     <div className="space-y-7">
       <PageHeader
@@ -47,7 +50,7 @@ export function OverviewScreen() {
         title="Overview"
       />
 
-      <section aria-label="Workspace metrics" className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-6">
+      <section aria-label="Workspace metrics" className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-3 2xl:grid-cols-6">
         <MetricCard href="/documents" icon={<Files aria-hidden className="size-5" />} label="Documents" value={data.documents_total} />
         <MetricCard href="/documents" icon={<FileCheck2 aria-hidden className="size-5" />} label="Ready" tone="evidence" value={data.documents_ready} />
         <MetricCard href="/documents" icon={<CircleDotDashed aria-hidden className="size-5" />} label="Processing" tone="pending" value={data.documents_processing} />
@@ -97,8 +100,8 @@ export function OverviewScreen() {
       </section>
 
       <section className="panel overflow-hidden" aria-labelledby="recent-activity-heading">
-        <header className="flex items-center gap-3 border-b border-border px-5 py-4 sm:px-6"><Activity aria-hidden className="size-5 text-brand" /><div><h2 className="font-heading text-lg font-semibold" id="recent-activity-heading">Recent activity</h2><p className="mt-1 text-sm text-muted-foreground">Redacted operational outcomes from the local audit stream.</p></div></header>
-        {data.recent_activity.length ? <ol className="divide-y divide-border">{data.recent_activity.map((event) => <li className="list-action flex flex-wrap items-center gap-3 px-5 py-4 sm:px-6" key={event.id}><div className="min-w-0 flex-1"><p className="text-sm font-semibold">{event.action}</p><p className="mt-1 text-xs text-muted-foreground">{event.resource_type} · {formatDateTime(event.occurred_at)}</p></div><StatusBadge status={event.outcome} /></li>)}</ol> : <p className="p-5 text-sm text-muted-foreground sm:p-6">No recent audit activity is available.</p>}
+        <header className="flex items-center gap-3 border-b border-border px-5 py-4 sm:px-6"><Activity aria-hidden className="size-5 text-brand" /><div className="min-w-0 flex-1"><h2 className="font-heading text-lg font-semibold" id="recent-activity-heading">Recent activity</h2><p className="mt-1 text-sm text-muted-foreground">Redacted operational outcomes from the local audit stream.</p></div>{canReview ? <Link className="inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-md px-2 text-sm font-semibold text-brand hover:bg-surface-raised" href="/audit">View all <ArrowRight aria-hidden className="size-4" /></Link> : data.recent_activity.length > 5 ? <button aria-expanded={showAllActivity} className="inline-flex min-h-11 shrink-0 items-center rounded-md px-2 text-sm font-semibold text-brand hover:bg-surface-raised" onClick={() => setShowAllActivity((value) => !value)} type="button">{showAllActivity ? "Show less" : "Show all"}</button> : null}</header>
+        {data.recent_activity.length ? <ol className="divide-y divide-border">{visibleActivity.map((event) => <li className="list-action flex flex-wrap items-center gap-3 px-5 py-4 sm:px-6" key={event.id}><div className="min-w-0 flex-1"><p className="text-sm font-semibold">{event.action}</p><p className="mt-1 text-xs text-muted-foreground">{event.resource_type} · {formatDateTime(event.occurred_at)}</p></div><StatusBadge status={event.outcome} /></li>)}</ol> : <p className="p-5 text-sm text-muted-foreground sm:p-6">No recent audit activity is available.</p>}
       </section>
     </div>
   );

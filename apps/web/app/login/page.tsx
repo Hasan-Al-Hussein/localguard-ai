@@ -6,6 +6,7 @@ import { Eye, EyeOff, LockKeyhole, ShieldCheck } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { EvidenceLens } from "@/components/effects/evidence-lens";
 import { useAuth } from "@/components/providers/auth-provider";
 import { Button } from "@/components/ui/button";
 import { errorMessage } from "@/lib/api-client";
@@ -45,17 +46,18 @@ export default function LoginPage() {
 
   return (
     <main className="grid min-h-dvh lg:grid-cols-[minmax(25rem,0.92fr)_minmax(34rem,1.08fr)]" id="main-content">
-      <section className="relative hidden overflow-hidden bg-[linear-gradient(145deg,#0d3553,#154f74_62%,#0d6e68)] p-12 text-white lg:flex lg:flex-col lg:justify-between xl:p-16">
+      <section className="login-visual relative hidden overflow-hidden p-12 text-white lg:flex lg:flex-col lg:justify-between xl:p-16">
+        <EvidenceLens className="login-evidence-lens" variant="login" />
         <div className="absolute inset-0 opacity-25 [background-image:linear-gradient(rgba(255,255,255,.1)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.1)_1px,transparent_1px)] [background-size:40px_40px]" />
         <div className="absolute -top-28 -right-24 size-[28rem] rounded-full bg-[#67e8d2]/15 blur-3xl" />
         <div className="absolute -bottom-40 -left-28 size-[34rem] rounded-full border border-white/10 bg-white/5" />
-        <div className="relative">
+        <div className="relative z-10">
           <span className="grid size-12 place-items-center rounded-2xl bg-white/10 shadow-2xl ring-1 ring-white/20 backdrop-blur">
             <ShieldCheck aria-hidden className="size-6" />
           </span>
           <p className="mt-5 font-heading text-xl font-bold tracking-[-0.03em]">LocalGuard AI</p>
         </div>
-        <div className="relative max-w-xl">
+        <div className="relative z-10 max-w-xl">
           <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/8 px-3 py-1.5 text-xs font-semibold tracking-wide text-[#bff9ef] uppercase backdrop-blur"><span className="size-1.5 rounded-full bg-[#67e8d2] shadow-[0_0_0_4px_rgb(103_232_210/0.12)]" />Private evidence workspace</span>
           <p className="mt-6 font-heading text-4xl leading-[1.08] font-bold tracking-[-0.045em] xl:text-5xl">Every answer has a source. Every action waits for you.</p>
           <p className="mt-6 max-w-lg text-base leading-7 text-slate-200">Inspect policies, find obligations, and review proposed work without sending documents to an external model service.</p>
@@ -64,15 +66,18 @@ export default function LoginPage() {
             Documents and model requests stay on this machine.
           </div>
         </div>
-        <p className="relative text-xs text-slate-300">Portfolio demonstration · Not legal advice</p>
+        <p className="relative z-10 text-xs text-slate-300">Portfolio demonstration · Not legal advice</p>
       </section>
 
       <section className="relative grid place-items-center overflow-hidden px-5 py-10 sm:px-8">
         <div aria-hidden className="absolute top-[10%] right-[5%] size-72 rounded-full bg-evidence-soft/55 blur-3xl" />
-        <div className="panel relative w-full max-w-md p-6 sm:p-8">
-          <div className="mb-8 flex items-center gap-3 lg:hidden">
+        <div className="login-panel panel relative w-full max-w-md p-6 sm:p-8">
+          <div className="mb-8 lg:hidden">
+            <div className="flex items-center gap-3">
             <span className="brand-mark grid size-10 place-items-center rounded-xl text-white"><ShieldCheck aria-hidden className="size-5" /></span>
             <span className="font-heading font-bold">LocalGuard AI</span>
+            </div>
+            <p className="mt-3 max-w-sm text-sm leading-6 text-muted-foreground">Private document intelligence with source-linked answers and human-approved actions.</p>
           </div>
           <p className="text-xs font-bold tracking-[0.14em] text-evidence uppercase">Private workspace</p>
           <h1 className="mt-3 font-heading text-3xl font-bold tracking-[-0.045em]">Sign in to review evidence</h1>

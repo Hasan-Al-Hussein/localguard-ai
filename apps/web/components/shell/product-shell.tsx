@@ -20,6 +20,7 @@ import {
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
+import { EvidenceLens } from "@/components/effects/evidence-lens";
 import { useAuth } from "@/components/providers/auth-provider";
 import { apiRequest } from "@/lib/api-client";
 import { cn } from "@/lib/cn";
@@ -117,7 +118,7 @@ function NavigationContent({ onNavigate, role }: { onNavigate?: () => void; role
       <div className="border-t border-border/80 p-4">
         <div className="privacy-card flex items-center gap-2.5 rounded-xl px-3 py-3 text-xs font-semibold text-evidence">
           <span className="relative grid size-7 place-items-center rounded-lg bg-white/70"><LockKeyhole aria-hidden className="size-3.5" /><span aria-hidden className="privacy-dot absolute -right-0.5 -bottom-0.5" /></span>
-          <span><span className="block">Local processing</span><span className="mt-0.5 block text-[0.65rem] font-medium text-evidence/75">Private by design</span></span>
+          <span><span className="block">Local processing</span><span className="mt-0.5 block text-[0.6875rem] font-semibold text-evidence-hover">Private by design</span></span>
         </div>
       </div>
     </>
@@ -208,6 +209,7 @@ export function ProductShell({ children }: { children: ReactNode }) {
 
   return (
     <div className="workspace-shell min-h-dvh lg:grid lg:grid-cols-[264px_minmax(0,1fr)]">
+      <EvidenceLens className="workspace-evidence-lens" />
       <aside className="workspace-sidebar fixed inset-y-0 left-0 z-30 hidden w-[264px] flex-col border-r border-border/80 lg:flex" ref={desktopNavigationRef}>
         <NavigationContent role={user?.role} />
       </aside>
@@ -238,7 +240,7 @@ export function ProductShell({ children }: { children: ReactNode }) {
         </div>
       ) : null}
 
-      <div className="min-w-0 lg:col-start-2" ref={contentRef}>
+      <div className="workspace-content min-w-0 lg:col-start-2" ref={contentRef}>
         <header className="workspace-header sticky top-0 z-20 flex h-[4.5rem] items-center gap-3 border-b border-border/80 px-4 backdrop-blur-xl sm:px-6 lg:px-8">
           <button aria-expanded={mobileOpen} aria-label="Open navigation" className="icon-button grid size-11 place-items-center rounded-xl text-muted-foreground hover:bg-surface-raised hover:text-foreground lg:hidden" onClick={() => setMobileOpen(true)} type="button">
             <Menu aria-hidden className="size-5" />
