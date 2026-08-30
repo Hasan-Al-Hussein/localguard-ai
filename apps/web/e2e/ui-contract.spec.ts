@@ -104,7 +104,7 @@ test.describe("UI contract (intercepted API)", () => {
     await expect(page.locator(`a[href="/evaluations/${runId}"]`)).toBeVisible();
   });
 
-  test("labels legacy evaluation history and renders metadata without current metrics", async ({ page, isMobile }) => {
+  test("labels legacy evaluation history and renders metadata without current metrics", async ({ page }) => {
     const runId = "20260823T080500000000Z-ollama-bbbbbbbbbbbb";
     const metadata = {
       schema_version: "1.1.0",
@@ -149,9 +149,7 @@ test.describe("UI contract (intercepted API)", () => {
     }));
 
     await page.goto("/evaluations");
-    const historySurface = isMobile
-      ? page.locator("div.md\\:hidden")
-      : page.locator("div.md\\:block");
+    const historySurface = page.locator(`[data-table-surface="${(page.viewportSize()?.width ?? 0) < 1440 ? "cards" : "table"}"]`);
     await expect(historySurface.getByText("Legacy metadata", { exact: true })).toBeVisible();
     await historySurface.getByRole("link", { name: runId }).click();
     await expect(page).toHaveURL(new RegExp(`/evaluations/${runId}$`), { timeout: 15_000 });

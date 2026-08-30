@@ -29,6 +29,7 @@ export function Button({
 }: ButtonProps) {
   return (
     <button
+      aria-busy={isLoading || undefined}
       className={cn(
         "button-base inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 border px-4 py-2 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-45",
         variantClasses[variant],

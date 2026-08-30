@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { Braces, FileText, Fingerprint, ShieldCheck } from "lucide-react";
 import { cn } from "@/lib/cn";
+import evidenceVaultHero from "@/public/brand/evidence-vault-hero.png";
 
 const GlobeCollection = dynamic(
   () => import("@designcodeio/threeui/components/GlobeCollection").then((module) => module.GlobeCollection),
@@ -29,6 +30,7 @@ export function ProofCoreScene({ className, compact = false, priority = false }:
   const [canAnimate, setCanAnimate] = useState(false);
   const [inView, setInView] = useState(false);
   const [documentVisible, setDocumentVisible] = useState(true);
+  const [posterFailed, setPosterFailed] = useState(false);
   const [webglFailed, setWebglFailed] = useState(false);
 
   useEffect(() => {
@@ -91,15 +93,21 @@ export function ProofCoreScene({ className, compact = false, priority = false }:
       ref={rootRef}
       role="img"
     >
-      <Image
-        alt=""
-        aria-hidden
-        className={cn("proof-core-poster", showWebgl && "proof-core-poster-dimmed")}
-        fill
-        priority={priority}
-        sizes={compact ? "(max-width: 767px) 100vw, 42vw" : "(max-width: 767px) 100vw, 52vw"}
-        src="/brand/evidence-vault-hero.png"
-      />
+      {!posterFailed ? (
+        <Image
+          alt=""
+          aria-hidden
+          className={cn("proof-core-poster", showWebgl && "proof-core-poster-dimmed")}
+          fill
+          onError={(event) => {
+            console.error("Proof core poster failed to load; using the local CSS evidence scene.", event.currentTarget.currentSrc);
+            setPosterFailed(true);
+          }}
+          preload={priority}
+          sizes={compact ? "(max-width: 767px) 100vw, 42vw" : "(max-width: 767px) 100vw, 52vw"}
+          src={evidenceVaultHero}
+        />
+      ) : null}
       {showWebgl ? (
         <div aria-hidden className="proof-core-webgl">
           <GlobeCollection

@@ -17,12 +17,14 @@ export function DataTable<T>({
   getRowId,
   mobileRow,
   empty,
+  wide = false,
 }: {
   columns: Array<ColumnDef<T>>;
   data: T[];
   getRowId?: (row: T) => string;
   mobileRow?: (row: T) => ReactNode;
   empty?: ReactNode;
+  wide?: boolean;
 }) {
   const [sorting, setSorting] = useState<SortingState>([]);
   // TanStack Table intentionally returns a mutable table facade; React Compiler
@@ -42,7 +44,10 @@ export function DataTable<T>({
 
   return (
     <>
-      <div className="panel hidden overflow-hidden md:block">
+      <div
+        className={`panel hidden max-w-full overflow-x-auto ${wide ? "min-[90rem]:block" : "lg:block"}`}
+        data-table-surface="table"
+      >
         <table className="w-full border-collapse text-left text-sm">
           <thead className="border-b border-border bg-surface-raised text-xs font-semibold tracking-wide text-muted-foreground uppercase">
             {table.getHeaderGroups().map((headerGroup) => (
@@ -78,7 +83,7 @@ export function DataTable<T>({
             {table.getRowModel().rows.map((row) => (
               <tr className="bg-surface transition-colors hover:bg-surface-muted" key={row.id}>
                 {row.getVisibleCells().map((cell) => (
-                  <td className="px-4 py-3.5 align-middle" key={cell.id}>
+                  <td className="px-4 py-3 align-middle" key={cell.id}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>
                 ))}
@@ -87,7 +92,7 @@ export function DataTable<T>({
           </tbody>
         </table>
       </div>
-      {mobileRow ? <div className="grid min-w-0 gap-3 md:hidden">{table.getRowModel().rows.map((row) => <div className="min-w-0 w-full" key={row.id}>{mobileRow(row.original)}</div>)}</div> : null}
+      {mobileRow ? <div className={`grid min-w-0 gap-2.5 ${wide ? "min-[90rem]:hidden" : "lg:hidden"}`} data-table-surface="cards">{table.getRowModel().rows.map((row) => <div className="min-w-0 w-full" key={row.id}>{mobileRow(row.original)}</div>)}</div> : null}
     </>
   );
 }
