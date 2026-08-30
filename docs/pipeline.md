@@ -7,7 +7,7 @@ grounded answering, exact citation proof, human approval, exactly-once task crea
 measured evaluation. The screenshots come from the validated local application; the documents in
 the demonstration are synthetic.
 
-[Watch the 110-second product tour](../demo-video/output/product-demo.mp4) or open its
+[Watch the 160-second product tour](../demo-video/output/product-demo.mp4) or open its
 [captions](../demo-video/output/product-demo.srt) for a concise pass through the same live
 application surfaces.
 

@@ -22,7 +22,7 @@ AUDIO_DIRECTORY = ROOT / "public" / "audio"
 CAPTION_DIRECTORY = ROOT / "public" / "captions"
 DEMO_OUTPUT_DIRECTORY = ROOT.parent / "output"
 VOICE = "en-US-AndrewMultilingualNeural"
-RATE = "+3%"
+RATE = "-12%"
 PITCH = "-1Hz"
 
 

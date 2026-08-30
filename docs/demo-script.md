@@ -2,7 +2,7 @@
 
 This walkthrough uses only the committed synthetic fixtures and the real local Ollama providers.
 It is designed for a five-minute live interview walkthrough. For the edited presentation cut, use
-the [110-second product tour](../demo-video/output/product-demo.mp4), its
+the [160-second product tour](../demo-video/output/product-demo.mp4), its
 [captions](../demo-video/output/product-demo.srt), and the concise
 [production script](../demo-video/script.md). Nothing in this live path is mocked.
 

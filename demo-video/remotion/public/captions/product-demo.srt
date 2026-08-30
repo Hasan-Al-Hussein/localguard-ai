@@ -1,95 +1,95 @@
 1
-00:00:00,050 --> 00:00:04,587
+00:00:00,050 --> 00:00:05,767
 Operations reviewers turn long policies into time-sensitive work.
 
 2
-00:00:04,587 --> 00:00:10,800
+00:00:05,767 --> 00:00:13,011
 Searching by hand can hide the rule, lose its source, or trigger action from an unverified answer.
 
 3
-00:00:11,050 --> 00:00:15,720
+00:00:16,050 --> 00:00:21,454
 LocalGuard AI is a private evidence workspace running on one computer.
 
 4
-00:00:15,720 --> 00:00:21,594
+00:00:21,454 --> 00:00:28,215
 It answers from indexed files, opens exact proof, and keeps actions behind human review.
 
 5
-00:00:22,050 --> 00:00:23,808
+00:00:32,050 --> 00:00:34,144
 Imagine vendor offboarding.
 
 6
-00:00:23,808 --> 00:00:29,791
+00:00:34,144 --> 00:00:41,133
 A synthetic policy requires the Service Desk to disable an account within one hour of notice.
 
 7
-00:00:30,050 --> 00:00:32,402
+00:00:44,050 --> 00:00:46,599
 Step one: open Documents.
 
 8
-00:00:32,402 --> 00:00:37,718
+00:00:46,599 --> 00:00:52,764
 LocalGuard indexes the PDF pages locally and preserves an immutable revision.
 
 9
-00:00:38,050 --> 00:00:41,495
+00:00:56,050 --> 00:01:00,062
 Step two: ask, How long does the Service Desk have?
 
 10
-00:00:41,495 --> 00:00:48,206
+00:01:00,062 --> 00:01:07,676
 LocalGuard searches the indexed evidence, checks whether it is sufficient, and returns, within one hour.
 
 11
-00:00:48,206 --> 00:00:53,851
+00:01:07,676 --> 00:01:14,283
 The source opens page two and highlights the exact stored sentence, making the answer
 
 12
-00:00:53,851 --> 00:00:56,507
+00:01:14,283 --> 00:01:17,392
 inspectable instead of merely plausible.
 
 13
-00:00:57,050 --> 00:00:59,779
+00:01:24,050 --> 00:01:27,139
 Step three: choose Propose an action.
 
 14
-00:00:59,779 --> 00:01:05,880
-In a synthetic September first scenario, the notice arrives at nine A M U T C. LocalGuard
+00:01:27,139 --> 00:01:35,406
+In a synthetic September first scenario, the notice arrives at 9:00 AM UTC.
 
 15
-00:01:05,880 --> 00:01:11,502
-derives a high-priority Service Desk proposal due at ten, but creates no task yet.
+00:01:35,406 --> 00:01:42,934
+LocalGuard derives a high-priority Service Desk proposal due at ten, but creates no task yet.
 
 16
-00:01:15,050 --> 00:01:19,004
+00:01:50,050 --> 00:01:54,744
 The reviewer checks the proposal and evidence, then approves it.
 
 17
-00:01:19,004 --> 00:01:21,468
+00:01:54,744 --> 00:01:57,727
 Only then does one workflow task appear.
 
 18
-00:01:21,468 --> 00:01:25,667
+00:01:57,727 --> 00:02:02,769
 Its owner, priority, deadline, and source stay visible.
 
 19
-00:01:25,667 --> 00:01:28,968
+00:02:02,769 --> 00:02:06,676
 The audit log records the decision and task creation.
 
 20
-00:01:30,050 --> 00:01:32,463
+00:02:12,050 --> 00:02:14,826
 Next.js calls FastAPI.
 
 21
-00:01:32,463 --> 00:01:36,189
+00:02:14,826 --> 00:02:18,946
 PostgreSQL and pgvector retrieve evidence.
 
 22
-00:01:36,189 --> 00:01:38,907
+00:02:18,946 --> 00:02:22,000
 A Celery worker checks it with Ollama.
 
 23
-00:01:38,907 --> 00:01:43,900
+00:02:22,000 --> 00:02:28,264
 LangGraph pauses actions for human approval, and PostgreSQL permits one task.
 
 24
-00:01:44,050 --> 00:01:49,497
+00:02:32,050 --> 00:02:38,420
 LocalGuard: source-backed answers and reviewable work, with evidence before action.

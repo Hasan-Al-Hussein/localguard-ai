@@ -2,15 +2,15 @@
 
 | Time | Scene | Visual direction | Product evidence |
 |---|---|---|---|
-| 00:00–00:11 | Problem | Dark graphite title card; three policy fragments drift out of alignment; amber risk line stops before action. | No product claim yet. |
-| 00:11–00:22 | Solution | LocalGuard Proof Gate mark resolves; four-stage rail appears: Document → Exact anchor → Cited answer → Human gate. | Overview hero and local/private status. |
-| 00:22–00:30 | Example | Vendor policy page and one highlighted obligation enter the evidence prism. | Synthetic `lg-pol-001-vendor-access` document. |
-| 00:30–00:38 | Input | Real Documents screen; ready state and immutable revision are emphasized with a restrained mint outline. | `LG-POL-001`, PDF page-preserving extraction. |
-| 00:38–00:57 | Answer | Real Ask interaction, brief queued state, cited answer, then exact highlighted page-2 source. Long model wait is honestly compressed. | One-hour answer; page 2, offsets 767–889. |
-| 00:57–01:15 | Proposal | Real action request, pending proposal, “Nothing has been created yet,” assignee/priority/due values. | Service Desk; high; 10:00 UTC; no task preapproval. |
-| 01:15–01:30 | Result | Reviewer approves once; task detail and approval provenance; causal audit chain. | One task after approval, one after replay. |
-| 01:30–01:44 | Pipeline | Clean animated architecture diagram over a softened product frame. | Next.js → FastAPI → PostgreSQL/pgvector → Celery/Ollama → LangGraph → approval → task. |
-| 01:44–01:50 | Close | Proof Gate mark, short value statement, repository URL, local-first disclosure. | “Evidence before action.” |
+| 00:00–00:16 | Problem | Dark graphite title card; three policy fragments drift out of alignment; amber risk line stops before action. | No product claim yet. |
+| 00:16–00:32 | Solution | LocalGuard Proof Gate mark resolves; four-stage rail appears: Document → Exact anchor → Cited answer → Human gate. | Overview hero and local/private status. |
+| 00:32–00:44 | Example | Vendor policy page and one highlighted obligation enter the evidence prism. | Synthetic `lg-pol-001-vendor-access` document. |
+| 00:44–00:56 | Input | Real Documents screen; ready state and immutable revision are emphasized with a restrained mint outline. | `LG-POL-001`, PDF page-preserving extraction. |
+| 00:56–01:24 | Answer | Real Ask interaction, brief queued state, cited answer, then exact highlighted page-2 source. Long model wait is honestly compressed. | One-hour answer; page 2, offsets 767–889. |
+| 01:24–01:50 | Proposal | Real action request, pending proposal, “Nothing has been created yet,” assignee/priority/due values. | Service Desk; high; 10:00 UTC; no task preapproval. |
+| 01:50–02:12 | Result | Reviewer approves once; task detail and approval provenance; causal audit chain. | One task after approval, one after replay. |
+| 02:12–02:32 | Pipeline | Clean animated architecture diagram over a softened product frame. | Next.js → FastAPI → PostgreSQL/pgvector → Celery/Ollama → LangGraph → approval → task. |
+| 02:32–02:40 | Close | Proof Gate mark, short value statement, repository URL, local-first disclosure. | “Evidence before action.” |
 
 ## Visual system
 

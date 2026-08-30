@@ -1,10 +1,20 @@
-import {AbsoluteFill, Easing, Img, Interactive, interpolate, staticFile, useCurrentFrame} from "remotion";
-import {COLORS} from "../constants";
-import {BrandMark} from "../components/BrandMark";
-import {CinematicBackdrop} from "../components/CinematicBackdrop";
+import {
+  AbsoluteFill,
+  Easing,
+  Img,
+  Interactive,
+  interpolate,
+  staticFile,
+  useCurrentFrame,
+  useVideoConfig,
+} from "remotion";
+import { COLORS } from "../constants";
+import { BrandMark } from "../components/BrandMark";
+import { CinematicBackdrop } from "../components/CinematicBackdrop";
 
 export const CloseScene: React.FC = () => {
   const frame = useCurrentFrame();
+  const { durationInFrames } = useVideoConfig();
 
   return (
     <AbsoluteFill>
@@ -25,15 +35,16 @@ export const CloseScene: React.FC = () => {
             extrapolateRight: "clamp",
             easing: Easing.bezier(0.16, 1, 0.3, 1),
           }),
-          scale: interpolate(frame, [0, 179], [1.08, 1], {
+          scale: interpolate(frame, [0, durationInFrames - 1], [1.08, 1], {
             extrapolateLeft: "clamp",
             extrapolateRight: "clamp",
             output: "perceptual-scale",
           }),
-          maskImage: "linear-gradient(90deg, transparent 0%, black 28%, black 100%)",
+          maskImage:
+            "linear-gradient(90deg, transparent 0%, black 28%, black 100%)",
         }}
       />
-      <div style={{position: "absolute", left: 140, top: 170, width: 1050}}>
+      <div style={{ position: "absolute", left: 140, top: 170, width: 1050 }}>
         <BrandMark size={96} label />
         <Interactive.Div
           name="Final value statement"
@@ -57,8 +68,9 @@ export const CloseScene: React.FC = () => {
             }),
           }}
         >
-          Evidence<br />
-          <span style={{color: COLORS.mint}}>before action.</span>
+          Evidence
+          <br />
+          <span style={{ color: COLORS.mint }}>before action.</span>
         </Interactive.Div>
         <Interactive.Div
           name="Final product description"
@@ -94,11 +106,38 @@ export const CloseScene: React.FC = () => {
             }),
           }}
         >
-          <span style={{width: 10, height: 10, borderRadius: 999, backgroundColor: COLORS.mint, boxShadow: `0 0 18px ${COLORS.mint}`}} />
-          <span style={{fontFamily: "monospace", fontSize: 22, color: COLORS.mintSoft}}>github.com/Hasan-Al-Hussein/localguard-ai</span>
+          <span
+            style={{
+              width: 10,
+              height: 10,
+              borderRadius: 999,
+              backgroundColor: COLORS.mint,
+              boxShadow: `0 0 18px ${COLORS.mint}`,
+            }}
+          />
+          <span
+            style={{
+              fontFamily: "monospace",
+              fontSize: 22,
+              color: COLORS.mintSoft,
+            }}
+          >
+            github.com/Hasan-Al-Hussein/localguard-ai
+          </span>
         </div>
       </div>
-      <div style={{position: "absolute", left: 140, bottom: 250, fontFamily: "Geist Variable", fontSize: 18, letterSpacing: 2.5, textTransform: "uppercase", color: COLORS.muted}}>
+      <div
+        style={{
+          position: "absolute",
+          left: 140,
+          bottom: 250,
+          fontFamily: "Geist Variable",
+          fontSize: 18,
+          letterSpacing: 2.5,
+          textTransform: "uppercase",
+          color: COLORS.muted,
+        }}
+      >
         LocalGuard AI · Local processing · Human controlled
       </div>
     </AbsoluteFill>

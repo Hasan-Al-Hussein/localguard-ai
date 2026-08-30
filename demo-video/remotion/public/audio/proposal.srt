@@ -1,7 +1,11 @@
 1
-00:00:00,050 --> 00:00:02,779
+00:00:00,050 --> 00:00:03,139
 Step three: choose Propose an action.
 
 2
-00:00:02,779 --> 00:00:14,502
-In a synthetic September first scenario, the notice arrives at nine A M U T C. LocalGuard derives a high-priority Service Desk proposal due at ten, but creates no task yet.
+00:00:03,139 --> 00:00:11,406
+In a synthetic September first scenario, the notice arrives at 9:00 AM UTC.
+
+3
+00:00:11,406 --> 00:00:18,934
+LocalGuard derives a high-priority Service Desk proposal due at ten, but creates no task yet.

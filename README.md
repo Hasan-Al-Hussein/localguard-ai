@@ -7,7 +7,7 @@
 **Local-first document intelligence where every answer resolves to source proof and every action waits for human approval.**
 
 [![CI](https://img.shields.io/github/actions/workflow/status/Hasan-Al-Hussein/localguard-ai/ci.yml?branch=main&style=for-the-badge&label=CI)](https://github.com/Hasan-Al-Hussein/localguard-ai/actions/workflows/ci.yml)
-[![Demo](https://img.shields.io/badge/DEMO-110_SECONDS-18BFA5?style=for-the-badge)](demo-video/output/product-demo.mp4)
+[![Demo](https://img.shields.io/badge/DEMO-160_SECONDS-18BFA5?style=for-the-badge)](demo-video/output/product-demo.mp4)
 ![Local-first](https://img.shields.io/badge/RUNTIME-LOCAL--FIRST-4F8CFF?style=for-the-badge)
 ![CPU-only](https://img.shields.io/badge/INFERENCE-CPU--ONLY-68758A?style=for-the-badge)
 [![MIT License](https://img.shields.io/badge/LICENSE-MIT-F5B942?style=for-the-badge)](LICENSE)
@@ -57,9 +57,9 @@ are not production, legal, or general model-accuracy claims.
 ## See the complete workflow
 
 <div align="center">
-  <a href="demo-video/output/product-demo.mp4"><img src="docs/screenshots/product-demo/localguard-product-demo.png" width="900" alt="Open the 110-second LocalGuard AI product demo" /></a>
+  <a href="demo-video/output/product-demo.mp4"><img src="docs/screenshots/product-demo/localguard-product-demo.png" width="900" alt="Open the 160-second LocalGuard AI product demo" /></a>
   <br />
-  <strong><a href="demo-video/output/product-demo.mp4">▶ Watch the 110-second product tour</a></strong>
+  <strong><a href="demo-video/output/product-demo.mp4">▶ Watch the 160-second product tour</a></strong>
   <br />
   <a href="demo-video/output/product-demo.srt">Read the captions</a>
 </div>

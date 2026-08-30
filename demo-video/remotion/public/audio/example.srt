@@ -1,7 +1,7 @@
 1
-00:00:00,050 --> 00:00:01,808
+00:00:00,050 --> 00:00:02,144
 Imagine vendor offboarding.
 
 2
-00:00:01,808 --> 00:00:07,791
+00:00:02,144 --> 00:00:09,133
 A synthetic policy requires the Service Desk to disable an account within one hour of notice.

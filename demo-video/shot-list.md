@@ -36,6 +36,6 @@ appears accidentally.
 
 ## Verification frames
 
-Inspect at minimum the final render near 00:03, 00:16, 00:26, 00:34, 00:46, 00:54, 01:05,
-01:20, 01:36, and 01:47. Reject black frames, frozen transitions, clipped captions, unreadable
+Inspect at minimum the final render near 00:08, 00:24, 00:38, 00:50, 01:00, 01:10, 01:20,
+01:36, 01:56, 02:05, 02:22, and 02:36. Reject black frames, frozen transitions, clipped captions, unreadable
 product text, cursor obstruction, or a state that contradicts the narration.

@@ -1,7 +1,65 @@
 export const FPS = 30;
 export const WIDTH = 1920;
 export const HEIGHT = 1080;
-export const DURATION_IN_FRAMES = 3300;
+
+export const SCENE_DURATIONS = {
+  problem: 480,
+  solution: 480,
+  example: 360,
+  input: 360,
+  answer: 840,
+  proposal: 780,
+  result: 660,
+  pipeline: 600,
+  close: 240,
+} as const;
+
+export const SCENE_STARTS = {
+  problem: 0,
+  solution: SCENE_DURATIONS.problem,
+  example: SCENE_DURATIONS.problem + SCENE_DURATIONS.solution,
+  input:
+    SCENE_DURATIONS.problem +
+    SCENE_DURATIONS.solution +
+    SCENE_DURATIONS.example,
+  answer:
+    SCENE_DURATIONS.problem +
+    SCENE_DURATIONS.solution +
+    SCENE_DURATIONS.example +
+    SCENE_DURATIONS.input,
+  proposal:
+    SCENE_DURATIONS.problem +
+    SCENE_DURATIONS.solution +
+    SCENE_DURATIONS.example +
+    SCENE_DURATIONS.input +
+    SCENE_DURATIONS.answer,
+  result:
+    SCENE_DURATIONS.problem +
+    SCENE_DURATIONS.solution +
+    SCENE_DURATIONS.example +
+    SCENE_DURATIONS.input +
+    SCENE_DURATIONS.answer +
+    SCENE_DURATIONS.proposal,
+  pipeline:
+    SCENE_DURATIONS.problem +
+    SCENE_DURATIONS.solution +
+    SCENE_DURATIONS.example +
+    SCENE_DURATIONS.input +
+    SCENE_DURATIONS.answer +
+    SCENE_DURATIONS.proposal +
+    SCENE_DURATIONS.result,
+  close:
+    SCENE_DURATIONS.problem +
+    SCENE_DURATIONS.solution +
+    SCENE_DURATIONS.example +
+    SCENE_DURATIONS.input +
+    SCENE_DURATIONS.answer +
+    SCENE_DURATIONS.proposal +
+    SCENE_DURATIONS.result +
+    SCENE_DURATIONS.pipeline,
+} as const;
+
+export const DURATION_IN_FRAMES = SCENE_STARTS.close + SCENE_DURATIONS.close;
 
 export const COLORS = {
   obsidian: "#07121C",
@@ -15,18 +73,6 @@ export const COLORS = {
   white: "#F7FBFC",
   muted: "#9FB1BA",
   danger: "#FF806C",
-} as const;
-
-export const SCENE_DURATIONS = {
-  problem: 330,
-  solution: 330,
-  example: 240,
-  input: 240,
-  answer: 570,
-  proposal: 540,
-  result: 450,
-  pipeline: 420,
-  close: 180,
 } as const;
 
 export const SCREENSHOTS = {
