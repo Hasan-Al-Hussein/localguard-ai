@@ -4,7 +4,7 @@ Version `1.0.2` defines a portable, synthetic-only gold dataset. It contains exa
 
 ## Changelog
 
-### 1.0.2 — source-faithful action proposals
+### 1.0.2: source-faithful action proposals
 
 The five action proposals now render their title, description, and assignee directly from the
 uniquely cited modal policy sentence. Their due times remain independently derived from the cited
@@ -17,7 +17,7 @@ markers, claims, approval scripts, and final task counts. The correction aligns 
 scoring with a generic runtime evidence renderer rather than model wording or case-specific
 templates.
 
-### 1.0.1 — source-faithful extraction gold
+### 1.0.1: source-faithful extraction gold
 
 Five structured-extraction fields were corrected to match their cited marker text exactly. `GRD007-E1` now records the action stated by `LG-POL-001:L009` (`notify Service Desk`). `GRD010-E1` now records `complete approved deletion` and preserves the marker's receipt event in `10_business_days_after_disposal_notice_received`. `GRD010-E3` now records `close each finding` and classifies the bounded modal rule as an `obligation`. Case IDs, source documents, marker IDs, spans, requests, and category counts are unchanged. These corrections remove unsupported elaboration from the gold contract; they do not relax exact-set scoring.
 

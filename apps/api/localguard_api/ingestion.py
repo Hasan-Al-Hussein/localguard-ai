@@ -242,7 +242,7 @@ def _parse_docx(content: bytes, settings: Settings) -> list[ParsedAnchor]:
             ParsedAnchor(
                 stable_key=f"section:{section_number}:paragraph:{paragraph_in_section}",
                 kind="docx_paragraph",
-                label=f"{section_label} — paragraph {paragraph_in_section}",
+                label=f"{section_label}: paragraph {paragraph_in_section}",
                 ordinal=ordinal,
                 text=text,
             )

@@ -47,7 +47,7 @@ export function AuditScreen({ threadId }: { threadId?: string }) {
       header: "Action",
       cell: ({ row }) => <OperationalLink href={`/audit/${encodeURIComponent(row.original.id)}`}>{row.original.action}</OperationalLink>,
     },
-    { accessorKey: "resource_type", header: "Resource", cell: ({ row }) => <span>{row.original.resource_type}<span className="block max-w-40 truncate font-mono text-xs text-muted-foreground" title={row.original.resource_id ?? undefined}>{row.original.resource_id ?? "—"}</span></span> },
+    { accessorKey: "resource_type", header: "Resource", cell: ({ row }) => <span>{row.original.resource_type}<span className="block max-w-40 truncate font-mono text-xs text-muted-foreground" title={row.original.resource_id ?? undefined}>{row.original.resource_id ?? "Not available"}</span></span> },
     { accessorKey: "outcome", header: "Outcome", cell: ({ row }) => <StatusBadge status={row.original.outcome} /> },
     { accessorKey: "actor_id", header: "Actor", cell: ({ row }) => row.original.actor_id ? <span className="block max-w-36 truncate font-mono text-xs" title={row.original.actor_id}>{row.original.actor_id}</span> : "System" },
     { accessorKey: "correlation_id", header: "Correlation", cell: ({ row }) => <span className="block max-w-36 truncate font-mono text-xs" title={row.original.correlation_id}>{row.original.correlation_id}</span> },

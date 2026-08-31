@@ -45,7 +45,7 @@ export function AuditEventScreen({ eventId }: { eventId: string }) {
       <section aria-label="Event metadata" className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <div className="panel p-5"><Clock3 aria-hidden className="size-5 text-brand" /><p className="mt-4 text-xs font-semibold tracking-wide text-muted-foreground uppercase">Recorded</p><p className="mt-1 font-semibold">{formatDateTime(record.occurred_at)}</p></div>
         <div className="panel p-5"><UserRound aria-hidden className="size-5 text-evidence" /><p className="mt-4 text-xs font-semibold tracking-wide text-muted-foreground uppercase">Actor</p><p className="mt-1 break-all font-mono text-xs">{record.actor_id ?? "System"}</p></div>
-        <div className="panel p-5"><Link2 aria-hidden className="size-5 text-pending" /><p className="mt-4 text-xs font-semibold tracking-wide text-muted-foreground uppercase">Resource</p><p className="mt-1 font-semibold">{record.resource_type}</p><p className="mt-1 break-all font-mono text-xs text-muted-foreground">{record.resource_id ?? "—"}</p></div>
+        <div className="panel p-5"><Link2 aria-hidden className="size-5 text-pending" /><p className="mt-4 text-xs font-semibold tracking-wide text-muted-foreground uppercase">Resource</p><p className="mt-1 font-semibold">{record.resource_type}</p><p className="mt-1 break-all font-mono text-xs text-muted-foreground">{record.resource_id ?? "Not available"}</p></div>
         <div className="panel p-5"><Fingerprint aria-hidden className="size-5 text-brand" /><p className="mt-4 text-xs font-semibold tracking-wide text-muted-foreground uppercase">Correlation ID</p><p className="mt-1 break-all font-mono text-xs">{record.correlation_id}</p></div>
       </section>
 

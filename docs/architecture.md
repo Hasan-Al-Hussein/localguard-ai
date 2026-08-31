@@ -141,7 +141,7 @@ stateDiagram-v2
 ```
 
 The proposal binds its immutable version, canonical payload hash, evidence snapshot hash, expiry,
-and workflow thread. Approval is a reviewer/admin API operation—not a phrase the model or document
+and workflow thread. Approval is a reviewer/admin API operation, not a phrase the model or document
 can emit. The worker rechecks the actor’s current role and every binding under row locks before a
 unique task can be inserted.
 

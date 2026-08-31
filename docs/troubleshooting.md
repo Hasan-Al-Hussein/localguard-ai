@@ -74,7 +74,7 @@ LocalGuard validates settings before the API starts. Typical deliberate failures
 - insecure cookies in production mode;
 - unchanged bootstrap password or MCP token placeholders.
 
-Compare names—not secret values—with `.env.example`. If `.env` is missing, bootstrap creates a new
+Compare names, not secret values, with `.env.example`. If `.env` is missing, bootstrap creates a new
 one. It never overwrites an existing credential file.
 
 API, worker, and MCP deliberately receive empty bootstrap-password and bootstrap-token variables;

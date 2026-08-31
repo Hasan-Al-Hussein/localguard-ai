@@ -85,7 +85,7 @@ export function DocumentsScreen() {
       ),
     },
     { accessorKey: "state", header: "State", cell: ({ row }) => <StatusBadge status={row.original.state} /> },
-    { accessorKey: "current_revision_id", header: "Current revision", cell: ({ row }) => row.original.current_revision_id ? <span className="block max-w-40 truncate font-mono text-xs" title={row.original.current_revision_id}>{row.original.current_revision_id}</span> : "—" },
+    { accessorKey: "current_revision_id", header: "Current revision", cell: ({ row }) => row.original.current_revision_id ? <span className="block max-w-40 truncate font-mono text-xs" title={row.original.current_revision_id}>{row.original.current_revision_id}</span> : "Not available" },
     { accessorKey: "created_at", header: "Created", cell: ({ row }) => <time dateTime={row.original.created_at}>{formatDateTime(row.original.created_at)}</time> },
     { accessorKey: "updated_at", header: "Updated", cell: ({ row }) => <time dateTime={row.original.updated_at}>{formatDateTime(row.original.updated_at)}</time> },
     {

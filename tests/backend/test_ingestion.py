@@ -65,7 +65,7 @@ def test_docx_anchors_preserve_heading_and_paragraph_positions() -> None:
     anchors = parse_document(upload, _settings())
     assert anchors[0].stable_key == "section:1:paragraph:1"
     assert anchors[1].stable_key == "section:1:paragraph:2"
-    assert anchors[1].label == "Policy — paragraph 2"
+    assert anchors[1].label == "Policy: paragraph 2"
 
 
 def test_docx_zip_bomb_ratio_is_rejected() -> None:

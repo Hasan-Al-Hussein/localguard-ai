@@ -25,13 +25,13 @@ authenticated reviewer can approve the exact version, payload, evidence snapshot
 database uniqueness then permits one task. Generation and embeddings run locally with pinned
 Ollama models, with no paid model API or GPU required.
 
-This is a single-machine engineering demonstration—not legal advice or a production multi-tenant
+This is a single-machine engineering demonstration, not legal advice or a production multi-tenant
 compliance system.
 
 ## Why LocalGuard exists
 
-Plausible answers are easy to generate. Proving where they came from—and preventing suggestions
-from silently becoming privileged actions—is harder. LocalGuard makes both guarantees application
+Plausible answers are easy to generate. Proving where they came from, and preventing suggestions
+from silently becoming privileged actions, is harder. LocalGuard makes both guarantees application
 responsibilities:
 
 - every citation resolves to an immutable document revision and exact source range;

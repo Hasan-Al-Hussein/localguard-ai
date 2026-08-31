@@ -1,4 +1,4 @@
-LOCALGUARD AI — WINDOWS QUICK START
+LOCALGUARD AI: WINDOWS QUICK START
 ===================================
 
 1. Extract the entire ZIP to a normal local folder.

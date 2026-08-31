@@ -238,7 +238,7 @@ export function DocumentViewerScreen({ documentId }: { documentId: string }) {
         >
           <div className="panel sticky top-[var(--sticky-offset)] z-10 mb-4 flex flex-wrap items-center gap-2 px-4 py-3">
             <span className="flex items-center gap-2 text-sm font-semibold"><ListTree aria-hidden className="size-4 text-brand" />{detail.anchors.length} stored anchors</span>
-            {revision ? <span className="ml-auto text-xs text-muted-foreground">{revision.extracted_characters?.toLocaleString() ?? "—"} extracted characters</span> : null}
+            {revision ? <span className="ml-auto text-xs text-muted-foreground">{revision.extracted_characters == null ? "Extraction count unavailable" : `${revision.extracted_characters.toLocaleString()} extracted characters`}</span> : null}
           </div>
 
           <article className="document-paper panel mx-auto max-w-[820px] overflow-hidden bg-white">

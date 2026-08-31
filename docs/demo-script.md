@@ -27,7 +27,7 @@ Open `http://localhost:3000`. Keep `docs/architecture.md`, `evals/results/latest
 `artifacts/verification/demo.json` available as supporting evidence, but do not present an old run
 as if it happened during the recording.
 
-## 0:00–0:35 — frame the problem
+## 0:00–0:35: frame the problem
 
 Say:
 
@@ -38,7 +38,7 @@ Say:
 Show the overview briefly. Point out that the status indicator is connected to the local FastAPI
 service and that this is an engineering demonstration, not legal advice.
 
-## 0:35–1:25 — upload and index a real fixture
+## 0:35–1:25: upload and index a real fixture
 
 Sign in as `demo-reviewer`, open **Documents**, and upload:
 
@@ -53,7 +53,7 @@ Mention the three boundaries while the status progresses from queued to ready:
 Open the document. Show the page/section structure and extracted text. The synthetic notice should
 be visibly recognizable.
 
-## 1:25–2:15 — ask a cited question
+## 1:25–2:15: ask a cited question
 
 Open **Ask LocalGuard** and ask:
 
@@ -71,7 +71,7 @@ resolved the title, revision, anchor, quote, and offsets.
 If the response abstains, do not hide it. Confirm that the intended document revision is ready and
 keep the failure in the demo evidence; never lower the guardrail live simply to force an answer.
 
-## 2:15–3:45 — prove the human approval boundary
+## 2:15–3:45: prove the human approval boundary
 
 Submit this explicitly synthetic action request:
 
@@ -96,7 +96,7 @@ Optionally demonstrate edit semantics with the Severity 1 incident fixture: edit
 pending version, invalidates the old hash, and still creates no task until the replacement is
 approved.
 
-## 3:45–4:25 — inspect the audit chain
+## 3:45–4:25: inspect the audit chain
 
 Open **Audit log**. Follow the same correlation/workflow thread through:
 
@@ -112,7 +112,7 @@ returning to the browser. Be precise about the fields: each worker creates a new
 correlation, and its `causation_id` currently stores the originating request correlation reference.
 It is not necessarily an audit-event UUID.
 
-## 4:25–5:00 — close with measured evidence
+## 4:25–5:00: close with measured evidence
 
 Open **Evaluations** or the generated `evals/results/latest.md`. State the provider and contract
 shown in the report:

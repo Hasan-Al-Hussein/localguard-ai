@@ -40,7 +40,7 @@ that user can inspect containers, process memory, volumes, and the generated `.e
   methods, paths, and headers, limits request bodies before buffering/forwarding, and converts
   upstream failures to sanitized responses.
 - The UI hides actions a role cannot use, but every protected route repeats authorization on the
-  server. Viewer, reviewer, and admin are stored authorities—not model or request-body fields.
+  server. Viewer, reviewer, and admin are stored authorities, not model or request-body fields.
 - Reseeding an existing principal replaces its password hash and revokes that principal's active
   browser sessions. `scripts/rotate-demo-admin.ps1` rotates the ignored `.env` value and reseeds
   without printing it.
