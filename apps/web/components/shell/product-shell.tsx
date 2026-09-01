@@ -140,6 +140,7 @@ function focusableElements(container: HTMLElement): HTMLElement[] {
 export function ProductShell({ children }: { children: ReactNode }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
+  const canonicalPathname = pathname.replace(/\/+$/u, "") || "/";
   const router = useRouter();
   const { user, logout } = useAuth();
   const desktopNavigationRef = useRef<HTMLElement>(null);
@@ -153,7 +154,7 @@ export function ProductShell({ children }: { children: ReactNode }) {
     refetchInterval: 30_000,
     retry: 1,
   });
-  const pathParts = pathname.split("/").filter(Boolean);
+  const pathParts = canonicalPathname.split("/").filter(Boolean);
   const currentLabel = routeLabels[pathParts[0] ?? "overview"] ?? "Details";
   const userInitial = user?.display_name.trim().charAt(0).toUpperCase() || "L";
 
@@ -219,7 +220,7 @@ export function ProductShell({ children }: { children: ReactNode }) {
 
   return (
     <div className="workspace-shell min-h-dvh min-[72rem]:grid min-[72rem]:grid-cols-[var(--sidebar-width)_minmax(0,1fr)]">
-      {pathname === "/overview" || pathname === "/ask" ? <EvidenceLens className="workspace-evidence-lens" /> : null}
+      {canonicalPathname === "/overview" || canonicalPathname === "/ask" ? <EvidenceLens className="workspace-evidence-lens" /> : null}
       <aside className="workspace-sidebar fixed inset-y-0 left-0 z-30 hidden w-[var(--sidebar-width)] flex-col border-r border-border/80 min-[72rem]:flex" ref={desktopNavigationRef}>
         <NavigationContent role={user?.role} />
       </aside>
@@ -295,7 +296,7 @@ export function ProductShell({ children }: { children: ReactNode }) {
           </aside>
         ) : null}
         <main className="workspace-main mx-auto w-full max-w-[var(--content-max)] px-4 py-5 sm:px-6 sm:py-6 lg:px-8" id="main-content" tabIndex={-1}>
-          <div className="page-stage" key={pathname}>{children}</div>
+          <div className="page-stage" key={canonicalPathname}>{children}</div>
         </main>
       </div>
     </div>

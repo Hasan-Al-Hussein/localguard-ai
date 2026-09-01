@@ -6,8 +6,12 @@ import {
   type Request,
   type TestInfo,
 } from "@playwright/test";
+import { readFile } from "node:fs/promises";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 
 const showcaseOrigin = "http://127.0.0.1:4173";
+const showcaseRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
 const disclosureText =
   "Public portfolio demo with synthetic data. No uploads, persistence, live AI, or real-world actions.";
 const browserDocument404ConsoleMessage =
@@ -331,6 +335,33 @@ test.describe("public showcase static contract", () => {
     const runtime = createRuntimeRecorder(page);
     const response = await page.goto("/", { waitUntil: "networkidle" });
     expect(response?.status()).toBe(200);
+    await expectDisclosure(page);
+    await runtime.assertClean(testInfo);
+  });
+
+  test("hydrates the exported overview when the host serves it without a trailing slash", async ({
+    page,
+  }, testInfo) => {
+    const runtime = createRuntimeRecorder(page);
+    const overviewHtml = await readFile(
+      join(showcaseRoot, "out", "overview", "index.html"),
+      "utf8",
+    );
+
+    await page.route(`${showcaseOrigin}/overview`, async (route) => {
+      await route.fulfill({
+        body: overviewHtml,
+        contentType: "text/html; charset=utf-8",
+        status: 200,
+      });
+    });
+
+    const response = await page.goto("/overview", { waitUntil: "networkidle" });
+    expect(response?.status()).toBe(200);
+    await expect(page).toHaveURL(`${showcaseOrigin}/overview`);
+    await expect(
+      page.getByRole("heading", { level: 1, name: "Overview", exact: true }),
+    ).toBeVisible();
     await expectDisclosure(page);
     await runtime.assertClean(testInfo);
   });
