@@ -23,7 +23,7 @@ active RAM and 15 GB attributable disk, use no model above 3B parameters, serial
 and contain only original synthetic documents. Identity, RBAC, citations, tool availability,
 approval, and execution must remain application-controlled.
 
-## Phase 0 — foundation and proof contracts
+## Phase 0: foundation and proof contracts
 
 - Inspect Windows, Docker Desktop, memory, storage, Node, Python, Git, and Ollama availability.
 - Initialize a local-only Git repository; do not create a remote.
@@ -36,7 +36,7 @@ approval, and execution must remain application-controlled.
 Gate: dependency resolution, Compose validation, fixture structural/visual review, dataset negative
 self-tests, migration reversal, and model manifest/resource evidence.
 
-## Phase 1 — smallest complete vertical slice
+## Phase 1: smallest complete vertical slice
 
 - Opaque database sessions, Argon2id, CSRF, roles, throttled login, trusted host/origin policy.
 - Bounded PDF/DOCX/TXT upload, private atomic storage, immutable revisions and true source anchors.
@@ -47,7 +47,7 @@ self-tests, migration reversal, and model manifest/resource evidence.
 Gate: upload → ready → question → answer/abstain → immutable citation in real PostgreSQL/pgvector,
 plus focused security and browser checks.
 
-## Phase 2 — controlled agent workflow
+## Phase 2: controlled agent workflow
 
 - Explicit LangGraph classify, retrieve, sufficiency, generation, validation, extraction, proposal,
   interrupt, resume, and execute nodes with PostgreSQL checkpoints.
@@ -65,7 +65,7 @@ Gate: no preapproval mutation; approve/edit/reject/expire/replay tests; current-
 authentication/RBAC/schema/audit; broker/filesystem failure recovery; schema drift after checkpoint
 setup.
 
-## Phase 3 — reliability and evaluation
+## Phase 3: reliability and evaluation
 
 - Deterministic provider for CI that exercises the real graph and persistence without replaying gold
   answers or inspecting case IDs.
@@ -80,7 +80,7 @@ setup.
 Gate: every case completes; every declared forbidden outcome is a hard failure; deterministic safety
 gates pass; real-model failures remain visible; CI-parity commands pass locally.
 
-## Phase 4 — portfolio and operational quality
+## Phase 4: portfolio and operational quality
 
 - Responsive accessible UI with loading, empty, error, keyboard, mobile, and exact evidence states.
 - Real screenshots, architecture/security/evaluation/demo/troubleshooting documentation, and an

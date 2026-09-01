@@ -86,7 +86,7 @@ export default function LoginPage() {
           <motion.p className="login-display mt-5 max-w-[13ch] font-heading text-[clamp(2.75rem,4.3vw,5.35rem)] leading-[0.96] font-bold tracking-[-0.065em]" variants={revealVariants}>
             Proof you can inspect. <span>Actions you control.</span>
           </motion.p>
-          <motion.p className="mt-6 max-w-xl text-base leading-7 text-slate-200/88 xl:text-lg xl:leading-8" variants={revealVariants}>LocalGuard turns private policy documents into source-linked answers and reviewable work—without surrendering the final decision to AI.</motion.p>
+          <motion.p className="mt-6 max-w-xl text-base leading-7 text-slate-200/88 xl:text-lg xl:leading-8" variants={revealVariants}>LocalGuard turns private policy documents into source-linked answers and reviewable work, without surrendering the final decision to AI.</motion.p>
           <motion.ol aria-label="LocalGuard evidence flow" className="login-pipeline mt-7 grid max-w-xl grid-cols-3 gap-2" variants={revealVariants}>
             {[
               ["01", "Source", "Local document"],

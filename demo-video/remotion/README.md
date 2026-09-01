@@ -1,4 +1,4 @@
-# LocalGuard AI — editable product demo
+# LocalGuard AI: editable product demo
 
 This Remotion 4.0.518 project is the editable source for the 160-second, 1920×1080,
 30-fps LocalGuard AI product film. The main composition is `LocalGuardProductDemo`;

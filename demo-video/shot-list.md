@@ -1,6 +1,6 @@
 # LocalGuard AI shot list
 
-## Screenshot set — capture before video
+## Screenshot set: capture before video
 
 All screenshots use a 1440×1000 viewport, one device pixel per CSS pixel, disabled screenshot
 animations, loaded fonts, and an intentionally blurred active element so the skip link never

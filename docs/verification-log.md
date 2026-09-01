@@ -2,7 +2,7 @@
 
 This ledger records observed evidence. Planning estimates are labelled as estimates and are replaced by measured artifacts as each phase closes.
 
-## 2026-08-23 — Phase 0 pre-build baseline
+## 2026-08-23: Phase 0 pre-build baseline
 
 | Check | Observed result | Status |
 |---|---:|---|
@@ -35,7 +35,7 @@ synthetic-data validation, model-selection gate, and initial test harnesses belo
 sections append commands, exit codes, artifact paths, metrics, and failures without replacing the
 baseline or silently rewriting an earlier result.
 
-## 2026-08-23 — Foundation integration evidence
+## 2026-08-23: Foundation integration evidence
 
 | Check | Observed result | Status |
 |---|---:|---|
@@ -51,7 +51,7 @@ baseline or silently rewriting an earlier result.
 
 The packaged LibreOffice DOCX renderer was attempted first and failed because `soffice` is absent. The documented Windows fallback was then used: Office COM preflight returned `can_use_com=true`, Microsoft Word exported all four DOCX fixtures to PDF, and those rendered pages were inspected. The temporary review PDFs and PNGs are not repository deliverables.
 
-## 2026-08-23 — Phase 1 vertical-slice gate
+## 2026-08-23: Phase 1 vertical-slice gate
 
 All checks below were reproduced from the dependency-locked Python 3.12 backend image. The
 working tree was bind-mounted for source checks so the commands verified the exact files under
@@ -75,7 +75,7 @@ the entire suite and caused two configuration-policy tests to fail. Re-running w
 documented environment produced 25 passes. The failure was retained here because it confirmed
 that production-mode and deterministic-provider safeguards are environment-sensitive as designed.
 
-## 2026-08-23 — bounded local-model selection gate
+## 2026-08-23: bounded local-model selection gate
 
 The pinned Ollama runtime was attached to the temporary `model_egress` network only while pulling
 the two candidates and embedding model. It was then recreated on the internal-only backend network
@@ -94,7 +94,7 @@ the API runner used about 47 MiB. The retained MiniLM embedding returned one fin
 `docs/runtime-lock.json`; raw per-case timings, token counts, and outputs are stored in
 `artifacts/model-gate-qwen3-1.7b.json` and the rejected-candidate comparison artifact.
 
-## 2026-08-23 — Phase 2 migration and checkpoint gate
+## 2026-08-23: Phase 2 migration and checkpoint gate
 
 Alembic revision `c57f8be7e15c` adds the workflow and reliability schema. Corrective revision
 `20260823_0003` reconciles databases created from the pre-final Phase 2 shape. The data-bearing
@@ -114,7 +114,7 @@ disposable PostgreSQL database.
 | Checkpoint retention | externally managed checkpoint tables and rows intentionally survive Alembic downgrade | pass, separate export/purge procedure documented |
 | Phase 2 schema at that checkpoint | revision `20260823_0003`; 24 public tables including four LangGraph tables | pass (historical; superseded by 0004 below) |
 
-## 2026-08-23 — Structured-finding evidence migration
+## 2026-08-23: Structured-finding evidence migration
 
 Revision `20260823_0004` adds exact marker IDs, structured fields, and derivation provenance to
 persisted findings without changing the public-table count. A disposable PostgreSQL 16 matrix
@@ -128,7 +128,7 @@ proved legacy backfill, transactional failure recovery, data-loss refusal, and f
 | Historical/full migration chain | c57 reconciliation plus base-to-head recovery completed at `20260823_0004`; `alembic check` found no drift | pass |
 | Restart/API persistence | real PostgreSQL graph write survived process/checkpointer loss and `GET /findings` returned actor, action, deadline, marker, and provenance | pass (`1 passed`) |
 
-## 2026-08-23 — Release-contract alignment
+## 2026-08-23: Release-contract alignment
 
 This section records the frozen release identities and final local verification. It does not replace
 the historical phase evidence above.
@@ -186,7 +186,7 @@ disk. Both memory and disk targets passed. The fully identified 11.39 GB LocalGu
 one stale audit image, and 12 disposable audit volumes were removed; live app data and models were
 preserved.
 
-## 2026-08-24 — GitHub publication evidence
+## 2026-08-24: GitHub publication evidence
 
 The public repository is `Hasan-Al-Hussein/localguard-ai` on `main`. After the initial publication,
 all five jobs in GitHub Actions run `32687729728` passed for commit
