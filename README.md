@@ -6,13 +6,14 @@
 
 **Local-first document intelligence where every answer resolves to source proof and every action waits for human approval.**
 
+[![Live Showcase](https://img.shields.io/badge/LIVE_SHOWCASE-OPEN-18BFA5?style=for-the-badge&logo=vercel&logoColor=white)](https://localguard-portfolio-demo.vercel.app/)
 [![CI](https://img.shields.io/github/actions/workflow/status/Hasan-Al-Hussein/localguard-ai/ci.yml?branch=main&style=for-the-badge&label=CI)](https://github.com/Hasan-Al-Hussein/localguard-ai/actions/workflows/ci.yml)
 [![Demo](https://img.shields.io/badge/DEMO-160_SECONDS-18BFA5?style=for-the-badge)](https://youtu.be/CQOcgDrGuR8)
 ![Local-first](https://img.shields.io/badge/RUNTIME-LOCAL--FIRST-4F8CFF?style=for-the-badge)
 ![CPU-only](https://img.shields.io/badge/INFERENCE-CPU--ONLY-68758A?style=for-the-badge)
 [![MIT License](https://img.shields.io/badge/LICENSE-MIT-F5B942?style=for-the-badge)](LICENSE)
 
-[Product tour](#see-the-complete-workflow) · [Pipeline](docs/pipeline.md) · [Architecture](docs/architecture.md) · [Security](docs/security.md) · [Evaluation](docs/evaluation.md) · [Windows quick start](README-WINDOWS.txt)
+[Live showcase](https://localguard-portfolio-demo.vercel.app/) · [Product tour](#see-the-complete-workflow) · [Pipeline](docs/pipeline.md) · [Architecture](docs/architecture.md) · [Security](docs/security.md) · [Evaluation](docs/evaluation.md) · [Windows quick start](README-WINDOWS.txt)
 
 </div>
 
@@ -27,6 +28,27 @@ Ollama models, with no paid model API or GPU required.
 
 This is a single-machine engineering demonstration—not legal advice or a production multi-tenant
 compliance system.
+
+## Public showcase vs full localhost system
+
+**[Open the interactive LocalGuard AI recruiter showcase](https://localguard-portfolio-demo.vercel.app/)**
+
+> Public portfolio demo with synthetic data. No uploads, persistence, live AI, or real-world actions.
+
+The hosted showcase is an intentionally safe, deterministic, browser-only presentation surface.
+It reuses the real LocalGuard product UI, runtime contracts, routes, forms, citation viewer,
+approval flow, task views, evaluations, and audit views with synthetic fixtures. Browser state
+resets on refresh. The Ask view accepts any question, but a browser-side rule returns the prepared
+cited vendor-offboarding answer only for covered vendor and account terms. Other questions return
+the prepared insufficient-evidence response. Displayed source records and timings are synthetic.
+
+The full localhost system is the substantive engineering project. It runs the FastAPI API, Celery
+worker, PostgreSQL with pgvector and full-text search, Redis, pinned local Ollama models, Next.js
+product UI, and authenticated FastMCP tools. That stack performs PDF, DOCX, and TXT ingestion,
+immutable revision indexing, hybrid retrieval, evidence-bound answers with stored exact citations,
+approval-gated LangGraph workflows, exactly-once task creation, and correlated audit recording.
+None of those runtime services, uploads, persistent state, model calls, or action execution are
+exposed by the public showcase.
 
 ## Why LocalGuard exists
 
