@@ -1,0 +1,38 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": false,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "incremental": true,
+    "plugins": [{ "name": "next" }],
+    "paths": {
+      "@/lib/api-client": ["./lib/api-client.ts"],
+      "@/lib/deployment-mode": ["./lib/deployment-mode.ts"],
+      "@/components/providers/auth-provider": [
+        "./components/providers/auth-provider.tsx"
+      ],
+      "@/lib/public-demo": ["./lib/public-demo/index.ts"],
+      "@/*": ["../web/*"],
+      "@localguard/contracts": ["../../packages/contracts/src/index.ts"]
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts",
+    "../web/**/*.ts",
+    "../web/**/*.tsx"
+  ],
+  "exclude": ["node_modules", "out"]
+}

@@ -5,6 +5,7 @@
   "packageManager": "npm@11.6.2",
   "workspaces": [
     "apps/web",
+    "apps/showcase",
     "packages/contracts"
   ],
   "scripts": {
@@ -13,6 +14,11 @@
     "typecheck": "npm run typecheck --workspace @localguard/web",
     "test": "npm run test --workspace @localguard/web",
     "test:e2e": "npm run test:e2e --workspace @localguard/web",
+    "build:showcase": "npm run build --workspace @localguard/showcase && node scripts/verify-public-showcase.mjs",
+    "verify:showcase": "node scripts/verify-public-showcase.mjs",
+    "typecheck:showcase": "npm run typecheck --workspace @localguard/showcase",
+    "test:showcase": "npm run test --workspace @localguard/showcase",
+    "test:e2e:showcase": "playwright test --config apps/showcase/playwright.config.ts",
     "contracts": "npm run generate --workspace @localguard/contracts"
   },
   "engines": {

@@ -17,7 +17,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { BookOpenCheck, Bot, ChevronDown, ClipboardCheck, Database, FileSearch, Link2, Send, ShieldAlert, UserCheck, UserRound } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/components/ui/app-link";
 import { useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { AnswerCitationEvidence, AnswerCitationLink } from "@/components/evidence/citation-link";
@@ -43,9 +43,9 @@ type IdempotentSubmission = {
 };
 
 const starters = [
-  "What deadlines are stated in the indexed procedures?",
-  "Which party is responsible for incident escalation?",
-  "What evidence describes the highest-priority obligation?",
+  "How quickly must the Service Desk disable a departing vendor account?",
+  "Who owns the approved vendor offboarding action?",
+  "Can LocalGuard authorize an action without supporting evidence?",
 ];
 
 const actionStarters = [

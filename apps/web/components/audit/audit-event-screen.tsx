@@ -3,7 +3,7 @@
 import { AuditEventSchema } from "@localguard/contracts";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, Clock3, Fingerprint, Link2, ScrollText, UserRound } from "lucide-react";
-import Link from "next/link";
+import { Link } from "@/components/ui/app-link";
 import { useAuth } from "@/components/providers/auth-provider";
 import { EmptyState, ErrorState, InlineBanner, PageSkeleton } from "@/components/ui/async-state";
 import { PageHeader } from "@/components/ui/page-header";

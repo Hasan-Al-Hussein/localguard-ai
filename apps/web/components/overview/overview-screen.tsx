@@ -4,7 +4,7 @@ import { OverviewResponseSchema, type EvaluationOverview } from "@localguard/con
 import { useQuery } from "@tanstack/react-query";
 import { Activity, ArrowRight, CalendarClock, Check, CircleAlert, CircleDotDashed, ClipboardCheck, FileCheck2, Files, MessagesSquare, ShieldCheck } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
-import Link from "next/link";
+import { Link } from "@/components/ui/app-link";
 import { useState } from "react";
 import { ProofGateMark } from "@/components/brand/proof-gate-mark";
 import { ProofCoreScene } from "@/components/effects/proof-core-scene";

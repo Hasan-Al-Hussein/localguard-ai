@@ -3,6 +3,7 @@
 import { ServiceHealthSchema, type Role } from "@localguard/contracts";
 import { useQuery } from "@tanstack/react-query";
 import {
+  BadgeInfo,
   BookOpenText,
   ChartNoAxesCombined,
   ChevronRight,
@@ -13,10 +14,11 @@ import {
   LockKeyhole,
   LogOut,
   Menu,
+  RotateCcw,
   ScrollText,
   X,
 } from "lucide-react";
-import Link from "next/link";
+import { Link } from "@/components/ui/app-link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
 import { ProofGateMark } from "@/components/brand/proof-gate-mark";
@@ -24,6 +26,7 @@ import { EvidenceLens } from "@/components/effects/evidence-lens";
 import { useAuth } from "@/components/providers/auth-provider";
 import { apiRequest } from "@/lib/api-client";
 import { cn } from "@/lib/cn";
+import { isPublicShowcase } from "@/lib/deployment-mode";
 import { queryKeys } from "@/lib/query-keys";
 
 type NavigationItem = {
@@ -118,7 +121,10 @@ function NavigationContent({ onNavigate, role }: { onNavigate?: () => void; role
       <div className="sidebar-footer border-t p-4">
         <div className="privacy-card flex items-center gap-2.5 rounded-xl px-3 py-3 text-xs font-semibold text-evidence">
           <span className="relative grid size-7 place-items-center rounded-lg bg-white/70"><LockKeyhole aria-hidden className="size-3.5" /><span aria-hidden className="privacy-dot absolute -right-0.5 -bottom-0.5" /></span>
-          <span><span className="block">Local processing</span><span className="mt-0.5 block text-[0.6875rem] font-semibold text-evidence-hover">Private by design</span></span>
+          <span>
+            <span className="block">{isPublicShowcase ? "Synthetic showcase" : "Local processing"}</span>
+            <span className="mt-0.5 block text-[0.6875rem] font-semibold text-evidence-hover">{isPublicShowcase ? "Resets on refresh" : "Private by design"}</span>
+          </span>
         </div>
       </div>
     </>
@@ -204,6 +210,10 @@ export function ProductShell({ children }: { children: ReactNode }) {
 
   async function handleLogout() {
     await logout();
+    if (isPublicShowcase) {
+      window.location.replace("/");
+      return;
+    }
     router.replace("/login");
   }
 
@@ -258,20 +268,32 @@ export function ProductShell({ children }: { children: ReactNode }) {
                 "health-pill hidden min-h-9 items-center gap-2 rounded-full border px-3 text-xs font-semibold sm:flex",
                 health.isError ? "border-danger/30 bg-danger-soft text-danger" : "border-evidence/30 bg-evidence-soft text-evidence",
               )}
-              title={health.isError ? "The local API is unavailable" : "The local API is available"}
+              title={isPublicShowcase ? "Static public portfolio showcase" : health.isError ? "The local API is unavailable" : "The local API is available"}
             >
               <span className={cn("size-1.5 rounded-full", health.isError ? "bg-danger" : "bg-evidence")} />
-              {health.isError ? "Local API offline" : "Local · Private"}
+              {isPublicShowcase ? "Public · Synthetic" : health.isError ? "Local API offline" : "Local · Private"}
             </div>
             <div className="hidden items-center gap-2.5 border-l border-border pl-3 sm:flex">
               <span aria-hidden className="user-avatar grid size-9 place-items-center rounded-full font-heading text-xs font-bold">{userInitial}</span>
-              <span><span className="block max-w-32 truncate text-sm font-semibold">{user?.display_name}</span><span className="block text-xs capitalize text-muted-foreground">{user?.role}</span></span>
+              <span><span className="block max-w-32 truncate text-sm font-semibold">{user?.display_name}</span><span className="block text-xs capitalize text-muted-foreground">{isPublicShowcase ? "Simulated reviewer" : user?.role}</span></span>
             </div>
-            <button aria-label="Sign out" className="icon-button grid size-11 place-items-center rounded-xl text-muted-foreground hover:bg-danger-soft hover:text-danger" onClick={handleLogout} type="button">
-              <LogOut aria-hidden className="size-[1.1rem]" />
+            <button aria-label={isPublicShowcase ? "Reset demo" : "Sign out"} className="icon-button grid size-11 place-items-center rounded-xl text-muted-foreground hover:bg-danger-soft hover:text-danger" onClick={handleLogout} title={isPublicShowcase ? "Reset demo" : "Sign out"} type="button">
+              {isPublicShowcase ? <RotateCcw aria-hidden className="size-[1.1rem]" /> : <LogOut aria-hidden className="size-[1.1rem]" />}
             </button>
           </div>
         </header>
+        {isPublicShowcase ? (
+          <aside
+            className="sticky z-[19] flex min-h-11 items-center justify-center gap-2 border-b border-evidence/20 bg-[linear-gradient(90deg,rgba(13,148,136,0.11),rgba(255,255,255,0.94),rgba(18,63,97,0.10))] px-4 py-2 text-center text-[0.72rem] leading-4 font-semibold text-foreground backdrop-blur-xl sm:text-xs"
+            data-public-demo-disclosure
+            data-public-showcase-disclosure
+            role="note"
+            style={{ top: "var(--topbar-height)" }}
+          >
+            <BadgeInfo aria-hidden className="size-3.5 shrink-0 text-evidence" />
+            <span>Public portfolio demo with synthetic data. No uploads, persistence, live AI, or real-world actions.</span>
+          </aside>
+        ) : null}
         <main className="workspace-main mx-auto w-full max-w-[var(--content-max)] px-4 py-5 sm:px-6 sm:py-6 lg:px-8" id="main-content" tabIndex={-1}>
           <div className="page-stage" key={pathname}>{children}</div>
         </main>

@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { TaskPatchSchema, WorkflowTaskSchema } from "@localguard/contracts";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft, ClipboardCheck, FileCheck2, Save } from "lucide-react";
-import Link from "next/link";
+import { Link } from "@/components/ui/app-link";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/ui/page-header";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { apiRequest, errorMessage } from "@/lib/api-client";
+import { isPublicShowcase } from "@/lib/deployment-mode";
 import { formatDate, formatDateTime } from "@/lib/format";
 import { queryKeys } from "@/lib/query-keys";
 
@@ -42,7 +43,7 @@ export function TaskDetailScreen({ taskId }: { taskId: string }) {
     queryKey: queryKeys.task(taskId),
     queryFn: () => apiRequest(`/tasks/${encodeURIComponent(taskId)}`, WorkflowTaskSchema),
   });
-  const canUpdate = user?.role === "admin" || user?.role === "reviewer";
+  const canUpdate = !isPublicShowcase && (user?.role === "admin" || user?.role === "reviewer");
   const form = useForm<TaskForm>({
     resolver: zodResolver(TaskFormSchema),
     defaultValues: { state: "open", assignee: "", priority: "medium", due_at: "" },
@@ -111,7 +112,7 @@ export function TaskDetailScreen({ taskId }: { taskId: string }) {
               <div><label className="text-sm font-semibold" htmlFor="task-assignee">Assignee</label><input className="mt-2 min-h-11 w-full rounded-md border border-border bg-surface px-3" id="task-assignee" {...form.register("assignee")} /><p className="mt-1 text-xs text-muted-foreground">Blank retains the current value.</p></div>
               <div><label className="text-sm font-semibold" htmlFor="task-due">Due date and time</label><input className="mt-2 min-h-11 w-full rounded-md border border-border bg-surface px-3" id="task-due" type="datetime-local" {...form.register("due_at")} /><p className="mt-1 text-xs text-muted-foreground">Blank retains the current value.</p></div>
             </fieldset>
-            {!canUpdate ? <div className="mt-5"><InlineBanner tone="info" title="Read-only access">Viewer accounts can inspect their task records but cannot change workflow state or assignment.</InlineBanner></div> : null}
+            {!canUpdate ? <div className="mt-5"><InlineBanner tone="info" title={isPublicShowcase ? "Read-only demo record" : "Read-only access"}>{isPublicShowcase ? "Task editing is intentionally disabled in the public showcase. The private LocalGuard deployment records authorized changes in its audit log." : "Viewer accounts can inspect their task records but cannot change workflow state or assignment."}</InlineBanner></div> : null}
             {canUpdate ? <div className="mt-5 flex justify-end border-t border-border pt-5"><Button icon={<Save aria-hidden className="size-4" />} isLoading={updateTask.isPending} type="submit">Save changes</Button></div> : null}
           </form>
         </div>

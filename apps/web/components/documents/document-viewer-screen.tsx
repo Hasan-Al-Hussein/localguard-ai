@@ -7,7 +7,7 @@ import {
 } from "@localguard/contracts";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, FileText, History, ListTree, Tags } from "lucide-react";
-import Link from "next/link";
+import { Link } from "@/components/ui/app-link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from "react";
 import { ErrorState, InlineBanner, PageSkeleton } from "@/components/ui/async-state";
@@ -15,6 +15,7 @@ import { PageHeader } from "@/components/ui/page-header";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { apiRequest } from "@/lib/api-client";
 import { cn } from "@/lib/cn";
+import { isPublicShowcase } from "@/lib/deployment-mode";
 import { formatBytes, formatDateTime } from "@/lib/format";
 import { queryKeys } from "@/lib/query-keys";
 
@@ -129,7 +130,12 @@ export function DocumentViewerScreen({ documentId }: { documentId: string }) {
   function selectAnchor(anchor: DocumentAnchor) {
     const parameters = new URLSearchParams();
     parameters.set("anchor", anchor.stable_key);
-    router.replace(`${pathname}?${parameters.toString()}`);
+    const href = `${pathname}?${parameters.toString()}`;
+    if (isPublicShowcase) {
+      window.location.replace(href);
+      return;
+    }
+    router.replace(href);
     setMobileTab("document");
   }
 

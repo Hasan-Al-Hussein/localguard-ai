@@ -1,0 +1,47 @@
+export const PUBLIC_DEMO_IDS = {
+  reviewer: "33333333-3333-4333-8333-333333333333",
+  vendorDocument: "11111111-1111-4111-8111-111111111111",
+  vendorRevision: "22222222-2222-4222-8222-222222222222",
+  vendorAnchor: "55555555-5555-4555-8555-555555555555",
+  incidentDocument: "12121212-1212-4121-8121-121212121212",
+  incidentRevision: "23232323-2323-4232-8232-232323232323",
+  incidentAnchor: "56565656-5656-4565-8565-565656565656",
+  evidenceDocument: "13131313-1313-4131-8131-131313131313",
+  evidenceRevision: "24242424-2424-4242-8242-242424242424",
+  evidenceAnchor: "57575757-5757-4575-8575-575757575757",
+  groundedQuestion: "77777777-7777-4777-8777-777777777777",
+  groundedAnswer: "88888888-8888-4888-8888-888888888888",
+  insufficientQuestion: "79797979-7979-4797-8797-797979797979",
+  insufficientAnswer: "89898989-8989-4898-8989-898989898989",
+  workflow: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+  finding: "66666666-6666-4666-8666-666666666666",
+  proposal: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+  decision: "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+  createdTask: "dddddddd-dddd-4ddd-8ddd-dddddddddddd",
+  historicalTask: "d1d1d1d1-d1d1-4d1d-8d1d-d1d1d1d1d1d1",
+  auditOverview: "e1111111-1111-4111-8111-111111111111",
+  auditDocument: "e2222222-2222-4222-8222-222222222222",
+  auditQuestion: "e3333333-3333-4333-8333-333333333333",
+  auditWorkflow: "e4444444-4444-4444-8444-444444444444",
+  auditApproval: "e5555555-5555-4555-8555-555555555555",
+  evaluationRun: "20260830T091500000000Z-deterministic-showcase",
+} as const;
+
+export const PUBLIC_DEMO_TIMESTAMPS = {
+  created: "2026-08-18T08:00:00Z",
+  indexed: "2026-08-28T11:42:00Z",
+  question: "2026-08-30T09:08:00Z",
+  workflow: "2026-08-30T09:10:00Z",
+  proposal: "2026-08-30T09:10:02Z",
+  approved: "2026-08-30T09:12:00Z",
+  evaluationStarted: "2026-08-30T09:14:34Z",
+  evaluationCompleted: "2026-08-30T09:15:00Z",
+} as const;
+
+export const PUBLIC_DEMO_CORRELATION_IDS = {
+  overview: "demo-corr-overview-001",
+  document: "demo-corr-document-001",
+  question: "demo-corr-question-001",
+  workflow: "demo-corr-workflow-001",
+  approval: "demo-corr-approval-001",
+} as const;

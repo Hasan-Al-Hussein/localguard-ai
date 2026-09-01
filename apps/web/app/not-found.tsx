@@ -1,5 +1,5 @@
 import { SearchX } from "lucide-react";
-import Link from "next/link";
+import { Link } from "@/components/ui/app-link";
 import { EmptyState } from "@/components/ui/async-state";
 
 export default function NotFound() {

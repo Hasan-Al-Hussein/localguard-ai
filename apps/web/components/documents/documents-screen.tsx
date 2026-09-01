@@ -24,6 +24,7 @@ import {
 import { PageHeader } from "@/components/ui/page-header";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { apiRequest, errorMessage } from "@/lib/api-client";
+import { isPublicShowcase } from "@/lib/deployment-mode";
 import { formatDateTime } from "@/lib/format";
 import { queryKeys } from "@/lib/query-keys";
 import { UploadDialog } from "./upload-dialog";
@@ -40,8 +41,8 @@ export function DocumentsScreen() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
   const { notify } = useNotice();
-  const canManage = user?.role === "reviewer" || user?.role === "admin";
-  const canDelete = user?.role === "admin";
+  const canManage = !isPublicShowcase && (user?.role === "reviewer" || user?.role === "admin");
+  const canDelete = !isPublicShowcase && user?.role === "admin";
   const offset = (page - 1) * PAGE_SIZE;
   const filterString = `offset=${offset}&limit=${PAGE_SIZE}`;
 
@@ -116,12 +117,12 @@ export function DocumentsScreen() {
   return (
     <div className="space-y-5">
       <PageHeader
-        actions={<Button disabled={!canManage} icon={<UploadCloud aria-hidden className="size-4" />} onClick={() => setUploadOpen(true)}>Upload document</Button>}
-        description="Upload, process, and inspect synthetic operational documents without sending them off-device."
+        actions={canManage ? <Button icon={<UploadCloud aria-hidden className="size-4" />} onClick={() => setUploadOpen(true)}>Upload document</Button> : undefined}
+        description={isPublicShowcase ? "Explore a curated synthetic evidence library. Public showcase content is read only and resets on refresh." : "Upload, process, and inspect synthetic operational documents without sending them off-device."}
         eyebrow="Evidence library"
         title="Documents"
       />
-      {!canManage ? <InlineBanner tone="info" title="Read-only access">Viewer accounts can inspect indexed evidence but cannot upload, reprocess, or delete documents.</InlineBanner> : null}
+      {!canManage ? <InlineBanner tone="info" title={isPublicShowcase ? "Curated demo library" : "Read-only access"}>{isPublicShowcase ? "These synthetic records demonstrate the evidence workflow. Upload, reprocessing, and deletion are available only in the private LocalGuard deployment." : "Viewer accounts can inspect indexed evidence but cannot upload, reprocess, or delete documents."}</InlineBanner> : null}
 
       <section aria-label="Document filters" className="document-filters flex flex-col gap-2 sm:flex-row">
         <label className="relative flex-1">

@@ -9,7 +9,7 @@ import {
 } from "@localguard/contracts";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, BadgeCheck, Clock3, FlaskConical, ShieldCheck } from "lucide-react";
-import Link from "next/link";
+import { Link } from "@/components/ui/app-link";
 import { useAuth } from "@/components/providers/auth-provider";
 import { MetricsTable, type EvaluationMetric } from "@/components/evaluations/metrics-table";
 import { EmptyState, ErrorState, InlineBanner, PageSkeleton } from "@/components/ui/async-state";

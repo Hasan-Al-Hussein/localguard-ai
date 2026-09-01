@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+/* The public showcase compiles this stylesheet from a separate Next app.
+   Explicitly register the shared product components so Tailwind emits their
+   utilities in both builds instead of relying on each app's auto-detection. */
+@source "../components/**/*.{js,ts,jsx,tsx,mdx}";
+
 :root {
   color-scheme: light;
   --background: #e9eef2;

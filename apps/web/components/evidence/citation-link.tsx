@@ -1,6 +1,6 @@
 import type { AnswerCitation, EvidenceReference as WorkflowEvidenceReference } from "@localguard/contracts";
 import { BookOpenText, ExternalLink } from "lucide-react";
-import Link from "next/link";
+import { Link } from "@/components/ui/app-link";
 import {
   normalizeAnswerCitation,
   type EvidenceReference,

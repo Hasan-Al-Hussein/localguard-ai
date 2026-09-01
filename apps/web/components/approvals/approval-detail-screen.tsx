@@ -10,7 +10,7 @@ import {
 } from "@localguard/contracts";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft, CheckCircle2, Fingerprint, PencilLine, ShieldAlert, XCircle } from "lucide-react";
-import Link from "next/link";
+import { Link } from "@/components/ui/app-link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -24,6 +24,7 @@ import { Modal } from "@/components/ui/modal";
 import { PageHeader } from "@/components/ui/page-header";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { apiRequest, errorMessage } from "@/lib/api-client";
+import { isPublicShowcase } from "@/lib/deployment-mode";
 import { formatDate, formatDateTime } from "@/lib/format";
 import { queryKeys } from "@/lib/query-keys";
 
@@ -65,6 +66,7 @@ export function ApprovalDetailScreen({ approvalId }: { approvalId: string }) {
   const router = useRouter();
   const queryClient = useQueryClient();
   const canReview = user?.role === "admin" || user?.role === "reviewer";
+  const canRevise = canReview && !isPublicShowcase;
   const approval = useQuery({
     queryKey: queryKeys.approval(approvalId),
     queryFn: () => apiRequest(`/approvals/${encodeURIComponent(approvalId)}`, ProposalSchema),
@@ -101,6 +103,10 @@ export function ApprovalDetailScreen({ approvalId }: { approvalId: string }) {
         queryClient.invalidateQueries({ queryKey: ["approvals"] }),
         queryClient.invalidateQueries({ queryKey: ["tasks"] }),
       ]);
+      if (isPublicShowcase) {
+        notify("Demo approval recorded in this browser session.");
+        return;
+      }
       if (outcome.task) {
         notify("Proposal approved and exactly one local task was created.");
         router.push(`/tasks/${encodeURIComponent(outcome.task.id)}`);
@@ -177,7 +183,7 @@ export function ApprovalDetailScreen({ approvalId }: { approvalId: string }) {
       <Link className="inline-flex min-h-11 items-center gap-2 rounded-md text-sm font-semibold text-muted-foreground hover:text-brand" href="/approvals"><ArrowLeft aria-hidden className="size-4" />Back to approvals</Link>
       <PageHeader actions={<StatusBadge status={record.state} />} description={`Version ${record.version} · Proposed ${formatDateTime(record.created_at)} · Expires ${formatDateTime(record.expires_at)}`} eyebrow="Human approval" title={record.title} />
       {pending ? (
-        <InlineBanner title="Nothing has been created yet" tone="pending">The task described below remains a proposal. Approval revalidates its version, payload hash, and evidence snapshot before execution.</InlineBanner>
+        <InlineBanner title={isPublicShowcase ? "Browser-only approval simulation" : "Nothing has been created yet"} tone="pending">{isPublicShowcase ? "You can demonstrate the human gate below. The resulting synthetic task exists only in memory and disappears when this page is refreshed." : "The task described below remains a proposal. Approval revalidates its version, payload hash, and evidence snapshot before execution."}</InlineBanner>
       ) : (
         <InlineBanner title={`Proposal ${record.state.replaceAll("_", " ")}`} tone={record.state === "executed" || record.state === "approved" ? "evidence" : record.state === "rejected" || record.state === "failed" ? "danger" : "info"}>This proposal is no longer actionable. Its immutable decision boundary remains visible for review.</InlineBanner>
       )}
@@ -194,9 +200,9 @@ export function ApprovalDetailScreen({ approvalId }: { approvalId: string }) {
           </dl>
           {pending ? (
             <div className="mt-6 flex flex-wrap justify-end gap-2 border-t border-border pt-5">
-              <Button disabled={approve.isPending || reject.isPending || edit.isPending} icon={<XCircle aria-hidden className="size-4" />} onClick={() => setRejectOpen(true)} variant="secondary">Reject</Button>
-              <Button disabled={approve.isPending || reject.isPending || edit.isPending} icon={<PencilLine aria-hidden className="size-4" />} onClick={() => setEditOpen(true)} variant="secondary">Edit into new version</Button>
-              <Button icon={<CheckCircle2 aria-hidden className="size-4" />} isLoading={approve.isPending} onClick={() => approve.mutate(record)}>Approve unchanged</Button>
+              {canRevise ? <Button disabled={approve.isPending || reject.isPending || edit.isPending} icon={<XCircle aria-hidden className="size-4" />} onClick={() => setRejectOpen(true)} variant="secondary">Reject</Button> : null}
+              {canRevise ? <Button disabled={approve.isPending || reject.isPending || edit.isPending} icon={<PencilLine aria-hidden className="size-4" />} onClick={() => setEditOpen(true)} variant="secondary">Edit into new version</Button> : null}
+              <Button icon={<CheckCircle2 aria-hidden className="size-4" />} isLoading={approve.isPending} onClick={() => approve.mutate(record)}>{isPublicShowcase ? "Simulate approval" : "Approve unchanged"}</Button>
             </div>
           ) : null}
         </section>
