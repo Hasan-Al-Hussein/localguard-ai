@@ -1,0 +1,14 @@
+{
+  "timestamp": "2026-08-23T20:35:30.3002230Z",
+  "models": [
+    {
+      "tag": "qwen3:1.7b-q4_K_M",
+      "manifest_sha256": "8f68893c685c3ddff2aa3fffce2aa60a30bb2da65ca488b61fff134a4d1730e7"
+    },
+    {
+      "tag": "all-minilm:22m-l6-v2-fp16",
+      "manifest_sha256": "1b226e2802dbb772b5fc32a58f103ca1804ef7501331012de126ab22f67475ef"
+    }
+  ],
+  "runtime_lock": "docs/runtime-lock.json"
+}

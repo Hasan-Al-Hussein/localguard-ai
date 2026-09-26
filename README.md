@@ -50,6 +50,13 @@ approval-gated LangGraph workflows, exactly-once task creation, and correlated a
 None of those runtime services, uploads, persistent state, model calls, or action execution are
 exposed by the public showcase.
 
+## Preserved project record
+
+[Completion, source snapshots, and evidence catalog](docs/portfolio-record.md)
+connect the implemented local system, the separate synthetic showcase, editable media,
+and dated verification receipts. The September 2026 preservation update records the
+achievement; it is not a backup of private documents, credentials, or Docker runtime data.
+
 ## Why LocalGuard exists
 
 Plausible answers are easy to generate. Proving where they came from—and preventing suggestions
@@ -71,7 +78,7 @@ responsibilities:
 | Human approval | 7/7 approval transitions; zero preapproval tasks or executions |
 | Adversarial controls | 5/5 insufficiency abstentions, 27/27 injection controls, 97/97 forbidden controls |
 | Deterministic quality gates | 384 Python unit/security tests, 45 integration tests, and 46 frontend tests passed locally |
-| Public CI | [Five-job GitHub Actions workflow](https://github.com/Hasan-Al-Hussein/localguard-ai/actions/workflows/ci.yml), passing on `main` |
+| Public CI | [Five-job GitHub Actions workflow](https://github.com/Hasan-Al-Hussein/localguard-ai/actions/workflows/ci.yml); [September 1 baseline run](https://github.com/Hasan-Al-Hussein/localguard-ai/actions/runs/33508458129) passed; see the live badge for current status |
 
 These are bounded results from the documented synthetic corpus and target CPU-only laptop. They
 are not production, legal, or general model-accuracy claims.

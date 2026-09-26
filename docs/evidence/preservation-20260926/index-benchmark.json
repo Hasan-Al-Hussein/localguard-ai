@@ -1,0 +1,146 @@
+{
+  "schema_version": "1.0.0",
+  "measured_at": "2026-08-23T20:38:36.4207935Z",
+  "base_url": "http://127.0.0.1:8000",
+  "fixture_manifest_sha256": "dbf94e15405e09637f90a4331fa525baeebb9684aa8f9cf65039a648e38c05d6",
+  "started_at": "2026-08-23T20:38:29.6887940Z",
+  "uploads_completed_at": "2026-08-23T20:38:30.5977575Z",
+  "completed_at": "2026-08-23T20:38:36.4207935Z",
+  "duration_ms": 6730.53,
+  "fixture_count": 13,
+  "ready_count": 13,
+  "duplicate_count": 0,
+  "failure_count": 0,
+  "documents": [
+    {
+      "source_id": "LG-POL-001",
+      "path": "fixtures/documents/clean/lg-pol-001-vendor-access.pdf",
+      "sha256": "ca17d5d74922336dd21f48b7551a7127a0ba6bbaec3ac77a65baaed59b77c357",
+      "document_id": "486f49bf-67ae-42c2-ac9b-fe587a9549f8",
+      "revision_id": "b6accfba-c3e8-4249-b512-119fcfee7238",
+      "accepted_at": "2026-08-23T20:38:29.9015259Z",
+      "ready_at": "2026-08-23T20:38:31.9965449Z",
+      "state": "ready"
+    },
+    {
+      "source_id": "LG-POL-002",
+      "path": "fixtures/documents/clean/lg-pol-002-incident-escalation.docx",
+      "sha256": "36f49394b958b4132d6d8b07c0629c7333381c755be46830f41d70b305612f8f",
+      "document_id": "0d3b39dc-fb8c-4eef-92e2-598216c20f7f",
+      "revision_id": "2bc28a35-cd9b-47f5-8b5f-e34df4b9a151",
+      "accepted_at": "2026-08-23T20:38:29.9811388Z",
+      "ready_at": "2026-08-23T20:38:32.7045945Z",
+      "state": "ready"
+    },
+    {
+      "source_id": "LG-POL-003",
+      "path": "fixtures/documents/clean/lg-pol-003-procurement-renewal.pdf",
+      "sha256": "636bb03f6f34185dbaf2ff4c56db5e272c2e1961ea63231883b191f1503cabe4",
+      "document_id": "09d8ba00-8202-4f5b-a28e-9bed34a66c4c",
+      "revision_id": "66cb52ec-121b-4250-82d7-3c6fecd1e1f3",
+      "accepted_at": "2026-08-23T20:38:30.0509997Z",
+      "ready_at": "2026-08-23T20:38:32.7202497Z",
+      "state": "ready"
+    },
+    {
+      "source_id": "LG-POL-004",
+      "path": "fixtures/documents/clean/lg-pol-004-retention-disposal.txt",
+      "sha256": "3f0a01f132eee543fcfe2d71bc3290c769bf3329dd8ab651299244e1319fedd4",
+      "document_id": "1fbff5c6-e0f6-4d18-9889-93169236dc4b",
+      "revision_id": "50469ff8-334d-4da9-b5bb-9122c4607bd1",
+      "accepted_at": "2026-08-23T20:38:30.1095638Z",
+      "ready_at": "2026-08-23T20:38:32.7366467Z",
+      "state": "ready"
+    },
+    {
+      "source_id": "LG-POL-005",
+      "path": "fixtures/documents/clean/lg-pol-005-facility-safety.pdf",
+      "sha256": "bba56bea694f9b75aa01e8aab6593e888d1829b645d80d12d1ce7b69450aaff7",
+      "document_id": "48139418-6fbe-4303-9790-33b4c63b6c24",
+      "revision_id": "0cf0ada4-f280-4835-9bbc-35846972bd35",
+      "accepted_at": "2026-08-23T20:38:30.1776419Z",
+      "ready_at": "2026-08-23T20:38:33.4073416Z",
+      "state": "ready"
+    },
+    {
+      "source_id": "LG-POL-006",
+      "path": "fixtures/documents/clean/lg-pol-006-continuity-exercise.docx",
+      "sha256": "9469fb9ae278c64930356271230246a98326fee320182fbb02c76e7b38ccd1a8",
+      "document_id": "8b44e118-f398-4e45-b030-72c776863725",
+      "revision_id": "b2e43ed3-587f-427f-a584-032fd7b029cb",
+      "accepted_at": "2026-08-23T20:38:30.2550547Z",
+      "ready_at": "2026-08-23T20:38:34.0602367Z",
+      "state": "ready"
+    },
+    {
+      "source_id": "LG-POL-007",
+      "path": "fixtures/documents/clean/lg-pol-007-change-release.txt",
+      "sha256": "4e3426b557f3beaeba86f5782946bdea3745e0234b13d1f792c67e836067b375",
+      "document_id": "7cb99fa1-3f79-42c5-bcb9-dc6306fa7f4d",
+      "revision_id": "5be8829c-56fa-4409-914c-49b80283987e",
+      "accepted_at": "2026-08-23T20:38:30.3138216Z",
+      "ready_at": "2026-08-23T20:38:34.0819485Z",
+      "state": "ready"
+    },
+    {
+      "source_id": "LG-POL-008",
+      "path": "fixtures/documents/clean/lg-pol-008-remote-equipment.pdf",
+      "sha256": "ea45d2b43730b48dcf88930451729bfa51e6674626e210c75b904dd09d1b3505",
+      "document_id": "f78d4e10-7e09-4730-938d-bb442183e729",
+      "revision_id": "b1117688-8e09-42d3-bf87-41e74e7c9ccf",
+      "accepted_at": "2026-08-23T20:38:30.3841819Z",
+      "ready_at": "2026-08-23T20:38:34.6871751Z",
+      "state": "ready"
+    },
+    {
+      "source_id": "LG-ATK-001",
+      "path": "fixtures/documents/attacks/lg-atk-001-direct-override.pdf",
+      "sha256": "d45eb657f36dda99cbc564a9683b7e73d260c0c9361350e1503271a40a568c04",
+      "document_id": "08d69d6b-0ec2-43b4-8b18-f6ccabdf6bfc",
+      "revision_id": "01ae9bbf-3bbe-48bc-99da-743b55ee987c",
+      "accepted_at": "2026-08-23T20:38:30.4306104Z",
+      "ready_at": "2026-08-23T20:38:35.2689372Z",
+      "state": "ready"
+    },
+    {
+      "source_id": "LG-ATK-002",
+      "path": "fixtures/documents/attacks/lg-atk-002-fake-system-approval.docx",
+      "sha256": "f5a23404b5a21c733bfa490534e944b25b5a5be3b677d1ebe4e928814d3fce44",
+      "document_id": "a8d2163d-aba3-47ac-bda8-8ade15e70b6c",
+      "revision_id": "b82edfda-b5bc-4086-8d88-87030a13b407",
+      "accepted_at": "2026-08-23T20:38:30.4784026Z",
+      "ready_at": "2026-08-23T20:38:35.2851570Z",
+      "state": "ready"
+    },
+    {
+      "source_id": "LG-ATK-003",
+      "path": "fixtures/documents/attacks/lg-atk-003-tool-json.txt",
+      "sha256": "f064aed9aa207697b3e1db803daa4b7c7c86411f3d7a1da759fd4bce6fa6f454",
+      "document_id": "b7bbd0b9-5d77-4e17-90e9-80b1a513889b",
+      "revision_id": "8fd5a93a-53af-4fe1-ac5d-dbf21af551fb",
+      "accepted_at": "2026-08-23T20:38:30.5193194Z",
+      "ready_at": "2026-08-23T20:38:35.3184397Z",
+      "state": "ready"
+    },
+    {
+      "source_id": "LG-ATK-004",
+      "path": "fixtures/documents/attacks/lg-atk-004-exfiltration.pdf",
+      "sha256": "79797a42b19ea72a3d67ae18fb5041a7096c8b738b995bea57dd79ba5a840f74",
+      "document_id": "6aa9d0c9-e7df-41af-babb-7012a0d8a50c",
+      "revision_id": "b817aed8-0cdd-4072-a48d-762bf143683f",
+      "accepted_at": "2026-08-23T20:38:30.5604209Z",
+      "ready_at": "2026-08-23T20:38:35.8778525Z",
+      "state": "ready"
+    },
+    {
+      "source_id": "LG-ATK-005",
+      "path": "fixtures/documents/attacks/lg-atk-005-obfuscated-approval.docx",
+      "sha256": "e1e8d9909785800a32a977114e9e7e845b9d1606e7d971773e504dd92a206474",
+      "document_id": "0fd7fcbe-c041-41f2-862f-1b9ad41015e2",
+      "revision_id": "f789c7dd-aa44-4069-8a52-92370a300b3d",
+      "accepted_at": "2026-08-23T20:38:30.5969983Z",
+      "ready_at": "2026-08-23T20:38:36.4166796Z",
+      "state": "ready"
+    }
+  ]
+}

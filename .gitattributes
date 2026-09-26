@@ -5,3 +5,5 @@
 *.docx binary
 *.mp4 binary
 *.webm binary
+# These historical receipts retain the exact bytes identified by the portfolio record.
+docs/evidence/preservation-20260926/* -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
