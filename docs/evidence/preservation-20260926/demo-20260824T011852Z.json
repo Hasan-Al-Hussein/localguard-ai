@@ -1,0 +1,212 @@
+{
+  "approval_workflow": {
+    "answer": "A task proposal was prepared for human review.",
+    "approval_decision_id": "d84ff556-6f60-496b-b44c-a4ebc15c979b",
+    "cited_chunk_ids": [
+      "b3686ef9ef34de79118ed2b1a24d1db1bd0552e6b536982c57629507b7fad3d0"
+    ],
+    "cited_marker_ids": [
+      "LG-POL-001:L010"
+    ],
+    "correlation_id": "demo-workflow-a99a93a6e6e540c6adf9028bba49a4d3",
+    "outbox_event_id": "8a7bf2a4-8f6c-414a-8d80-e0c194e66b99",
+    "prompt": "An authorized sponsor's vendor offboarding notice was received at 2026-09-01T09:00:00Z. Propose the required account-disable task; do not execute it without review.",
+    "proposal_id": "c50885f9-e774-452e-b7ff-f69717022cfc",
+    "stage_latency_ms": {
+      "approval": 43.09818999900017,
+      "generation": 17509.123566997005,
+      "retrieval": 1017.2108200058574,
+      "validation": 105.07132699422073
+    },
+    "task_assignee": "Service Desk",
+    "task_due_at": "2026-09-01T10:00:00Z",
+    "task_id": "bdfe1936-2c46-49ec-91b1-bb0f8cff11e5",
+    "task_priority": "high",
+    "task_title": "Disable the vendor account",
+    "tasks_after_approval": 1,
+    "tasks_after_replay": 1,
+    "tasks_before_approval": 0,
+    "total_ms": 19031.786,
+    "workflow_run_id": "5c7ee8bd-769b-4407-aa16-357e0919348c"
+  },
+  "audit": {
+    "actions": [
+      "document.upload",
+      "ingestion.process",
+      "ingestion.process",
+      "question.request",
+      "question.process",
+      "question.process",
+      "workflow.request",
+      "workflow.analysis",
+      "proposal.create",
+      "proposal.approve",
+      "workflow.resume",
+      "workflow_task.create",
+      "workflow.resume"
+    ],
+    "event_ids": [
+      "42e2e9f7-4a5f-4380-addd-a102cfd56515",
+      "f5ad8363-90fd-48eb-98fb-a2c33fe9e8ad",
+      "453b70e4-307b-4d32-920c-cf8e65a642bf",
+      "3c177113-6058-49e6-87ee-99f5444c5744",
+      "c2191097-1be9-478e-adf4-5f27669b9c8f",
+      "2343c941-cbd4-45cc-9295-78b3199a3203",
+      "1bb7cc1c-94e5-4c91-aef6-224ca42146de",
+      "5757ba3a-719a-43c0-953b-2c8f672b7d09",
+      "d032366d-1de6-4ec9-afb7-593b8261f334",
+      "01ae8b0f-5a80-4310-9ce0-83a4a10cc654",
+      "7cb615c9-bed2-475a-b73e-c3ed9032cd81",
+      "5a54fe80-6064-4ee3-90a7-2b7b89d73e7d",
+      "a4b97786-d4bc-4d51-b062-51e15e73afc5"
+    ],
+    "events": [
+      {
+        "action": "document.upload",
+        "causation_id": "05e5d229-7963-4205-9298-b19db0e6038c",
+        "correlation_id": "demo-upload-6aa2fff03f2143a6958e3887949ee239",
+        "event_id": "42e2e9f7-4a5f-4380-addd-a102cfd56515",
+        "outcome": "accepted",
+        "thread_id": null
+      },
+      {
+        "action": "ingestion.process",
+        "causation_id": "demo-upload-6aa2fff03f2143a6958e3887949ee239",
+        "correlation_id": "worker-d28147fcfa1649deb956a07602b9554f",
+        "event_id": "f5ad8363-90fd-48eb-98fb-a2c33fe9e8ad",
+        "outcome": "started",
+        "thread_id": null
+      },
+      {
+        "action": "ingestion.process",
+        "causation_id": "demo-upload-6aa2fff03f2143a6958e3887949ee239",
+        "correlation_id": "worker-d28147fcfa1649deb956a07602b9554f",
+        "event_id": "453b70e4-307b-4d32-920c-cf8e65a642bf",
+        "outcome": "succeeded",
+        "thread_id": null
+      },
+      {
+        "action": "question.request",
+        "causation_id": "2a173442-d6d3-45d4-b284-a292357d05fe",
+        "correlation_id": "demo-question-4439d513b5e242208ff6e6c533c9f980",
+        "event_id": "3c177113-6058-49e6-87ee-99f5444c5744",
+        "outcome": "queued",
+        "thread_id": null
+      },
+      {
+        "action": "question.process",
+        "causation_id": "demo-question-4439d513b5e242208ff6e6c533c9f980",
+        "correlation_id": "worker-2a4d8ee87b40487e84bb065a46697b8e",
+        "event_id": "c2191097-1be9-478e-adf4-5f27669b9c8f",
+        "outcome": "started",
+        "thread_id": null
+      },
+      {
+        "action": "question.process",
+        "causation_id": "demo-question-4439d513b5e242208ff6e6c533c9f980",
+        "correlation_id": "worker-2a4d8ee87b40487e84bb065a46697b8e",
+        "event_id": "2343c941-cbd4-45cc-9295-78b3199a3203",
+        "outcome": "succeeded",
+        "thread_id": null
+      },
+      {
+        "action": "workflow.request",
+        "causation_id": null,
+        "correlation_id": "demo-workflow-a99a93a6e6e540c6adf9028bba49a4d3",
+        "event_id": "1bb7cc1c-94e5-4c91-aef6-224ca42146de",
+        "outcome": "started",
+        "thread_id": "5c7ee8bd-769b-4407-aa16-357e0919348c"
+      },
+      {
+        "action": "workflow.analysis",
+        "causation_id": null,
+        "correlation_id": "demo-workflow-a99a93a6e6e540c6adf9028bba49a4d3",
+        "event_id": "5757ba3a-719a-43c0-953b-2c8f672b7d09",
+        "outcome": "grounded",
+        "thread_id": "5c7ee8bd-769b-4407-aa16-357e0919348c"
+      },
+      {
+        "action": "proposal.create",
+        "causation_id": null,
+        "correlation_id": "demo-workflow-a99a93a6e6e540c6adf9028bba49a4d3",
+        "event_id": "d032366d-1de6-4ec9-afb7-593b8261f334",
+        "outcome": "pending",
+        "thread_id": "5c7ee8bd-769b-4407-aa16-357e0919348c"
+      },
+      {
+        "action": "proposal.approve",
+        "causation_id": "d84ff556-6f60-496b-b44c-a4ebc15c979b",
+        "correlation_id": "demo-workflow-a99a93a6e6e540c6adf9028bba49a4d3",
+        "event_id": "01ae8b0f-5a80-4310-9ce0-83a4a10cc654",
+        "outcome": "approved",
+        "thread_id": "5c7ee8bd-769b-4407-aa16-357e0919348c"
+      },
+      {
+        "action": "workflow.resume",
+        "causation_id": "d84ff556-6f60-496b-b44c-a4ebc15c979b",
+        "correlation_id": "demo-workflow-a99a93a6e6e540c6adf9028bba49a4d3",
+        "event_id": "7cb615c9-bed2-475a-b73e-c3ed9032cd81",
+        "outcome": "started",
+        "thread_id": "5c7ee8bd-769b-4407-aa16-357e0919348c"
+      },
+      {
+        "action": "workflow_task.create",
+        "causation_id": "d84ff556-6f60-496b-b44c-a4ebc15c979b",
+        "correlation_id": "demo-workflow-a99a93a6e6e540c6adf9028bba49a4d3",
+        "event_id": "5a54fe80-6064-4ee3-90a7-2b7b89d73e7d",
+        "outcome": "succeeded",
+        "thread_id": "5c7ee8bd-769b-4407-aa16-357e0919348c"
+      },
+      {
+        "action": "workflow.resume",
+        "causation_id": "d84ff556-6f60-496b-b44c-a4ebc15c979b",
+        "correlation_id": "demo-workflow-a99a93a6e6e540c6adf9028bba49a4d3",
+        "event_id": "a4b97786-d4bc-4d51-b062-51e15e73afc5",
+        "outcome": "applied",
+        "thread_id": "5c7ee8bd-769b-4407-aa16-357e0919348c"
+      }
+    ]
+  },
+  "chat_model": "qwen3:1.7b-q4_K_M",
+  "completed_at": "2026-08-24T01:18:52.384542Z",
+  "document": {
+    "content_sha256": "ca17d5d74922336dd21f48b7551a7127a0ba6bbaec3ac77a65baaed59b77c357",
+    "correlation_id": "demo-upload-6aa2fff03f2143a6958e3887949ee239",
+    "document_id": "b09a1e54-a30f-4f65-b9da-1859048bf44d",
+    "duplicate": false,
+    "filename": "lg-pol-001-vendor-access.pdf",
+    "ingestion_ms": 1163.241,
+    "revision_id": "c98e49a9-81d2-4586-b1fe-e2a64dd960bb",
+    "source_id": "LG-POL-001"
+  },
+  "embedding_model": "all-minilm:22m-l6-v2-fp16",
+  "proof_scope": "in_process_domain",
+  "provider": "ollama",
+  "question": {
+    "answer": "The Service Desk must disable the vendor account within one hour after receiving the offboarding notice.",
+    "answer_id": "ebb647bd-3fe8-48dd-b765-b76b735aec14",
+    "citations": [
+      {
+        "anchor_key": "page:2",
+        "anchor_label": "Page 2",
+        "citation_id": "9e990d44-0660-4673-9e80-080ace122b6d",
+        "document_id": "b09a1e54-a30f-4f65-b9da-1859048bf44d",
+        "end_offset": 889,
+        "quote": "[LG-POL-001:L010] The Service Desk must disable the vendor account within one hour after receiving\nthe offboarding notice.",
+        "revision_id": "c98e49a9-81d2-4586-b1fe-e2a64dd960bb",
+        "start_offset": 767
+      }
+    ],
+    "correlation_id": "demo-question-4439d513b5e242208ff6e6c533c9f980",
+    "generation_ms": 47836.500186997,
+    "model_name": "qwen3:1.7b-q4_K_M",
+    "prompt": "How long does the Service Desk have to disable a vendor account after it receives an offboarding notice?",
+    "question_job_id": "e659d46a-8293-4b1f-a1aa-3be45fd4161b",
+    "retrieval_ms": 94.27477899589576,
+    "total_ms": 48038.623
+  },
+  "schema_version": "1.0",
+  "started_at": "2026-08-24T01:17:43.973996Z",
+  "status": "verified",
+  "total_ms": 68415.001
+}

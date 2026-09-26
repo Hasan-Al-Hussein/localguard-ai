@@ -1,0 +1,66 @@
+{
+  "schema_version": "1.0.0",
+  "measured_at": "2026-08-24T00:40:23.4077323Z",
+  "revision": "unborn HEAD",
+  "docker_server": "29.7.2",
+  "compose_version": "5.3.1",
+  "dataset_version": "1.0.2",
+  "cases_sha256": "914d80632516db91cbd46700f52564677aa3a3b264d5c747b6537a8d1690392c",
+  "evaluation": {
+    "run_id": "20260823T234625509074Z-ollama-914d80632516",
+    "runtime_provider": "ollama",
+    "raw_result_sha256": "be9f481ef13719ce1bef4b6f752bfc2409657366282ee6abff8f559515f54ada",
+    "retrieval_mean_ms": 195.188272119849,
+    "retrieval_p95_ms": 433.4028593904804,
+    "generation_mean_ms": 8921.335630679387,
+    "generation_p95_ms": 14566.587457401327,
+    "total_p95_ms": 15546.705861404185,
+    "sample_count": 25,
+    "repairs_or_failures": 0
+  },
+  "idle": {
+    "evidence_file": "resource-idle-20260824T001745Z.csv",
+    "settled_seconds": 60,
+    "container_count": 7,
+    "active_memory_bytes": 604044787,
+    "active_memory_mib": 576.06
+  },
+  "warm_query": {
+    "evidence_file": "resource-query-20260824T001446Z.summary.json",
+    "successful": true,
+    "wall_ms": 23565.246,
+    "sample_group_count": 11,
+    "peak_active_memory_bytes": 4169481060,
+    "peak_active_memory_mib": 3976.33,
+    "repairs_or_failures": 0
+  },
+  "indexing": {
+    "evidence_file": "index-benchmark-20260823T203829Z.json",
+    "fixture_count": 13,
+    "ready_count": 13,
+    "duplicate_count": 0,
+    "failure_count": 0,
+    "duration_ms": 6730.53
+  },
+  "demo": {
+    "evidence_file": "demo.json",
+    "sha256": "1a2970d3b2b0d311625d3af801aef24f3796124199d32ba89d3c68e1e516f53e",
+    "ingestion_ms": 727.488,
+    "question_retrieval_ms": 94.97948799980804,
+    "question_generation_ms": 20980.979683008627,
+    "total_ms": 34561.471
+  },
+  "disk": {
+    "evidence_file": "resource-disk-final-20260824T004023Z.txt",
+    "workspace_bytes": 1256835703,
+    "retained_image_bytes_approx": 10177220000,
+    "active_volume_bytes": 1502490134,
+    "live_container_writable_bytes_approx": 77824,
+    "build_cache_bytes": 0,
+    "total_attributable_bytes_approx": 12936623661,
+    "total_attributable_gb_approx": 12.94,
+    "pruned_localguard_build_cache_bytes_approx": 11390000000,
+    "stale_audit_images_removed": 1,
+    "disposable_test_volumes_removed": 12
+  }
+}
